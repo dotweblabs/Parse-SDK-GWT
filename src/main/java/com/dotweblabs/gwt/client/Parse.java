@@ -35,7 +35,7 @@ public class Parse {
 
     public static class Objects {
         public static void create(final ParseObject object, final AsyncCallback<ParseResponse> callback) {
-            Shape.post(Parse.CLASSES_URL + object.getClassName())
+            Shape.post(Parse.SERVER_URL + Parse.CLASSES_URI + object.getClassName())
                     .header("X-Parse-Application-Id", X_Parse_Application_Id)
                     .header("X-Parse-REST-API-Key", X_Parse_REST_API_Key)
                     .header("X-Parse-Master-Key", X_Parse_Master_Key)
@@ -52,10 +52,33 @@ public class Parse {
                         }
                     });
         }
+        public static void retrieve(final ParseObject ref, final AsyncCallback<ParseObject> callback) {
+            String objectId = ref.getObjectId();
+            final String className = ref.getClassName();
+            final String path = Parse.SERVER_URL + Parse.CLASSES_URI + className + "/" + objectId;
+            Shape.get(path)
+                    .header("X-Parse-Application-Id", X_Parse_Application_Id)
+                    .header("X-Parse-REST-API-Key", X_Parse_REST_API_Key)
+                    .header("X-Parse-Master-Key", X_Parse_Master_Key)
+                    .asJson(new AsyncCallback<String>() {
+                        @Override
+                        public void onFailure(Throwable throwable) {
+                            HttpRequestException ex = (HttpRequestException) throwable;
+                            callback.onFailure(ex);
+                        }
+                        @Override
+                        public void onSuccess(String s) {
+                            callback.onSuccess(ParseObject.parse(className, s));
+                        }
+                    });
+        }
+        public static void query(final Query query, final AsyncCallback<ParseResponse> callback) {
+
+        }
     }
 
     public static String SERVER_URL = "https://parseapi.back4app.com/";
-    public static String CLASSES_URL = "https://parseapi.back4app.com/classes/";
+    public static String CLASSES_URI = "classes/";
 
     /*
     Headers
@@ -76,6 +99,9 @@ public class Parse {
         X_Parse_Application_Id = appId;
         X_Parse_REST_API_Key = restApiKey;
         X_Parse_Master_Key = masterKey;
+        if(!SERVER_URL.endsWith("/")) {
+            SERVER_URL = SERVER_URL + "/";
+        }
     }
 
 

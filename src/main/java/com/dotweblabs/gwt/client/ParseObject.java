@@ -3,8 +3,11 @@ package com.dotweblabs.gwt.client;
 import com.dotweblabs.gwt.client.js.JsonConverter;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
+import com.google.gwt.json.client.JSONString;
+import com.google.gwt.json.client.JSONValue;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -25,7 +28,40 @@ public class ParseObject extends JSONObject {
     }
     public static ParseObject parse(String className, String json) {
         JSONObject jsonObject = (JSONObject) JSONParser.parseStrict(json);
-        ParseObject parseObject = ((ParseObject) jsonObject);
-        return parseObject;
+        return ParseObject.clone(className, jsonObject);
+    }
+    public static ParseObject clone(String className, JSONObject jsonObject) {
+        ParseObject response = null;
+        Iterator<String> it = jsonObject.keySet().iterator();
+        while(it.hasNext()) {
+            if(response == null) {
+                response = new ParseObject(className);
+            }
+            String key = it.next();
+            JSONValue value = jsonObject.get(key);
+            response.put(key, value);
+        }
+        return response;
+    }
+    public void setObjectId(String objectId) {
+        put("objectId", new JSONString(objectId));
+    }
+    public String getObjectId() {
+        if(get("objectId").isString() != null) {
+            return get("objectId").isString().stringValue();
+        }
+        return null;
+    }
+    public String getCreatedAt() {
+        if(get("createdAt").isString() != null) {
+            return get("createdAt").isString().stringValue();
+        }
+        return null;
+    }
+    public String getUpdatedAt() {
+        if(get("updatedAt").isString() != null) {
+            return get("updatedAt").isString().stringValue();
+        }
+        return null;
     }
 }

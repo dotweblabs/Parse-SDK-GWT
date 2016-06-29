@@ -57,17 +57,16 @@ public class ParseTest extends GWTTestCase {
         Parse.SERVER_URL = PARSE_API_ROOT;
         ParseObject testObject = new ParseObject("TestObject");
         testObject.put("foo", new JSONString("bar"));
-        log(testObject.toString());
-
         Parse.Objects.create(testObject, new AsyncCallback<ParseResponse>() {
             @Override
             public void onFailure(Throwable throwable) {
                 HttpRequestException ex = (HttpRequestException) throwable;
-                log("Error: " + ex.getCode());
+                log("POST Error: " + ex.getCode());
+                fail("POST Error: " + ex.getCode());
             }
             @Override
             public void onSuccess(ParseResponse parseResponse) {
-                log("Success objectId: " + parseResponse.getObjectId() + " createdAt: " + parseResponse.getCreatedAt());
+                log("POST Success objectId: " + parseResponse.getObjectId() + " createdAt: " + parseResponse.getCreatedAt());
                 assertNotNull(parseResponse.getObjectId());
                 assertNotNull(parseResponse.getCreatedAt());
             }
@@ -75,7 +74,41 @@ public class ParseTest extends GWTTestCase {
     }
 
     public void testRetrieveObject() {
-
+        delayTestFinish(2000);
+        Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
+        Parse.SERVER_URL = PARSE_API_ROOT;
+        ParseObject testObject = new ParseObject("TestObject");
+        testObject.put("foo", new JSONString("bar"));
+        Parse.Objects.create(testObject, new AsyncCallback<ParseResponse>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                HttpRequestException ex = (HttpRequestException) throwable;
+                log("POST Error: " + ex.getCode());
+                finishTest();
+            }
+            @Override
+            public void onSuccess(ParseResponse parseResponse) {
+                //log("Success objectId: " + parseResponse.getObjectId() + " createdAt: " + parseResponse.getCreatedAt());
+                ParseObject ref = new ParseObject("TestObject");
+                ref.setObjectId(parseResponse.getObjectId());
+                log("POST Success: " + ref.getObjectId());
+                Parse.Objects.retrieve(ref, new AsyncCallback<ParseObject>() {
+                    @Override
+                    public void onFailure(Throwable throwable) {
+                        HttpRequestException ex = (HttpRequestException) throwable;
+                        log("GET Error: " + ex.getCode());
+                        fail("GET Error: " + ex.getCode());
+                        finishTest();
+                    }
+                    @Override
+                    public void onSuccess(ParseObject parseObject) {
+                        log("GET Success: " + parseObject.toString());
+                        assertEquals("TestObject", parseObject.getClassName());
+                        finishTest();
+                    }
+                });
+            }
+        });
     }
 
     public static void log(String s){
