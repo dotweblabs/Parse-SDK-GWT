@@ -38,6 +38,9 @@ import java.util.Iterator;
 public class Parse {
 
     public static class Objects {
+        public static ParseObject extend(String className) {
+            return new ParseObject(className);
+        }
         public static void create(final ParseObject object, final AsyncCallback<ParseResponse> callback) {
             Shape.post(Parse.SERVER_URL + Parse.CLASSES_URI + object.getClassName())
                     .header("X-Parse-Application-Id", X_Parse_Application_Id)
