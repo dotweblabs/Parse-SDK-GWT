@@ -1,6 +1,7 @@
 ## 0-SNAPSHOT - 06/29/16
 
 ### Added
+- Added $or and $and for Where object
 - Where Object
 - Update ParseObject function
 - Delete ParseObject by objectId

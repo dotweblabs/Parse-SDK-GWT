@@ -1,5 +1,6 @@
 package com.dotweblabs.gwt.client;
 
+import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONBoolean;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONValue;
@@ -18,20 +19,6 @@ public class Where extends JSONObject {
         put(key, value);
        // this.filters = new JSONObject();
     }
-    /*
-    public Where where(String key, Boolean compareValue) {
-        this.put(key, JSONBoolean.getInstance(compareValue));
-        return this;
-    }
-
-    public Where where(String key, String compareValue) {
-        return this;
-    }
-
-    public Where where(String key, Number compareValue) {
-        return this;
-    }
-    */
 
     public Where lessThan(JSONValue value) {
         JSONObject operation = new JSONObject();
@@ -196,6 +183,30 @@ public class Where extends JSONObject {
             }
         } else {
             put(key, operation);
+        }
+        return this;
+    }
+
+    public Where or(Where where) {
+        JSONArray or = get("$or") != null ? get("$or").isArray() : null;
+        if(or != null){
+            or.set(or.size(), where);
+        } else {
+            JSONArray array = new JSONArray();
+            array.set(array.size(), where);
+            put("$or", array);
+        }
+        return this;
+    }
+
+    public Where and(Where where) {
+        JSONArray or = get("$and") != null ? get("$and").isArray() : null;
+        if(or != null){
+            or.set(or.size(), where);
+        } else {
+            JSONArray array = new JSONArray();
+            array.set(array.size(), where);
+            put("$and", array);
         }
         return this;
     }

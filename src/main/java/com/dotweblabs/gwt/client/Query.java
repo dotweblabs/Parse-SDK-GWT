@@ -3,6 +3,7 @@ package com.dotweblabs.gwt.client;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONBoolean;
 import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONString;
 
 /**
  *
@@ -14,37 +15,22 @@ import com.google.gwt.json.client.JSONObject;
  */
 public class Query extends JSONObject {
 
-    private String className;
-    private Where where = null;
-    private JSONArray and;
-    private JSONArray or;
     public Query() {}
+
     public Query(ParseObject object) {
         setClassName(object.getClassName());
     }
 
-    public String getClassName() {
-        return className;
+    private String getClassName() {
+        return get("className").isString().stringValue();
     }
 
-    public void setClassName(String className) {
-        this.className = className;
+    private void setClassName(String className) {
+        put("className", new JSONString(className));
     }
 
-    public Where where(String key) {
-        this.where = new Where(key);
-        return this.where;
+    public void where(Where where){
+        put("where", where);
     }
 
-    public void and(Where... where){
-        if(and == null){
-            and = new JSONArray();
-        }
-    }
-
-    public void or(Where... where){
-        if(or == null){
-            or = new JSONArray();
-        }
-    }
 }
