@@ -111,6 +111,44 @@ public class ParseTest extends GWTTestCase {
         });
     }
 
+    public void testDeleteObject() {
+        delayTestFinish(2000);
+        Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
+        Parse.SERVER_URL = PARSE_API_ROOT;
+        ParseObject testObject = new ParseObject("TestObject");
+        testObject.put("boom", new JSONString("box"));
+        Parse.Objects.create(testObject, new AsyncCallback<ParseResponse>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                HttpRequestException ex = (HttpRequestException) throwable;
+                log("POST Error: " + ex.getCode());
+                finishTest();
+            }
+            @Override
+            public void onSuccess(ParseResponse parseResponse) {
+                ParseObject ref = new ParseObject("TestObject");
+                ref.setObjectId(parseResponse.getObjectId());
+                log("POST Success: " + ref.getObjectId());
+                Parse.Objects.delete(ref, new AsyncCallback<ParseResponse>() {
+                    @Override
+                    public void onFailure(Throwable throwable) {
+                        HttpRequestException ex = (HttpRequestException) throwable;
+                        log("DELETE Error: " + ex.getCode());
+                        fail("DELETE Error: " + ex.getCode());
+                        finishTest();
+                    }
+                    @Override
+                    public void onSuccess(ParseResponse parseObject) {
+                        log("DELETE Success: " + parseObject.toString());
+                        String updatedAt = parseObject.getUpdatedAt();
+                        assertNotNull(updatedAt);
+                        finishTest();
+                    }
+                });
+            }
+        });
+    }
+
     public static void log(String s){
         System.out.println(s);
     }

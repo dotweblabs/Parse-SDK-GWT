@@ -20,6 +20,7 @@ import com.dotweblabs.gwt.client.js.JsonConverter;
 import com.dotweblabs.shape.client.HttpRequestException;
 import com.dotweblabs.shape.client.Shape;
 import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONString;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -69,6 +70,31 @@ public class Parse {
                         @Override
                         public void onSuccess(String s) {
                             callback.onSuccess(ParseObject.parse(className, s));
+                        }
+                    });
+        }
+        public static void delete(final ParseObject ref, final AsyncCallback<ParseResponse> callback) {
+            String objectId = ref.getObjectId();
+            final String className = ref.getClassName();
+            final String path = Parse.SERVER_URL + Parse.CLASSES_URI + className + "/" + objectId;
+            JSONObject payload = new JSONObject();
+            JSONObject opponents = new JSONObject();
+            opponents.put("__op", new JSONString("Delete"));
+            payload.put("opponents", opponents);
+            Shape.put(path)
+                    .header("X-Parse-Application-Id", X_Parse_Application_Id)
+                    .header("X-Parse-REST-API-Key", X_Parse_REST_API_Key)
+                    .header("X-Parse-Master-Key", X_Parse_Master_Key)
+                    .body(payload.toString())
+                    .asJson(new AsyncCallback<String>() {
+                        @Override
+                        public void onFailure(Throwable throwable) {
+                            HttpRequestException ex = (HttpRequestException) throwable;
+                            callback.onFailure(ex);
+                        }
+                        @Override
+                        public void onSuccess(String s) {
+                            callback.onSuccess(ParseResponse.parse(s));
                         }
                     });
         }
