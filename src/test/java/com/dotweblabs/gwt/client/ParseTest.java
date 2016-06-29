@@ -149,6 +149,48 @@ public class ParseTest extends GWTTestCase {
         });
     }
 
+    public void testUpdateObject() {
+        delayTestFinish(2000);
+        Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
+        Parse.SERVER_URL = PARSE_API_ROOT;
+        final ParseObject testObject = new ParseObject("TestObject");
+        testObject.put("marko", new JSONString("marko"));
+        Parse.Objects.create(testObject, new AsyncCallback<ParseResponse>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                HttpRequestException ex = (HttpRequestException) throwable;
+                log("POST Error: " + ex.getCode());
+                finishTest();
+            }
+            @Override
+            public void onSuccess(ParseResponse parseResponse) {
+                ParseObject ref = new ParseObject(testObject.getClassName());
+                ref.setObjectId(parseResponse.getObjectId());
+                ref.putString("marko", "polo");
+                ref.putString("jack", "sparrow");
+                ref.putBoolean("status", false);
+                ref.putNumber("count", 1L);
+                log("POST Success: " + ref.getObjectId());
+                Parse.Objects.update(ref, new AsyncCallback<ParseResponse>() {
+                    @Override
+                    public void onFailure(Throwable throwable) {
+                        HttpRequestException ex = (HttpRequestException) throwable;
+                        log("UPDATE Error: " + ex.getCode());
+                        fail("UPDATE Error: " + ex.getCode());
+                        finishTest();
+                    }
+                    @Override
+                    public void onSuccess(ParseResponse parseObject) {
+                        log("UPDATE Success: " + parseObject.toString());
+                        String updatedAt = parseObject.getUpdatedAt();
+                        assertNotNull(updatedAt);
+                        finishTest();
+                    }
+                });
+            }
+        });
+    }
+
     public static void log(String s){
         System.out.println(s);
     }

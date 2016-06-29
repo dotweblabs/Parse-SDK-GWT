@@ -1,10 +1,7 @@
 package com.dotweblabs.gwt.client;
 
 import com.dotweblabs.gwt.client.js.JsonConverter;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONParser;
-import com.google.gwt.json.client.JSONString;
-import com.google.gwt.json.client.JSONValue;
+import com.google.gwt.json.client.*;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -42,6 +39,34 @@ public class ParseObject extends JSONObject {
             response.put(key, value);
         }
         return response;
+    }
+    public void putNull(String key) {
+        put(key, JSONNull.getInstance());
+    }
+    public void putBoolean(String key, Boolean value) {
+        if(value != null) {
+            put(key, JSONBoolean.getInstance(value));
+        }
+    }
+    public void putString(String key, String value) {
+        if(value != null) {
+            put(key, new JSONString(value));
+        }
+    }
+    public void putNumber(String key, Integer value) {
+        if(value != null) {
+            put(key, new JSONNumber(value));
+        }
+    }
+    public void putNumber(String key, Long value) {
+        if(value != null) {
+            put(key, new JSONNumber(value));
+        }
+    }
+    public void putNumber(String key, Double value) {
+        if(value != null) {
+            put(key, new JSONNumber(value));
+        }
     }
     public void setObjectId(String objectId) {
         put("objectId", new JSONString(objectId));
