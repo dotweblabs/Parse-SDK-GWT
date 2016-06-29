@@ -16,6 +16,7 @@
  */
 package com.dotweblabs.gwt.client;
 
+import com.dotweblabs.shape.client.HttpRequestException;
 import com.dotweblabs.shape.client.Shape;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
@@ -47,11 +48,34 @@ public class ParseTest extends GWTTestCase {
     }
 
     public void testInitialize() {
-        Parse.initializeMaster(TestKeys.TEST_APP_ID, TestKeys.TEST_JAVASCRIPT_KEY);
+        Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
+        Parse.SERVER_URL = PARSE_API_ROOT;
     }
 
-    public void testInitializeMaster() {
-        Parse.initializeMaster(TestKeys.TEST_APP_ID, TEST_MASTER_KEY);
+    public void testCreateObject() {
+        Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
+        Parse.SERVER_URL = PARSE_API_ROOT;
+        ParseObject testObject = new ParseObject("TestObject");
+        testObject.put("foo", new JSONString("bar"));
+        log(testObject.toString());
+
+        Parse.Objects.create(testObject, new AsyncCallback<ParseResponse>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                HttpRequestException ex = (HttpRequestException) throwable;
+                log("Error: " + ex.getCode());
+            }
+            @Override
+            public void onSuccess(ParseResponse parseResponse) {
+                log("Success objectId: " + parseResponse.getObjectId() + " createdAt: " + parseResponse.getCreatedAt());
+                assertNotNull(parseResponse.getObjectId());
+                assertNotNull(parseResponse.getCreatedAt());
+            }
+        });
+    }
+
+    public void testRetrieveObject() {
+
     }
 
     public static void log(String s){

@@ -16,6 +16,13 @@
  */
 package com.dotweblabs.gwt.client;
 
+import com.dotweblabs.gwt.client.js.JsonConverter;
+import com.dotweblabs.shape.client.HttpRequestException;
+import com.dotweblabs.shape.client.Shape;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 /**
  *
  * Simple Parse Client for GWT
@@ -26,17 +33,50 @@ package com.dotweblabs.gwt.client;
  */
 public class Parse {
 
-    public static String _appId;
-    public static String _javascriptKey;
-    public static String _restApiKey;
-    public static String _masterKey;
+    public static class Objects {
+        public static void create(final ParseObject object, final AsyncCallback<ParseResponse> callback) {
+            Shape.post(Parse.CLASSES_URL + object.getClassName())
+                    .header("X-Parse-Application-Id", X_Parse_Application_Id)
+                    .header("X-Parse-REST-API-Key", X_Parse_REST_API_Key)
+                    .header("X-Parse-Master-Key", X_Parse_Master_Key)
+                    .body(object.toString())
+                    .asJson(new AsyncCallback<String>() {
+                        @Override
+                        public void onFailure(Throwable throwable) {
+                            HttpRequestException ex = (HttpRequestException) throwable;
+                            callback.onFailure(ex);
+                        }
+                        @Override
+                        public void onSuccess(String s) {
+                            callback.onSuccess(ParseResponse.parse(s));
+                        }
+                    });
+        }
+    }
 
-    public static void initialize(String appId, String javascriptKey) {
+    public static String SERVER_URL = "https://parseapi.back4app.com/";
+    public static String CLASSES_URL = "https://parseapi.back4app.com/classes/";
+
+    /*
+    Headers
+     */
+    public static String X_Parse_Application_Id = null;
+    public static String X_Parse_REST_API_Key = null;
+    public static String X_Parse_Master_Key = null;
+
+    public static String _appId = null;;
+    public static String _javascriptKey = null;;
+    public static String _restApiKey = null;;
+    public static String _masterKey = null;;
+
+    public static void initialize(String appId, String restApiKey, String masterKey) {
         _appId = appId;
-        _javascriptKey = javascriptKey;
-    }
-    public static void initializeMaster(String appId, String masterKey) {
-        _appId = appId;
+        _restApiKey = restApiKey;
         _masterKey = masterKey;
+        X_Parse_Application_Id = appId;
+        X_Parse_REST_API_Key = restApiKey;
+        X_Parse_Master_Key = masterKey;
     }
+
+
 }
