@@ -240,5 +240,15 @@ public class Parse {
         }
     }
 
+    public static void initialize(String appId, String restApiKey) {
+        _appId = appId;
+        _restApiKey = restApiKey;
+        X_Parse_Application_Id = appId;
+        X_Parse_REST_API_Key = restApiKey;
+        if(!SERVER_URL.endsWith("/")) {
+            SERVER_URL = SERVER_URL + "/";
+        }
+    }
+
 
 }

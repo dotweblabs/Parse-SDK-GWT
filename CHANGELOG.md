@@ -1,5 +1,8 @@
 ## 0-SNAPSHOT - 06/30/16
 
+### Added
+Initialize with App Id and Rest API key
+
 ### Fixed 
 - Added missing `Parse.Objects.retrieve` function
 - Fiexed `testRetrieveObject` Test 
