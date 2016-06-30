@@ -1,3 +1,8 @@
+## 0-SNAPSHOT - 06/30/16
+
+### Updated
+- Updated README
+
 ## 0-SNAPSHOT - 06/29/16
 
 ### Added
