@@ -38,6 +38,17 @@ import java.util.Iterator;
  */
 public class Parse {
 
+    public static class Users {
+        public static void login(ParseObject user) {
+            //createdAt, objectId, sessionToken
+        }
+        public static void requestPasswordReset() {}
+        public static void retrieveUser(String objectId ){}
+        public static void retrieveCurrentUser() {}
+        public static void updateUser(ParseObject update) {}
+        public static void deleteUser(String objectId) {}
+    }
+
     public static class Objects {
         public static ParseObject extend(String className) {
             return new ParseObject(className);
