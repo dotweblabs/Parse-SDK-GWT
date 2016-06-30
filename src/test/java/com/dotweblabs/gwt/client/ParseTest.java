@@ -75,7 +75,7 @@ public class ParseTest extends GWTTestCase {
     }
 
     public void testRetrieveObject() {
-        delayTestFinish(2000);
+        delayTestFinish(20000);
         Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
         Parse.SERVER_URL = PARSE_API_ROOT;
         ParseObject testObject = new ParseObject("TestObject");

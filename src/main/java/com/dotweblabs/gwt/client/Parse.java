@@ -61,7 +61,24 @@ public class Parse {
                     });
         }
         public static void retrieve(final ParseObject ref, final AsyncCallback<ParseObject> callback) {
-
+            String objectId = ref.getObjectId();
+            final String className = ref.getClassName();
+            final String path = Parse.SERVER_URL + Parse.CLASSES_URI + className + "/" + objectId;
+            Shape.get(path)
+                    .header("X-Parse-Application-Id", X_Parse_Application_Id)
+                    .header("X-Parse-REST-API-Key", X_Parse_REST_API_Key)
+                    .header("X-Parse-Master-Key", X_Parse_Master_Key)
+                    .asJson(new AsyncCallback<String>() {
+                        @Override
+                        public void onFailure(Throwable throwable) {
+                            HttpRequestException ex = (HttpRequestException) throwable;
+                            callback.onFailure(ex);
+                        }
+                        @Override
+                        public void onSuccess(String s) {
+                            callback.onSuccess(ParseObject.parse(className, s));
+                        }
+                    });
         }
         public static void delete(final ParseObject ref, final AsyncCallback<ParseResponse> callback) {
             String objectId = ref.getObjectId();
