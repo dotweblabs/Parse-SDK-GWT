@@ -1,5 +1,8 @@
 ## 0-SNAPSHOT - 06/30/16
 
+### Fixed
+- Fixed getErrorCode
+
 ### Added
 - Signup and login JUnit tests
 - Parse signup and login function

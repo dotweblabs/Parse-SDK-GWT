@@ -76,7 +76,7 @@ public class ParseResponse extends JSONObject {
         return message;
     }
     public int getErrorCode() {
-        double code = get("code") != null ? get("error").isNumber().doubleValue() : null;
+        double code = get("code") != null ? get("code").isNumber().doubleValue() : null;
         return (int) code;
     }
 }
