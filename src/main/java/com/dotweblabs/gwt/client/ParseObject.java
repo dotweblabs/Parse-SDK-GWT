@@ -8,7 +8,11 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- * Created by paperspace on 6/29/2016.
+ *
+ *
+ * @author Kerby Martino
+ * @since 0-SNAPSHOT
+ * @version 0-SNAPSHOT
  */
 public class ParseObject extends JSONObject {
     private String className;

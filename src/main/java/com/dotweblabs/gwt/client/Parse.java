@@ -19,6 +19,7 @@ package com.dotweblabs.gwt.client;
 import com.dotweblabs.gwt.client.js.JsonConverter;
 import com.dotweblabs.shape.client.HttpRequestException;
 import com.dotweblabs.shape.client.Shape;
+import com.google.gwt.http.client.URL;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONValue;
@@ -60,24 +61,7 @@ public class Parse {
                     });
         }
         public static void retrieve(final ParseObject ref, final AsyncCallback<ParseObject> callback) {
-            String objectId = ref.getObjectId();
-            final String className = ref.getClassName();
-            final String path = Parse.SERVER_URL + Parse.CLASSES_URI + className + "/" + objectId;
-            Shape.get(path)
-                    .header("X-Parse-Application-Id", X_Parse_Application_Id)
-                    .header("X-Parse-REST-API-Key", X_Parse_REST_API_Key)
-                    .header("X-Parse-Master-Key", X_Parse_Master_Key)
-                    .asJson(new AsyncCallback<String>() {
-                        @Override
-                        public void onFailure(Throwable throwable) {
-                            HttpRequestException ex = (HttpRequestException) throwable;
-                            callback.onFailure(ex);
-                        }
-                        @Override
-                        public void onSuccess(String s) {
-                            callback.onSuccess(ParseObject.parse(className, s));
-                        }
-                    });
+
         }
         public static void delete(final ParseObject ref, final AsyncCallback<ParseResponse> callback) {
             String objectId = ref.getObjectId();
@@ -136,8 +120,80 @@ public class Parse {
                     });
         }
         public static void query(final Query query, final AsyncCallback<ParseResponse> callback) {
+            String className = query.get("className").isString().stringValue();
 
         }
+    }
+
+    public static class Query extends JSONObject {
+
+        public Query() {
+
+        }
+
+        public Query(ParseObject object) {
+            setClassName(object.getClassName());
+        }
+
+        public static Query extend(ParseObject object) {
+            return new Query(object);
+        }
+
+        private String getClassName() {
+            return get("className").isString().stringValue();
+        }
+
+        private void setClassName(String className) {
+            put("className", new JSONString(className));
+        }
+
+        public Query where(Where where){
+            put("where", where);
+            return this;
+        }
+
+        public void get(String objectId, final AsyncCallback<ParseObject> response) {
+            ParseObject ref = new ParseObject(getClassName());
+            ref.setObjectId(objectId);
+            Parse.Objects.retrieve(ref, new AsyncCallback<ParseObject>() {
+                @Override
+                public void onFailure(Throwable throwable) {
+                    response.onFailure(throwable);
+                }
+
+                @Override
+                public void onSuccess(ParseObject parseObject) {
+                    response.onSuccess(parseObject);
+                }
+            });
+        }
+
+        public void find(final AsyncCallback<ParseResponse> callback){
+            String className = getClassName();
+            String where = null;
+            if(get("where") != null) {
+                JSONObject jsonWhere = get("where").isObject();
+                where = jsonWhere.toString();
+                assert where != null;
+            }
+            where = URL.encode(where);
+            Shape.get(Parse.SERVER_URL + Parse.CLASSES_URI + className + "?where=" + where)
+                    .header("X-Parse-Application-Id", X_Parse_Application_Id)
+                    .header("X-Parse-REST-API-Key", X_Parse_REST_API_Key)
+                    .header("X-Parse-Master-Key", X_Parse_Master_Key)
+                    .asJson(new AsyncCallback<String>() {
+                        @Override
+                        public void onFailure(Throwable throwable) {
+                            HttpRequestException ex = (HttpRequestException) throwable;
+                            callback.onFailure(ex);
+                        }
+                        @Override
+                        public void onSuccess(String s) {
+                            callback.onSuccess(ParseResponse.parse(s));
+                        }
+                    });
+        }
+
     }
 
     public static String SERVER_URL = "https://parseapi.back4app.com/";

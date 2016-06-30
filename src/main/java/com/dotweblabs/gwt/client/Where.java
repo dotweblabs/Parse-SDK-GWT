@@ -6,7 +6,11 @@ import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONValue;
 
 /**
- * Created by paperspace on 6/29/2016.
+ *
+ *
+ * @author Kerby Martino
+ * @since 0-SNAPSHOT
+ * @version 0-SNAPSHOT
  */
 public class Where extends JSONObject {
     //private JSONObject filters;

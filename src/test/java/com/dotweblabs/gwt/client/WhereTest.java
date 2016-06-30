@@ -24,6 +24,7 @@ import com.google.gwt.junit.client.GWTTestCase;
 /**
  *
  * Unit tests of {@link Where}
+ *
  * @author Kerby Martino
  * @since 0-SNAPSHOT
  * @version 0-SNAPSHOT
