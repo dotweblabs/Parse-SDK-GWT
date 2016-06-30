@@ -24,6 +24,8 @@ import com.google.gwt.json.client.JSONString;
 import com.google.gwt.junit.client.GWTTestCase;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import java.util.Date;
+
 /**
  *
  * Unit tests of {@link ParseTest}
@@ -188,6 +190,70 @@ public class ParseTest extends GWTTestCase {
                         finishTest();
                     }
                 });
+            }
+        });
+    }
+
+    public void testShouldFailSignupAlreadyExist() {
+        delayTestFinish(3000);
+        Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY);
+        ParseObject user = Parse.Objects.extend("_User");
+        user.putString("username", "testUser");
+        user.putString("password", "testPassword");
+        user.putNumber("age", 18L);
+        Parse.Users.signup(user, new AsyncCallback<ParseResponse>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                log(throwable.getMessage());
+                finishTest();
+            }
+
+            @Override
+            public void onSuccess(ParseResponse parseResponse) {
+                log(parseResponse.toString());
+                fail();
+                finishTest();
+            }
+        });
+    }
+
+    public void testSignup() {
+        delayTestFinish(3000);
+        Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY);
+        ParseObject user = Parse.Objects.extend("_User");
+        user.putString("username", "testUser@" + new Date().toString()); // random
+        user.putString("password", "testPassword");
+        user.putNumber("age", 18L);
+        Parse.Users.signup(user, new AsyncCallback<ParseResponse>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                log(throwable.getMessage());
+                fail();
+                finishTest();
+            }
+
+            @Override
+            public void onSuccess(ParseResponse parseResponse) {
+                log(parseResponse.toString());
+                finishTest();
+            }
+        });
+    }
+
+    public void testLogin() {
+        delayTestFinish(3000);
+        Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY);
+        Parse.Users.login("testUser", "testPassword", new AsyncCallback<ParseResponse>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                log(throwable.getMessage());
+                fail();
+                finishTest();
+            }
+            @Override
+            public void onSuccess(ParseResponse parseResponse) {
+                log(parseResponse.toString());
+                finishTest();
             }
         });
     }

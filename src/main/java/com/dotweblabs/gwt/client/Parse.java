@@ -39,8 +39,57 @@ import java.util.Iterator;
 public class Parse {
 
     public static class Users {
-        public static void login(ParseObject user) {
-            //createdAt, objectId, sessionToken
+        public static void signup(ParseObject user, final AsyncCallback<ParseResponse> callback) {
+            Shape.post(Parse.SERVER_URL + "users")
+                    .header("X-Parse-Application-Id", X_Parse_Application_Id)
+                    .header("X-Parse-REST-API-Key", X_Parse_REST_API_Key)
+                    .header("X-Parse-Master-Key", X_Parse_Master_Key)
+                    .body(user.toString())
+                    .asJson(new AsyncCallback<String>() {
+                        @Override
+                        public void onFailure(Throwable throwable) {
+                            HttpRequestException ex = (HttpRequestException) throwable;
+                            callback.onFailure(ex);
+                        }
+                        @Override
+                        public void onSuccess(String s) {
+                            ParseResponse response = ParseResponse.parse(s);
+                            if(response.get("sessionToken") != null) {
+                                //createdAt, objectId, sessionToken
+                                callback.onSuccess(response);
+                            } else {
+                                HttpRequestException ex
+                                        = new HttpRequestException(response.getErrorMessage(), response.getErrorCode());
+                                callback.onFailure(ex);
+                            }
+                        }
+                    });
+        }
+        public static void login(String username, String password, final AsyncCallback<ParseResponse> callback) {
+            String param = "username=" + username + "&" + "password=" + password;
+            Shape.get(Parse.SERVER_URL + "login?" + URL.encode(param))
+                    .header("X-Parse-Application-Id", X_Parse_Application_Id)
+                    .header("X-Parse-REST-API-Key", X_Parse_REST_API_Key)
+                    .header("X-Parse-Master-Key", X_Parse_Master_Key)
+                    .asJson(new AsyncCallback<String>() {
+                        @Override
+                        public void onFailure(Throwable throwable) {
+                            HttpRequestException ex = (HttpRequestException) throwable;
+                            callback.onFailure(ex);
+                        }
+                        @Override
+                        public void onSuccess(String s) {
+                            ParseResponse response = ParseResponse.parse(s);
+                            if(response.get("sessionToken") != null) {
+                                //createdAt, objectId, sessionToken
+                                callback.onSuccess(response);
+                            } else {
+                                HttpRequestException ex
+                                        = new HttpRequestException(response.getErrorMessage(), response.getErrorCode());
+                                callback.onFailure(ex);
+                            }
+                        }
+                    });
         }
         public static void requestPasswordReset() {}
         public static void retrieveUser(String objectId ){}

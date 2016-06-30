@@ -13,7 +13,7 @@ import java.util.*;
 
 /**
  * Helper class to decode and encode objects to and from Json. Converter handles
- * simple data types (strings, numbers, booleans) and lists and maps.
+ * simple testdata types (strings, numbers, booleans) and lists and maps.
  */
 @SuppressWarnings("deprecation")
 public class JsonConverter {
