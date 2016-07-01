@@ -1,6 +1,5 @@
 package com.dotweblabs.gwt.client;
 
-import com.dotweblabs.gwt.client.js.JsonConverter;
 import com.google.gwt.json.client.*;
 
 import java.util.HashMap;

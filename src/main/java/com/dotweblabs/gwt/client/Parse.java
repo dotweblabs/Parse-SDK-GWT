@@ -16,7 +16,6 @@
  */
 package com.dotweblabs.gwt.client;
 
-import com.dotweblabs.gwt.client.js.JsonConverter;
 import com.dotweblabs.shape.client.HttpRequestException;
 import com.dotweblabs.shape.client.Shape;
 import com.google.gwt.http.client.URL;

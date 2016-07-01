@@ -1,3 +1,6 @@
+## 0-SNAPSHOT - 07/01/16
+- Removed unused package
+
 ## 0-SNAPSHOT - 06/30/16
 
 - Added Logout function
