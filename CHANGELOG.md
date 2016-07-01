@@ -1,5 +1,7 @@
 ## 0-SNAPSHOT - 06/30/16
 
+- Added Logout function
+
 ### Fixed
 - Fixed getErrorCode
 
