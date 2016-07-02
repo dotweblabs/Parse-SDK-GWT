@@ -1,4 +1,10 @@
+## 0-SNAPSHOT - 07/02/16
+
+- Added `testQueryPointer` Test
+- Added null check on ParseObject getters for createdAt and updatedAt
+
 ## 0-SNAPSHOT - 07/01/16
+
 - Removed unused package
 
 ## 0-SNAPSHOT - 06/30/16

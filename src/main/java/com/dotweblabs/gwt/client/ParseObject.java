@@ -75,19 +75,19 @@ public class ParseObject extends JSONObject {
         put("objectId", new JSONString(objectId));
     }
     public String getObjectId() {
-        if(get("objectId").isString() != null) {
+        if(get("objectId") != null && get("objectId").isString() != null) {
             return get("objectId").isString().stringValue();
         }
         return null;
     }
     public String getCreatedAt() {
-        if(get("createdAt").isString() != null) {
+        if(get("createdAt") != null && get("createdAt").isString() != null) {
             return get("createdAt").isString().stringValue();
         }
         return null;
     }
     public String getUpdatedAt() {
-        if(get("updatedAt").isString() != null) {
+        if(get("updatedAt") != null && get("updatedAt").isString() != null) {
             return get("updatedAt").isString().stringValue();
         }
         return null;

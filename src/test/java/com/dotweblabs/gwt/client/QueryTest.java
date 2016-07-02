@@ -57,8 +57,69 @@ public class QueryTest extends GWTTestCase {
         log(query.toString());
     }
 
+    public void testQueryPointer() {
+        delayTestFinish(10000);
+        Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
+        Parse.SERVER_URL = PARSE_API_ROOT;
+        createParseObject();
+        ParseObject talentObject = Parse.Objects.extend("TestObject");
+        Parse.Query query = Parse.Query.extend(talentObject);
+
+        ParseObject pointer = new ParseObject();
+        pointer.putString("__type", "Pointer");
+        pointer.putString("className", "_User");
+        pointer.putString("objectId", "QoSqhY3nV7");
+
+        Where where = new Where("userId", pointer);
+
+        query.where(where).find(new AsyncCallback<ParseResponse>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                HttpRequestException ex = (HttpRequestException) throwable;
+                fail();
+                finishTest();
+            }
+            @Override
+            public void onSuccess(ParseResponse parseResponse) {
+                log(parseResponse.toString());
+                JSONArray results = parseResponse.getResults();
+                assertNotNull(results);
+                finishTest();
+            }
+        });
+    }
+
     public static void log(String s){
         System.out.println(s);
+    }
+
+    public void createParseObject() {
+
+        ParseObject testObject = new ParseObject("TestObject");
+        testObject.put("foo", new JSONString("bar"));
+
+        ParseObject pointer = new ParseObject();
+        pointer.putString("__type", "Pointer");
+        pointer.putString("className", "_User");
+        pointer.putString("objectId", "QoSqhY3nV7");
+
+        testObject.put("userId", pointer);
+
+        Parse.Objects.create(testObject, new AsyncCallback<ParseResponse>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                HttpRequestException ex = (HttpRequestException) throwable;
+                log("POST Error: " + ex.getCode());
+                fail("POST Error: " + ex.getCode());
+            }
+            @Override
+            public void onSuccess(ParseResponse parseResponse) {
+                log("POST Success objectId: " + parseResponse.getObjectId() + " createdAt: " + parseResponse.getCreatedAt());
+                assertNotNull(parseResponse.getObjectId());
+                assertNotNull(parseResponse.getCreatedAt());
+            }
+        });
+
     }
 
     public Where complexWhere() {
