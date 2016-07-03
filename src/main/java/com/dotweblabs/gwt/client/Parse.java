@@ -284,14 +284,14 @@ public class Parse {
 
         public void find(final AsyncCallback<ParseResponse> callback){
             String className = getClassName();
-            String where = null;
+            String where = "";
             if(get("where") != null) {
                 JSONObject jsonWhere = get("where").isObject();
                 where = jsonWhere.toString();
                 assert where != null;
+                where = "?where=" + URL.encode(where);
             }
-            where = URL.encode(where);
-            Shape.get(Parse.SERVER_URL + Parse.CLASSES_URI + className + "?where=" + where)
+            Shape.get(Parse.SERVER_URL + Parse.CLASSES_URI + className + where)
                     .header("X-Parse-Application-Id", X_Parse_Application_Id)
                     .header("X-Parse-REST-API-Key", X_Parse_REST_API_Key)
                     .header("X-Parse-Master-Key", X_Parse_Master_Key)

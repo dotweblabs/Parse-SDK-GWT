@@ -1,5 +1,6 @@
 ## 0-SNAPSHOT - 07/03/16
 
+- Fixed for if `Where` is null should not cause query to fail
 - Fixed DELETE for Objects
 - Added Session token support
 
