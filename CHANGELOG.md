@@ -1,5 +1,6 @@
 ## 0-SNAPSHOT - 07/02/16
 
+- Added null check on getter for ParseResponse
 - Added `testQueryPointer` Test
 - Added null check on ParseObject getters for createdAt and updatedAt
 
