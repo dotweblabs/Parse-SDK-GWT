@@ -85,6 +85,7 @@ public class Parse {
                             if(response.get("sessionToken") != null) {
                                 //createdAt, objectId, sessionToken
                                 sessionToken = response.get("sessionToken").isString().stringValue();
+                                Parse.X_Parse_Session_Token = sessionToken;
                                 callback.onSuccess(response);
                             } else {
                                 HttpRequestException ex
@@ -139,6 +140,7 @@ public class Parse {
                     .header("X-Parse-Application-Id", X_Parse_Application_Id)
                     .header("X-Parse-REST-API-Key", X_Parse_REST_API_Key)
                     .header("X-Parse-Master-Key", X_Parse_Master_Key)
+                    .header("X-Parse-Session-Token", X_Parse_Session_Token)
                     .body(object.toString())
                     .asJson(new AsyncCallback<String>() {
                         @Override
@@ -160,6 +162,7 @@ public class Parse {
                     .header("X-Parse-Application-Id", X_Parse_Application_Id)
                     .header("X-Parse-REST-API-Key", X_Parse_REST_API_Key)
                     .header("X-Parse-Master-Key", X_Parse_Master_Key)
+                    .header("X-Parse-Session-Token", X_Parse_Session_Token)
                     .asJson(new AsyncCallback<String>() {
                         @Override
                         public void onFailure(Throwable throwable) {
@@ -180,10 +183,11 @@ public class Parse {
             JSONObject opponents = new JSONObject();
             opponents.put("__op", new JSONString("Delete"));
             payload.put("opponents", opponents);
-            Shape.put(path)
+            Shape.delete(path)
                     .header("X-Parse-Application-Id", X_Parse_Application_Id)
                     .header("X-Parse-REST-API-Key", X_Parse_REST_API_Key)
                     .header("X-Parse-Master-Key", X_Parse_Master_Key)
+                    .header("X-Parse-Session-Token", X_Parse_Session_Token)
                     .body(payload.toString())
                     .asJson(new AsyncCallback<String>() {
                         @Override
@@ -215,6 +219,7 @@ public class Parse {
                     .header("X-Parse-Application-Id", X_Parse_Application_Id)
                     .header("X-Parse-REST-API-Key", X_Parse_REST_API_Key)
                     .header("X-Parse-Master-Key", X_Parse_Master_Key)
+                    .header("X-Parse-Session-Token", X_Parse_Session_Token)
                     .body(payload.toString())
                     .asJson(new AsyncCallback<String>() {
                         @Override
@@ -290,6 +295,7 @@ public class Parse {
                     .header("X-Parse-Application-Id", X_Parse_Application_Id)
                     .header("X-Parse-REST-API-Key", X_Parse_REST_API_Key)
                     .header("X-Parse-Master-Key", X_Parse_Master_Key)
+                    .header("X-Parse-Session-Token", X_Parse_Session_Token)
                     .asJson(new AsyncCallback<String>() {
                         @Override
                         public void onFailure(Throwable throwable) {
@@ -314,11 +320,13 @@ public class Parse {
     public static String X_Parse_Application_Id = null;
     public static String X_Parse_REST_API_Key = null;
     public static String X_Parse_Master_Key = null;
+    public static String X_Parse_Session_Token = null;
 
     public static String _appId = null;;
     public static String _javascriptKey = null;;
     public static String _restApiKey = null;;
     public static String _masterKey = null;;
+    public static String _sessionToken = null;
 
     public static void initialize(String appId, String restApiKey, String masterKey) {
         _appId = appId;
@@ -338,6 +346,18 @@ public class Parse {
         X_Parse_Application_Id = appId;
         X_Parse_REST_API_Key = restApiKey;
         if(!SERVER_URL.endsWith("/")) {
+            SERVER_URL = SERVER_URL + "/";
+        }
+    }
+
+    public static void initializeSession(String appId, String restApiKey, String sessionToken) {
+        _appId = appId;
+        _restApiKey = restApiKey;
+        _sessionToken = sessionToken;
+        X_Parse_Application_Id = appId;
+        X_Parse_REST_API_Key = restApiKey;
+        X_Parse_Session_Token = sessionToken;
+        if (!SERVER_URL.endsWith("/")) {
             SERVER_URL = SERVER_URL + "/";
         }
     }

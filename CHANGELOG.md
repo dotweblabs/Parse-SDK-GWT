@@ -1,3 +1,8 @@
+## 0-SNAPSHOT - 07/03/16
+
+- Fixed DELETE for Objects
+- Added Session token support
+
 ## 0-SNAPSHOT - 07/02/16
 
 - Added null check on getter for ParseResponse

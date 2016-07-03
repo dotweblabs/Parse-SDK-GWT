@@ -18,6 +18,7 @@ package com.dotweblabs.gwt.client;
 
 import com.dotweblabs.shape.client.HttpRequestException;
 import com.dotweblabs.shape.client.Shape;
+import com.google.gwt.json.client.JSONBoolean;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONString;
@@ -120,6 +121,14 @@ public class ParseTest extends GWTTestCase {
         Parse.SERVER_URL = PARSE_API_ROOT;
         ParseObject testObject = new ParseObject("TestObject");
         testObject.put("boom", new JSONString("box"));
+
+        // If not using Master Key, ACL causes 404 on this operation
+        JSONObject acl = new JSONObject();
+        JSONObject asterisk = new JSONObject();
+        asterisk.put("read", JSONBoolean.getInstance(true));
+        acl.put("*", asterisk);
+        testObject.put("ACL", acl);
+
         Parse.Objects.create(testObject, new AsyncCallback<ParseResponse>() {
             @Override
             public void onFailure(Throwable throwable) {
@@ -142,9 +151,10 @@ public class ParseTest extends GWTTestCase {
                     }
                     @Override
                     public void onSuccess(ParseResponse parseObject) {
-                        log("DELETE Success: " + parseObject.toString());
-                        String updatedAt = parseObject.getUpdatedAt();
-                        assertNotNull(updatedAt);
+                        // DELETE OP returns null
+                        //log("DELETE Success: " + parseObject.toString());
+                        //String updatedAt = parseObject.getUpdatedAt();
+                        //assertNotNull(updatedAt);
                         finishTest();
                     }
                 });
