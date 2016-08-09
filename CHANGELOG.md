@@ -1,3 +1,7 @@
+## 0-SNAPSHOT - 08/09/16
+
+- Add ParsePointer
+
 ## 0-SNAPSHOT - 07/03/16
 
 - Fixed for if `Where` is null should not cause query to fail
