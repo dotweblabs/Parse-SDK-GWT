@@ -14,13 +14,11 @@
  * limitations under the License.
  *
  */
-package com.dotweblabs.gwt.client;
+package com.parse.gwt.client;
 
 import com.dotweblabs.shape.client.HttpRequestException;
-import com.dotweblabs.shape.client.Shape;
 import com.google.gwt.json.client.JSONBoolean;
 import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.junit.client.GWTTestCase;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -48,7 +46,7 @@ public class ParseTest extends GWTTestCase {
 
     @Override
     public String getModuleName() {
-        return "com.dotweblabs.gwt.Parse";
+        return "com.parse.gwt.Parse";
     }
 
     public void testInitialize() {

@@ -1,4 +1,4 @@
-package com.dotweblabs.gwt.client;
+package com.parse.gwt.client;
 
 import com.dotweblabs.shape.client.HttpRequestException;
 import com.google.gwt.json.client.JSONArray;
@@ -23,7 +23,7 @@ public class QueryTest extends GWTTestCase {
 
     @Override
     public String getModuleName() {
-        return "com.dotweblabs.gwt.Parse";
+        return "com.parse.gwt.Parse";
     }
 
     public void testQuery() {

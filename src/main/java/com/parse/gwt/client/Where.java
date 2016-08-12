@@ -1,7 +1,6 @@
-package com.dotweblabs.gwt.client;
+package com.parse.gwt.client;
 
 import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONBoolean;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONValue;
 

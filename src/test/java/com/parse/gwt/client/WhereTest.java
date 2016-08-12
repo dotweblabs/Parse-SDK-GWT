@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
-package com.dotweblabs.gwt.client;
+package com.parse.gwt.client;
 
 import com.google.gwt.json.client.JSONBoolean;
 import com.google.gwt.json.client.JSONNumber;
@@ -35,7 +35,7 @@ public class WhereTest extends GWTTestCase {
 
     @Override
     public String getModuleName() {
-        return "com.dotweblabs.gwt.Parse";
+        return "com.parse.gwt.Parse";
     }
 
     public void testSimpleWhere() {

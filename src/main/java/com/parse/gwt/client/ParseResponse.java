@@ -14,14 +14,13 @@
  * limitations under the License.
  *
  */
-package com.dotweblabs.gwt.client;
+package com.parse.gwt.client;
 
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
 
-import java.util.HashMap;
 import java.util.Iterator;
 
 /**

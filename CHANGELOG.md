@@ -1,3 +1,7 @@
+## 0-SNAPSHOT - 08/12/16
+
+- Refactor package from `com.dotweblabs.gwt` to `com.parse.gwt`
+
 ## 0-SNAPSHOT - 08/09/16
 
 - Add ParsePointer

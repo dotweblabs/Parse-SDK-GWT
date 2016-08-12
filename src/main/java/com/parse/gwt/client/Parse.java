@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
-package com.dotweblabs.gwt.client;
+package com.parse.gwt.client;
 
 import com.dotweblabs.shape.client.HttpRequestException;
 import com.dotweblabs.shape.client.Shape;
@@ -22,7 +22,6 @@ import com.google.gwt.http.client.URL;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONValue;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import java.util.Iterator;

@@ -1,10 +1,8 @@
-package com.dotweblabs.gwt.client;
+package com.parse.gwt.client;
 
 import com.google.gwt.json.client.*;
 
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 /**
  *
