@@ -1,4 +1,9 @@
 ## 0-SNAPSHOT - 08/12/16
+- Added `ParseGeoPoint` object
+- Null check on `setObjectId` for `ParseObject`
+- Clone `ParseResponse` as `ParseObject` method
+
+## 0-SNAPSHOT - 08/12/16
 
 - Refactor package from `com.dotweblabs.gwt` to `com.parse.gwt`
 

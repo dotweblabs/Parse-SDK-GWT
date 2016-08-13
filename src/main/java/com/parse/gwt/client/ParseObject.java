@@ -70,7 +70,9 @@ public class ParseObject extends JSONObject {
         }
     }
     public void setObjectId(String objectId) {
-        put("objectId", new JSONString(objectId));
+        if(objectId != null) {
+            put("objectId", new JSONString(objectId));
+        }
     }
     public String getObjectId() {
         if(get("objectId") != null && get("objectId").isString() != null) {

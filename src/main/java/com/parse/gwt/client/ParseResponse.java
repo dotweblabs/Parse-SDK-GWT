@@ -36,7 +36,7 @@ public class ParseResponse extends JSONObject {
         return ParseResponse.clone(jsonObject);
     }
     public static ParseResponse clone(JSONObject jsonObject) {
-        ParseResponse response = null;
+        ParseResponse response = new ParseResponse();
         Iterator<String> it = jsonObject.keySet().iterator();
         while(it.hasNext()) {
             if(response == null) {
@@ -47,6 +47,12 @@ public class ParseResponse extends JSONObject {
             response.put(key, value);
         }
         return response;
+    }
+    public ParseObject asParseObject(String className) {
+        return ParseObject.clone(className, this);
+    }
+    public Boolean isEmpty() {
+        return getResults().size() == 0 ? true : false;
     }
     public String getObjectId() {
         if(get("objectId") != null && get("objectId").isString() != null) {
