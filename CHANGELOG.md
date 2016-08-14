@@ -1,3 +1,6 @@
+## 0-SNAPSHOT - 08/15/16
+- Updated GWT version
+
 ## 0-SNAPSHOT - 08/12/16
 - Added `ParseGeoPoint` object
 - Null check on `setObjectId` for `ParseObject`
