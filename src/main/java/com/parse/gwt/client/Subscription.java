@@ -31,9 +31,6 @@ public class Subscription {
 
     public void on(String event, final AsyncCallback<ParseObject> callback){
         //throw new RuntimeException("Websocket is not yet connected");
-        if(event.equalsIgnoreCase("create")) {
-            event = "enter";
-        }
         final String subcribeOp = event;
         socket = new Websocket("ws://" + Parse.getUri());
         socket.open();
@@ -58,7 +55,7 @@ public class Subscription {
                         query.put("where", new Where("status", new JSONString("new")));
                         connect.put("query", query);
                         socket.send(connect.toString());
-                    } else if (op.equalsIgnoreCase("enter")) {
+                    } else if (op.equalsIgnoreCase("enter")||op.equalsIgnoreCase("create")||op.equalsIgnoreCase("leave")) {
                         if(subcribeOp.equals(op)) {
                             JSONObject jsonObject = message.get("object").isObject();
                             ParseObject parseObject = ParseObject.clone(className, jsonObject);

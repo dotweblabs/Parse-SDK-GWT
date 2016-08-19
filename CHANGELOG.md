@@ -1,4 +1,7 @@
 ## 0-SNAPSHOT - 08/19/16
+- Edit Subscription
+
+## 0-SNAPSHOT - 08/19/16
 - Added method to create Relation
 - Added JUnit test for `createRelation`
 - Added `ParseRelation` object
