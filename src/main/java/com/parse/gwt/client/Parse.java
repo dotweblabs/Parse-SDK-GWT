@@ -240,6 +240,8 @@ public class Parse {
 
     public static class Query extends JSONObject {
 
+        private Where where;
+
         public Query() {
 
         }
@@ -261,6 +263,7 @@ public class Parse {
         }
 
         public Query where(Where where){
+            this.where = where;
             put("where", where);
             return this;
         }
@@ -306,6 +309,11 @@ public class Parse {
                             callback.onSuccess(ParseResponse.parse(s));
                         }
                     });
+        }
+
+        public Subscription subscribe() {
+            Subscription subscription = new Subscription(getClassName(), where);
+            return subscription;
         }
 
     }
@@ -361,5 +369,9 @@ public class Parse {
         }
     }
 
+    public static String getUri() {
+        String s = SERVER_URL.replaceFirst("^(http://|https://)","");
+        return s;
+    }
 
 }

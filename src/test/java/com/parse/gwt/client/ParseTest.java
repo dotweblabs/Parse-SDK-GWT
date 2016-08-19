@@ -266,6 +266,15 @@ public class ParseTest extends GWTTestCase {
         });
     }
 
+    public void testGetUri() {
+        String uri = Parse.getUri();
+        assertEquals("parseapi.back4app.com/", uri);
+        Parse.SERVER_URL = "http://localhost:1337/parse";
+        uri = Parse.getUri();
+        assertEquals("localhost:1337/parse", uri);
+        log(uri);
+    }
+
     public static void log(String s){
         System.out.println(s);
     }

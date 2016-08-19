@@ -6,6 +6,7 @@
   <inherits name="com.google.gwt.json.JSON"/>
   <inherits name="com.google.common.collect.Collect"/>
   <inherits name="com.dotweblabs.shape.Shape"/>
+  <inherits name="com.sksamuel.gwt.GwtWebsockets" />
   <!-- Specify the paths for translatable code -->
   <source path="client"/>
 </module>

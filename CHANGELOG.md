@@ -1,3 +1,6 @@
+## 0-SNAPSHOT - 08/18/16
+- Subscrioption to LiveQuery 
+
 ## 0-SNAPSHOT - 08/15/16
 - Rollback GWT version to `2.8.0-beta1`
 - Removed unused codes 
