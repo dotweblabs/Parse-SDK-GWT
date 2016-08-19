@@ -1,3 +1,6 @@
+## 0-SNAPSHOT - 08/19/16
+- Added Relation Query
+
 ## 0-SNAPSHOT - 08/18/16
 - Subscrioption to LiveQuery 
 

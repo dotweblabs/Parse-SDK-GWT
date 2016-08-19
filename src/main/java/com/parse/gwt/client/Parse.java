@@ -236,6 +236,27 @@ public class Parse {
             String className = query.get("className").isString().stringValue();
 
         }
+
+        public static void getRelation(ParseObject reference, String referenceKey, ParseObject referencee,
+                                       final AsyncCallback<ParseResponse> callback) {
+            Parse.Query query = Parse.Query.extend(referencee);
+            JSONObject jsonObject = new JSONObject();
+            ParsePointer pointer = ParsePointer.parse(reference.getClassName(), reference.getObjectId());
+            jsonObject.put("object", pointer);
+            jsonObject.put("key", new JSONString(referenceKey));
+            Where where = new Where("$relatedTo", jsonObject);
+            query.where(where);
+            query.find(new AsyncCallback<ParseResponse>() {
+                @Override
+                public void onFailure(Throwable throwable) {
+                    callback.onFailure(throwable);
+                }
+                @Override
+                public void onSuccess(ParseResponse parseResponse) {
+                    callback.onSuccess(parseResponse);
+                }
+            });
+        }
     }
 
     public static class Query extends JSONObject {

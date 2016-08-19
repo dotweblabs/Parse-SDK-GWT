@@ -266,6 +266,33 @@ public class ParseTest extends GWTTestCase {
         });
     }
 
+    public void testGetRelation(){
+        /*
+            * where={"$relatedTo":{"object":{"__type":"Pointer","className":"Product","objectId":"2Fy4qdTUel"},"key":"subProductCategoryId"}}
+            *
+            * */
+        delayTestFinish(3000);
+        Parse.SERVER_URL = "http://localhost:1337/parse";
+        Parse.initialize("myAppId", "myRESTApiKey", "myMasterKey");
+        ParseObject parseObject = Parse.Objects.extend("Product");
+        parseObject.setObjectId("2Fy4qdTUel");
+        ParseObject subProductCategoryObject = Parse.Objects.extend("SubProductCategory");
+        Parse.Objects.getRelation(parseObject, "subProductCategoryId", subProductCategoryObject, new AsyncCallback<ParseResponse>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                log(throwable.getMessage());
+                fail();
+                finishTest();
+            }
+            @Override
+            public void onSuccess(ParseResponse parseResponse) {
+                log(parseResponse.toString());
+                finishTest();
+            }
+        });
+
+    }
+
     public void testGetUri() {
         String uri = Parse.getUri();
         assertEquals("parseapi.back4app.com/", uri);
