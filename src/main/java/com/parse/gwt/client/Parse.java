@@ -19,11 +19,13 @@ package com.parse.gwt.client;
 import com.dotweblabs.shape.client.HttpRequestException;
 import com.dotweblabs.shape.client.Shape;
 import com.google.gwt.http.client.URL;
+import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import java.util.Arrays;
 import java.util.Iterator;
 
 /**
@@ -256,6 +258,78 @@ public class Parse {
                     callback.onSuccess(parseResponse);
                 }
             });
+        }
+
+
+        public static void createRelation(ParseObject object, String key, ParsePointer target,
+                                          final AsyncCallback<ParseResponse> callback) {
+            String objectId = object.getObjectId();
+            final String className = object.getClassName();
+            final String path = Parse.SERVER_URL + Parse.CLASSES_URI + className + "/" + objectId;
+            JSONArray objects = new JSONArray();
+            objects.set(0, target);
+            JSONObject payload = new JSONObject();
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("__op", new JSONString("AddRelation"));
+            jsonObject.put("objects", objects);
+            payload.put(key, jsonObject);
+            Shape.put(path)
+                    .header("X-Parse-Application-Id", X_Parse_Application_Id)
+                    .header("X-Parse-REST-API-Key", X_Parse_REST_API_Key)
+                    .header("X-Parse-Master-Key", X_Parse_Master_Key)
+                    .header("X-Parse-Session-Token", X_Parse_Session_Token)
+                    .body(payload.toString())
+                    .asJson(new AsyncCallback<String>() {
+                        @Override
+                        public void onFailure(Throwable throwable) {
+                            throwable.printStackTrace();
+                            HttpRequestException ex = (HttpRequestException) throwable;
+                            callback.onFailure(ex);
+                        }
+                        @Override
+                        public void onSuccess(String s) {
+                            callback.onSuccess(ParseResponse.parse(s));
+                        }
+                    });
+
+
+        }
+
+        public static void createRelation(ParseObject object, String key, ParsePointer[] targets,
+                                          final AsyncCallback<ParseResponse> callback) {
+            String objectId = object.getObjectId();
+            final String className = object.getClassName();
+            final String path = Parse.SERVER_URL + Parse.CLASSES_URI + className + "/" + objectId;
+            JSONObject payload = new JSONObject();
+            JSONArray objects = new JSONArray();
+            int i = 0;
+            for(ParsePointer p :Arrays.asList(targets)) {
+                objects.set(i, p);
+                i++;
+            }
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("__op", new JSONString("AddRelation"));
+            jsonObject.put("objects", objects);
+            payload.put(key, jsonObject);
+            Shape.put(path)
+                    .header("X-Parse-Application-Id", X_Parse_Application_Id)
+                    .header("X-Parse-REST-API-Key", X_Parse_REST_API_Key)
+                    .header("X-Parse-Master-Key", X_Parse_Master_Key)
+                    .header("X-Parse-Session-Token", X_Parse_Session_Token)
+                    .body(payload.toString())
+                    .asJson(new AsyncCallback<String>() {
+                        @Override
+                        public void onFailure(Throwable throwable) {
+                            HttpRequestException ex = (HttpRequestException) throwable;
+                            callback.onFailure(ex);
+                        }
+                        @Override
+                        public void onSuccess(String s) {
+                            callback.onSuccess(ParseResponse.parse(s));
+                        }
+                    });
+
+
         }
     }
 

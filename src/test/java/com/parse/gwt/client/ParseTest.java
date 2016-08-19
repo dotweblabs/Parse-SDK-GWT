@@ -267,17 +267,12 @@ public class ParseTest extends GWTTestCase {
     }
 
     public void testGetRelation(){
-        /*
-            * where={"$relatedTo":{"object":{"__type":"Pointer","className":"Product","objectId":"2Fy4qdTUel"},"key":"subProductCategoryId"}}
-            *
-            * */
-        delayTestFinish(3000);
+        delayTestFinish(10000);
         Parse.SERVER_URL = "http://localhost:1337/parse";
         Parse.initialize("myAppId", "myRESTApiKey", "myMasterKey");
-        ParseObject parseObject = Parse.Objects.extend("Product");
-        parseObject.setObjectId("2Fy4qdTUel");
-        ParseObject subProductCategoryObject = Parse.Objects.extend("SubProductCategory");
-        Parse.Objects.getRelation(parseObject, "subProductCategoryId", subProductCategoryObject, new AsyncCallback<ParseResponse>() {
+        final ParseObject parseObject = Parse.Objects.extend("TestObject");
+        parseObject.put("foo", new JSONString("bar"));
+        Parse.Objects.create(parseObject, new AsyncCallback<ParseResponse>() {
             @Override
             public void onFailure(Throwable throwable) {
                 log(throwable.getMessage());
@@ -286,10 +281,54 @@ public class ParseTest extends GWTTestCase {
             }
             @Override
             public void onSuccess(ParseResponse parseResponse) {
-                log(parseResponse.toString());
-                finishTest();
+                parseObject.setObjectId(parseResponse.getObjectId());
+                final ParseObject relatedObject = Parse.Objects.extend("TestRelatedObject");
+                //parseObject.put("testRelatedObjectId", new ParseRelation(parseObject.getClassName()));
+                Parse.Objects.create(relatedObject, new AsyncCallback<ParseResponse>() {
+                    @Override
+                    public void onFailure(Throwable throwable) {
+                        log(throwable.getMessage());
+                        fail();
+                        finishTest();
+                    }
+                    @Override
+                    public void onSuccess(ParseResponse parseResponse) {
+                        String objectId = parseResponse.getObjectId();
+                        relatedObject.setObjectId(objectId);
+                        //finishTest();
+                        Parse.Objects.createRelation(parseObject, "testRelatedObjects", relatedObject.getPointer(),
+                                        new AsyncCallback<ParseResponse>() {
+                            @Override
+                            public void onFailure(Throwable throwable) {
+                                throwable.printStackTrace();
+                                log(throwable.getMessage());
+                                fail();
+                                finishTest();
+                            }
+                            @Override
+                            public void onSuccess(ParseResponse parseResponse) {
+                                log(parseResponse.toString());
+                                finishTest();
+                                Parse.Objects.getRelation(parseObject, "testRelatedObjects", relatedObject, new AsyncCallback<ParseResponse>() {
+                                    @Override
+                                    public void onFailure(Throwable throwable) {
+                                        log(throwable.getMessage());
+                                        fail();
+                                        finishTest();
+                                    }
+                                    @Override
+                                    public void onSuccess(ParseResponse parseResponse) {
+                                        log(parseResponse.toString());
+                                        finishTest();
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
             }
         });
+
 
     }
 

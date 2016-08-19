@@ -92,4 +92,8 @@ public class ParseObject extends JSONObject {
         }
         return null;
     }
+    public ParsePointer getPointer() {
+        ParsePointer pointer = new ParsePointer(this);
+        return pointer;
+    }
 }
