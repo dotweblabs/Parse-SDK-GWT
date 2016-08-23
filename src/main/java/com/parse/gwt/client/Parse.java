@@ -27,6 +27,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  *
@@ -260,6 +261,28 @@ public class Parse {
             });
         }
 
+        public static void getRelationOrderAscending(ParseObject reference, String referenceKey, ParseObject referencee,
+                                       final AsyncCallback<ParseResponse> callback) {
+            Parse.Query query = Parse.Query.extend(referencee);
+            JSONObject jsonObject = new JSONObject();
+            ParsePointer pointer = ParsePointer.parse(reference.getClassName(), reference.getObjectId());
+            jsonObject.put("object", pointer);
+            jsonObject.put("key", new JSONString(referenceKey));
+            Where where = new Where("$relatedTo", jsonObject);
+            query.where(where);
+
+            query.find(new AsyncCallback<ParseResponse>() {
+                @Override
+                public void onFailure(Throwable throwable) {
+                    callback.onFailure(throwable);
+                }
+                @Override
+                public void onSuccess(ParseResponse parseResponse) {
+                    callback.onSuccess(parseResponse);
+                }
+            });
+        }
+
 
         public static void createRelation(ParseObject object, String key, ParsePointer target,
                                           final AsyncCallback<ParseResponse> callback) {
@@ -336,6 +359,7 @@ public class Parse {
     public static class Query extends JSONObject {
 
         private Where where;
+        private Order order;
 
         public Query() {
 
@@ -355,6 +379,12 @@ public class Parse {
 
         private void setClassName(String className) {
             put("className", new JSONString(className));
+        }
+
+        public Query order(Order order) {
+            this.order = order;
+            put("order", order);
+            return this;
         }
 
         public Query where(Where where){
@@ -382,13 +412,23 @@ public class Parse {
         public void find(final AsyncCallback<ParseResponse> callback){
             String className = getClassName();
             String where = "";
+            String order = "";
             if(get("where") != null) {
                 JSONObject jsonWhere = get("where").isObject();
                 where = jsonWhere.toString();
                 assert where != null;
                 where = "?where=" + URL.encode(where);
             }
-            Shape.get(Parse.SERVER_URL + Parse.CLASSES_URI + className + where)
+            if(get("order") != null) {
+                JSONArray jsonOrder = get("order").isArray();
+                assert order != null;
+                order = where.isEmpty() ? "order=" : "&order=";
+                for(int i=0;i<jsonOrder.size();i++){
+                    order = order + jsonOrder.get(i).isString().stringValue() + ",";
+                }
+                order = order.substring(0, order.lastIndexOf(","));
+            }
+            Shape.get(Parse.SERVER_URL + Parse.CLASSES_URI + className + where + order)
                     .header("X-Parse-Application-Id", X_Parse_Application_Id)
                     .header("X-Parse-REST-API-Key", X_Parse_REST_API_Key)
                     .header("X-Parse-Master-Key", X_Parse_Master_Key)

@@ -333,6 +333,7 @@ public class ParseTest extends GWTTestCase {
     }
 
     public void testGetUri() {
+        Parse.SERVER_URL = "http://parseapi.back4app.com/";
         String uri = Parse.getUri();
         assertEquals("parseapi.back4app.com/", uri);
         Parse.SERVER_URL = "http://localhost:1337/parse";

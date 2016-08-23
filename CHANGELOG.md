@@ -1,3 +1,6 @@
+## 0-SNAPSHOT - 08/23/16
+- Added Order on Parse.Query
+
 ## 0-SNAPSHOT - 08/19/16
 - Edit Subscription
 
