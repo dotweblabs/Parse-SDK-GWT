@@ -1,4 +1,5 @@
 ## 0-SNAPSHOT - 08/23/16
+- Added `relation` method on ParseObject
 - Added Order on Parse.Query
 
 ## 0-SNAPSHOT - 08/19/16

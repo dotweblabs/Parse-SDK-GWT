@@ -267,7 +267,7 @@ public class ParseTest extends GWTTestCase {
     }
 
     public void testGetRelation(){
-        delayTestFinish(10000);
+        delayTestFinish(60000);
         Parse.SERVER_URL = "http://localhost:1337/parse";
         Parse.initialize("myAppId", "myRESTApiKey", "myMasterKey");
         final ParseObject parseObject = Parse.Objects.extend("TestObject");
@@ -308,17 +308,35 @@ public class ParseTest extends GWTTestCase {
                             @Override
                             public void onSuccess(ParseResponse parseResponse) {
                                 log(parseResponse.toString());
-                                finishTest();
-                                Parse.Objects.getRelation(parseObject, "testRelatedObjects", relatedObject, new AsyncCallback<ParseResponse>() {
+                                log("Testing relation():");
+                                parseObject.put("testRelatedObjects", ParseRelation.clone(relatedObject.getClassName()));
+                                parseObject.relation("testRelatedObjects").find(new AsyncCallback<ParseResponse>() {
                                     @Override
                                     public void onFailure(Throwable throwable) {
-                                        log(throwable.getMessage());
+                                        log("Failed: " + throwable.getMessage());
                                         fail();
                                         finishTest();
                                     }
                                     @Override
                                     public void onSuccess(ParseResponse parseResponse) {
-                                        log(parseResponse.toString());
+                                        String resp = parseResponse.toString();
+                                        log(relatedObject.getObjectId() + " relation() test: " + resp);
+                                        finishTest();
+                                    }
+                                });
+                                final String[] response = new String[1];
+                                log("Testing Parse.Objects.getRelation():");
+                                Parse.Objects.getRelation(parseObject, "testRelatedObjects", relatedObject, new AsyncCallback<ParseResponse>() {
+                                    @Override
+                                    public void onFailure(Throwable throwable) {
+                                        log("Failed: " + throwable.getMessage());
+                                        fail();
+                                        finishTest();
+                                    }
+                                    @Override
+                                    public void onSuccess(ParseResponse parseResponse) {
+                                        response[0] = parseResponse.toString();
+                                        log(response[0]);
                                         finishTest();
                                     }
                                 });
@@ -328,8 +346,6 @@ public class ParseTest extends GWTTestCase {
                 });
             }
         });
-
-
     }
 
     public void testGetUri() {

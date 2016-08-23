@@ -96,4 +96,31 @@ public class ParseObject extends JSONObject {
         ParsePointer pointer = new ParsePointer(this);
         return pointer;
     }
+
+    public Parse.Query relation(String key) {
+        Parse.Query query = null;
+        try {
+            JSONObject jsonRelation = get(key) != null ? get(key).isObject() : null;
+            if(jsonRelation != null && jsonRelation.isObject() != null) {
+                JSONObject jsonObject = get(key).isObject();
+                ParseRelation relation = ParseRelation.clone(jsonObject);
+                String className = relation.getClassName();
+                if(className != null) {
+                    query = Parse.Query.extend(new ParseObject(className));
+                    JSONObject relatedTo = new JSONObject();
+                    ParsePointer pointer = ParsePointer.parse(this.getClassName(), this.getObjectId());
+                    relatedTo.put("object", pointer);
+                    relatedTo.put("key", new JSONString(key));
+                    Where where = new Where("$relatedTo", relatedTo);
+                    query.where(where);
+                }
+            } else {
+                throw new RuntimeException("ParseRelation is missing for " + key);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return query;
+    }
+
 }

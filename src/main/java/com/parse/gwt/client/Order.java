@@ -7,10 +7,12 @@ public class Order extends JSONArray {
     public Order ascending(String key) {
         int index = -1;
         for(int i=0;i<size();i++){
-            String value = get(i).isString().stringValue();
-            if(value.equals(key)) {
-                index = i;
-                break;
+            if(get(i) != null) {
+                String value = get(i).isString().stringValue();
+                if(value.equals(key)) {
+                    index = i;
+                    break;
+                }
             }
         }
         if(index != -1){
@@ -23,10 +25,12 @@ public class Order extends JSONArray {
     public Order descending(String key){
         int index = -1;
         for(int i=0;i<size();i++){
-            String value = get(i).isString().stringValue();
-            if(value.equals(key)) {
-                index = i;
-                break;
+            if(get(i) != null) {
+                String value = get(i).isString().stringValue();
+                if(value.equals(key)) {
+                    index = i;
+                    break;
+                }
             }
         }
         if(index != -1){

@@ -36,9 +36,15 @@ public class ParseRelation extends JSONObject {
     }
     public static ParseRelation clone(JSONObject reference) {
         String className = reference.get("className").isString().stringValue();
+        if(className == null) {
+            throw new RuntimeException("Missing className");
+        }
         ParseRelation pointer = new ParseRelation();
         pointer.put("__type", new JSONString("Relation"));
         pointer.put("className", new JSONString(className));
         return pointer;
+    }
+    public String getClassName() {
+        return get("className") == null ? null : get("className").isString().stringValue();
     }
 }

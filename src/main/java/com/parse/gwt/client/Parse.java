@@ -305,13 +305,16 @@ public class Parse {
                     .asJson(new AsyncCallback<String>() {
                         @Override
                         public void onFailure(Throwable throwable) {
-                            throwable.printStackTrace();
-                            HttpRequestException ex = (HttpRequestException) throwable;
-                            callback.onFailure(ex);
+                            callback.onFailure(throwable);
                         }
                         @Override
                         public void onSuccess(String s) {
-                            callback.onSuccess(ParseResponse.parse(s));
+                            try{
+                                ParseResponse parseResponse = ParseResponse.parse(s);
+                                callback.onSuccess(parseResponse);
+                            } catch (Exception e) {
+                                callback.onFailure(e);
+                            }
                         }
                     });
 
@@ -436,12 +439,16 @@ public class Parse {
                     .asJson(new AsyncCallback<String>() {
                         @Override
                         public void onFailure(Throwable throwable) {
-                            HttpRequestException ex = (HttpRequestException) throwable;
-                            callback.onFailure(ex);
+                            callback.onFailure(throwable);
                         }
                         @Override
                         public void onSuccess(String s) {
-                            callback.onSuccess(ParseResponse.parse(s));
+                            try {
+                                ParseResponse resp = ParseResponse.parse(s);
+                                callback.onSuccess(resp);
+                            } catch (Exception e) {
+                                callback.onFailure(e);
+                            }
                         }
                     });
         }
