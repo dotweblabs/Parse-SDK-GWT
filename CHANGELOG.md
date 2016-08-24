@@ -1,3 +1,6 @@
+## 0-SNAPSHOT - 08/24/16
+- Added Logout function exception handling 
+
 ## 0-SNAPSHOT - 08/23/16
 - Added `relation` method on ParseObject
 - Added Order on Parse.Query

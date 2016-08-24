@@ -106,23 +106,17 @@ public class Parse {
                     .asJson(new AsyncCallback<String>() {
                         @Override
                         public void onFailure(Throwable throwable) {
-                            HttpRequestException ex = (HttpRequestException) throwable;
-                            callback.onFailure(ex);
+                            callback.onFailure(throwable);
                         }
                         @Override
                         public void onSuccess(String s) {
-                            ParseResponse response = ParseResponse.parse(s);
-                            sessionToken = null;
-                            callback.onSuccess(response);
-                            /*
-                            if(response.get("sessionToken") != null) {
-                                //createdAt, objectId, sessionToken
+                            try {
+                                ParseResponse response = ParseResponse.parse(s);
+                                sessionToken = null;
                                 callback.onSuccess(response);
-                            } else {
-                                HttpRequestException ex
-                                        = new HttpRequestException(response.getErrorMessage(), response.getErrorCode());
-                                callback.onFailure(ex);
-                            }*/
+                            } catch (Exception e) {
+                                callback.onFailure(e);
+                            }
                         }
                     });
         }
