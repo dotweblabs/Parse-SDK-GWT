@@ -26,12 +26,12 @@ package com.parse.gwt.client;
  *
  */
 public class TestKeys {
-    public static final String TEST_APP_ID = "EaKtiQ8Ug7WbWIvUm0cwsizZ5YSc6MMdi1OxJHAA";
+    public static final String TEST_APP_ID = "myAppId";
     //public static final String TEST_APP_ID = "";
     public static final String TEST_JAVASCRIPT_KEY = "";
-    public static final String TEST_MASTER_KEY = "MH1Vte3FHAkZSFl8N1c5vmEkXxyoG0dSn3ex8ohy";
+    public static final String TEST_MASTER_KEY = "myMasterKey";
     //public static final String TEST_MASTER_KEY = "";
-    public static final String TEST_REST_API_KEY = "jrQsoIB55V9kr1vxdZKEUbzH3x1a8Jyc2gSbec4Q";
+    public static final String TEST_REST_API_KEY = "myRESTApiKey";
     //public static final String TEST_REST_API_KEY = "";
     public static final String TEST_DOTNET_KEY = "";
     public static final String TEST_WEBHOOK_KEY = "";

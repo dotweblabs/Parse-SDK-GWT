@@ -1,3 +1,7 @@
+## 0-SNAPSHOT - 09/01/16
+- Added Run Cloud Code function
+- Updated Server URL
+
 ## 0-SNAPSHOT - 08/24/16
 - Added Logout function exception handling 
 

@@ -39,6 +39,26 @@ import java.util.Map;
  */
 public class Parse {
 
+    public static class Cloud {
+        public static void run(String function, ParseObject object, final AsyncCallback<ParseResponse> callback) {
+            Shape.post(Parse.SERVER_URL + "functions/" + function)
+                    .header("X-Parse-Application-Id", X_Parse_Application_Id)
+                    .header("X-Parse-REST-API-Key", X_Parse_REST_API_Key)
+                    .header("X-Parse-Master-Key", X_Parse_Master_Key)
+                    .body(object.toString())
+                    .asJson(new AsyncCallback<String>() {
+                        @Override
+                        public void onFailure(Throwable throwable) {
+                            callback.onFailure(throwable);
+                        }
+                        @Override
+                        public void onSuccess(String s) {
+                            callback.onSuccess(ParseResponse.parse(s));
+                        }
+                    });
+        }
+    }
+
     public static class Users {
         public static String sessionToken = null;
         public static void signup(ParseObject user, final AsyncCallback<ParseResponse> callback) {
@@ -454,7 +474,7 @@ public class Parse {
 
     }
 
-    public static String SERVER_URL = "https://parseapi.back4app.com/";
+    public static String SERVER_URL = "http://localhost:1337/parse";
     public static String CLASSES_URI = "classes/";
 
     /*

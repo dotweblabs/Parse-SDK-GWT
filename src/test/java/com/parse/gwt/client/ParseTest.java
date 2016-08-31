@@ -36,7 +36,7 @@ import java.util.Date;
  */
 public class ParseTest extends GWTTestCase {
 
-    private static final String PARSE_API_ROOT = "https://parseapi.back4app.com/";
+    private static final String PARSE_API_ROOT = "http://localhost:1337/parse";
 
     private static final String TEST_APP_ID = "";
     private static final String TEST_CLIENT_KEY = "";

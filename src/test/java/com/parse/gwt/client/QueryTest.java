@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public class QueryTest extends GWTTestCase {
 
-    private static final String PARSE_API_ROOT = "https://parseapi.back4app.com/";
+    private static final String PARSE_API_ROOT = "http://localhost:1337/parse";
 
     @Override
     public String getModuleName() {
