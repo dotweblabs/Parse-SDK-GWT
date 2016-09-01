@@ -59,8 +59,8 @@ public class QueryTest extends GWTTestCase {
 
     public void testQueryPointer() {
         delayTestFinish(10000);
-        Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
         Parse.SERVER_URL = PARSE_API_ROOT;
+        Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
         createParseObject();
         ParseObject talentObject = Parse.Objects.extend("TestObject");
         Parse.Query query = Parse.Query.extend(talentObject);
