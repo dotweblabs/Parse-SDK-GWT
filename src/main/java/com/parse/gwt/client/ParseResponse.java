@@ -76,6 +76,10 @@ public class ParseResponse extends JSONObject {
         JSONArray results =  get("results") != null ? get("results").isArray() : null;
         return results;
     }
+    public JSONValue getResult() {
+        JSONValue result = get("result") != null ? get("result") : null;
+        return result;
+    }
     public String getErrorMessage() {
         String message = get("error") != null ? get("error").isString().stringValue() : null;
         return message;

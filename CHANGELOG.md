@@ -1,4 +1,5 @@
 ## 0-SNAPSHOT - 09/01/16
+- Added `FunctionTest`
 - Added Run Cloud Code function
 - Updated Server URL
 
