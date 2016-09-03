@@ -211,6 +211,26 @@
                     </plugin-->
 				</plugins>
 			</build>
+			<repositories>
+				<repository>
+					<snapshots>
+						<enabled>false</enabled>
+					</snapshots>
+					<id>bintray-dotweblabs-maven</id>
+					<name>bintray</name>
+					<url>http://dl.bintray.com/dotweblabs/maven</url>
+				</repository>
+			</repositories>
+			<pluginRepositories>
+				<pluginRepository>
+					<snapshots>
+						<enabled>false</enabled>
+					</snapshots>
+					<id>bintray-dotweblabs-maven</id>
+					<name>bintray-plugins</name>
+					<url>http://dl.bintray.com/dotweblabs/maven</url>
+				</pluginRepository>
+			</pluginRepositories>
 		</profile>
 	</profiles>
 </project>
