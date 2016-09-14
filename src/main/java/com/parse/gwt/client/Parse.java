@@ -19,10 +19,7 @@ package com.parse.gwt.client;
 import com.dotweblabs.shape.client.HttpRequestException;
 import com.dotweblabs.shape.client.Shape;
 import com.google.gwt.http.client.URL;
-import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONString;
-import com.google.gwt.json.client.JSONValue;
+import com.google.gwt.json.client.*;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import java.util.Arrays;
@@ -377,6 +374,9 @@ public class Parse {
 
         private Where where;
         private Order order;
+        private int limit;
+        private int skip;
+
 
         public Query() {
 
@@ -410,6 +410,18 @@ public class Parse {
             return this;
         }
 
+        public Query limit(int limit){
+            this.limit = limit;
+            put("limit", new JSONNumber(limit));
+            return this;
+        }
+
+        public Query skip(int skip){
+            this.skip = skip;
+            put("skip", new JSONNumber(skip));
+            return this;
+        }
+
         public void get(String objectId, final AsyncCallback<ParseObject> response) {
             ParseObject ref = new ParseObject(getClassName());
             ref.setObjectId(objectId);
@@ -430,6 +442,8 @@ public class Parse {
             String className = getClassName();
             String where = "";
             String order = "";
+            String limit = "";
+            String skip = "";
             if(get("where") != null) {
                 JSONObject jsonWhere = get("where").isObject();
                 where = jsonWhere.toString();
@@ -445,7 +459,29 @@ public class Parse {
                 }
                 order = order.substring(0, order.lastIndexOf(","));
             }
-            Shape.get(Parse.SERVER_URL + Parse.CLASSES_URI + className + where + order)
+            if(get("limit") != null) {
+                int l = (int) get("limit").isNumber().doubleValue();
+                if(order.isEmpty() && !where.isEmpty()) {
+                    limit = "&limit=" + l;
+                } else if(!order.isEmpty() && where.isEmpty()) {
+                    limit = "&limit=" + l;
+                } else if(order.isEmpty() && where.isEmpty()) {
+                    limit = "?limit=" + l;
+                }
+            }
+            if(get("skip") != null) {
+                int s = (int) get("skip").isNumber().doubleValue();
+                if(!where.isEmpty() && order.isEmpty() && limit.isEmpty())  {
+                    skip = "&skip=" + s;
+                } else if(where.isEmpty() && order.isEmpty() && !limit.isEmpty()) {
+                    skip = "&skip=" + s;
+                } else if(where.isEmpty() && !order.isEmpty() && limit.isEmpty()) {
+                    skip = "&skip=" + s;
+                } else if(where.isEmpty() && order.isEmpty() && limit.isEmpty()) {
+                    skip = "?skip=" + s;
+                }
+            }
+            Shape.get(Parse.SERVER_URL + Parse.CLASSES_URI + className + where + order + limit + skip)
                     .header("X-Parse-Application-Id", X_Parse_Application_Id)
                     .header("X-Parse-REST-API-Key", X_Parse_REST_API_Key)
                     .header("X-Parse-Master-Key", X_Parse_Master_Key)

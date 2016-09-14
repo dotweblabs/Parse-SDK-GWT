@@ -1,3 +1,7 @@
+## 0-SNAPSHOT - 09/15/16
+- Added limit function
+- Added Skip function
+
 ## 0-SNAPSHOT - 09/01/16
 - Added `FunctionTest`
 - Added Run Cloud Code function
