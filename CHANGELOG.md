@@ -1,4 +1,5 @@
 ## 0-SNAPSHOT - 09/15/16
+- Edit Skip function
 - Added limit function
 - Added Skip function
 

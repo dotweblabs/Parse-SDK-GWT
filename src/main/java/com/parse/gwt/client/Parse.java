@@ -479,6 +479,8 @@ public class Parse {
                     skip = "&skip=" + s;
                 } else if(where.isEmpty() && order.isEmpty() && limit.isEmpty()) {
                     skip = "?skip=" + s;
+                } else {
+                    skip = "&skip=" + s;
                 }
             }
             Shape.get(Parse.SERVER_URL + Parse.CLASSES_URI + className + where + order + limit + skip)
