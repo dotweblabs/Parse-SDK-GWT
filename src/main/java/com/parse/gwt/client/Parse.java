@@ -453,7 +453,7 @@ public class Parse {
             if(get("order") != null) {
                 JSONArray jsonOrder = get("order").isArray();
                 assert order != null;
-                order = where.isEmpty() ? "order=" : "&order=";
+                order = where.isEmpty() ? "?order=" : "&order=";
                 for(int i=0;i<jsonOrder.size();i++){
                     order = order + jsonOrder.get(i).isString().stringValue() + ",";
                 }
