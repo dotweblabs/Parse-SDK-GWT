@@ -1,3 +1,6 @@
+## 0-SNAPSHOT - 09/23/16
+- Added getRelation with filtering
+
 ## 0-SNAPSHOT - 09/15/16
 - Edit Order function
 

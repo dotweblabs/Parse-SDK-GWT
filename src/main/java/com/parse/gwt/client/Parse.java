@@ -252,7 +252,9 @@ public class Parse {
         }
 
         public static void getRelation(ParseObject reference, String referenceKey, ParseObject referencee,
-                                       final AsyncCallback<ParseResponse> callback) {
+                                        final AsyncCallback<ParseResponse> callback) {
+
+
             Parse.Query query = Parse.Query.extend(referencee);
             JSONObject jsonObject = new JSONObject();
             ParsePointer pointer = ParsePointer.parse(reference.getClassName(), reference.getObjectId());
@@ -260,6 +262,38 @@ public class Parse {
             jsonObject.put("key", new JSONString(referenceKey));
             Where where = new Where("$relatedTo", jsonObject);
             query.where(where);
+            query.find(new AsyncCallback<ParseResponse>() {
+                @Override
+                public void onFailure(Throwable throwable) {
+                    callback.onFailure(throwable);
+                }
+                @Override
+                public void onSuccess(ParseResponse parseResponse) {
+                    callback.onSuccess(parseResponse);
+                }
+            });
+        }
+
+        public static void getRelation(ParseObject reference, String referenceKey, ParseObject referencee,
+                       String filterField, String filterValue, final AsyncCallback<ParseResponse> callback) {
+            String regex = "(?i)(?:.*";
+
+            String [] words = filterValue.split(" ");
+            for (int i = 0; i < words.length; i++) {
+                regex += words[i];
+                if (i == words.length - 1) {
+                    regex += ")";
+                } else {
+                    regex += "|.*";
+                }
+            }
+            JSONValue jsonValueRegex = new JSONString(regex);
+            Parse.Query query = Parse.Query.extend(referencee);
+            JSONObject jsonObject = new JSONObject();
+            ParsePointer pointer = ParsePointer.parse(reference.getClassName(), reference.getObjectId());
+            jsonObject.put("object", pointer);
+            jsonObject.put("key", new JSONString(referenceKey));
+            Where where = new Where("$relatedTo", jsonObject).where(filterField).regex(jsonValueRegex);
             query.find(new AsyncCallback<ParseResponse>() {
                 @Override
                 public void onFailure(Throwable throwable) {

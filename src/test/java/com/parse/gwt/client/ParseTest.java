@@ -17,6 +17,7 @@
 package com.parse.gwt.client;
 
 import com.dotweblabs.shape.client.HttpRequestException;
+import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONBoolean;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
@@ -24,6 +25,8 @@ import com.google.gwt.junit.client.GWTTestCase;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -346,6 +349,32 @@ public class ParseTest extends GWTTestCase {
                 });
             }
         });
+    }
+
+    public void testGetRelationWithParam(){
+
+        delayTestFinish(60000);
+        Parse.SERVER_URL = "http://localhost:1337/parse";
+        Parse.initialize("myAppId", "myRESTApiKey", "myMasterKey");
+
+        ParseObject storeObject = Parse.Objects.extend("Store");
+        ParseObject productObject = Parse.Objects.extend("Product");
+        storeObject.setObjectId("tTJv7g8aDf");
+        Parse.Objects.getRelation(storeObject, "products", productObject,"name", "E", new AsyncCallback<ParseResponse>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                log("Failed: " + throwable.getMessage());
+                fail();
+                finishTest();
+            }
+
+            @Override
+            public void onSuccess(ParseResponse parseResponse) {
+                log(parseResponse.toString());
+                finishTest();
+            }
+        });
+
     }
 
     public void testGetUri() {
