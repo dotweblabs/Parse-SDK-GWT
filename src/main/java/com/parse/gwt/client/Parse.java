@@ -294,6 +294,7 @@ public class Parse {
             jsonObject.put("object", pointer);
             jsonObject.put("key", new JSONString(referenceKey));
             Where where = new Where("$relatedTo", jsonObject).where(filterField).regex(jsonValueRegex);
+            query.where(where);
             query.find(new AsyncCallback<ParseResponse>() {
                 @Override
                 public void onFailure(Throwable throwable) {
