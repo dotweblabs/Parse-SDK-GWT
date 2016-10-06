@@ -1,3 +1,6 @@
+## 0-SNAPSHOT - 10/07/16
+- Added options
+
 ## 0-SNAPSHOT - 09/23/16
 - Added getRelation with filtering
 

@@ -190,6 +190,20 @@ public class Where extends JSONObject {
         return this;
     }
 
+    public Where options(JSONValue value) {
+        JSONObject operation = new JSONObject();
+        operation.put("$options", value);
+        if(get(key) != null){
+            JSONValue jsonValue = get(key);
+            if(jsonValue.isObject() != null){
+                jsonValue.isObject().put("$options", value);
+            }
+        } else {
+            put(key, operation);
+        }
+        return this;
+    }
+
     public Where or(Where where) {
         JSONArray or = get("$or") != null ? get("$or").isArray() : null;
         if(or != null){
