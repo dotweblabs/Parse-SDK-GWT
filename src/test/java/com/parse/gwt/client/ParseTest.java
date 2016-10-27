@@ -41,12 +41,6 @@ public class ParseTest extends GWTTestCase {
 
     private static final String PARSE_API_ROOT = "http://localhost:1337/parse";
 
-    private static final String TEST_APP_ID = "";
-    private static final String TEST_CLIENT_KEY = "";
-    private static final String TEST_JAVASCRIPT_KEY = "";
-    private static final String TEST_MASTER_KEY = "";
-    private static final String TEST_REST_API_KEY = "";
-
     @Override
     public String getModuleName() {
         return "com.parse.gwt.Parse";
@@ -58,8 +52,8 @@ public class ParseTest extends GWTTestCase {
     }
 
     public void testCreateObject() {
-        Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
         Parse.SERVER_URL = PARSE_API_ROOT;
+        Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
         ParseObject testObject = new ParseObject("TestObject");
         testObject.put("foo", new JSONString("bar"));
         Parse.Objects.create(testObject, new AsyncCallback<ParseResponse>() {
@@ -267,6 +261,10 @@ public class ParseTest extends GWTTestCase {
                 finishTest();
             }
         });
+    }
+
+    public void testBecome() {
+        delayTestFinish(3000);
     }
 
     public void testGetRelation(){

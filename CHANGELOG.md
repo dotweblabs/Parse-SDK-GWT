@@ -1,3 +1,6 @@
+## 0-SNAPSHOT - 10/27/16
+- Fix failing test `testCreateObject`
+
 ## 0-SNAPSHOT - 10/07/16
 - Added options
 

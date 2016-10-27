@@ -137,6 +137,25 @@ public class Parse {
                         }
                     });
         }
+
+        public static void become(String sessionToken, final AsyncCallback<ParseObject> callback){
+            Shape.post(Parse.SERVER_URL + "sessions" + "/" + sessionToken)
+                    .header("X-Parse-Application-Id", X_Parse_Application_Id)
+                    .header("X-Parse-REST-API-Key", X_Parse_REST_API_Key)
+                    .header("X-Parse-Master-Key", X_Parse_Master_Key)
+                    .header("X-Parse-Session-Token", sessionToken)
+                    .asJson(new AsyncCallback<String>() {
+                        @Override
+                        public void onFailure(Throwable throwable) {
+                            callback.onFailure(throwable);
+                        }
+                        @Override
+                        public void onSuccess(String s) {
+                            System.out.println("Response: " + s);
+                        }
+                    });
+        }
+
         public static void requestPasswordReset() {}
         public static void retrieveUser(String objectId ){}
         public static void retrieveCurrentUser() {}
