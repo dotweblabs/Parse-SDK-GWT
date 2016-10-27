@@ -1,4 +1,5 @@
 ## 0-SNAPSHOT - 10/27/16
+- Added Parse.Users.become function to login with sessionToken
 - Fix failing test `testCreateObject`
 
 ## 0-SNAPSHOT - 10/07/16

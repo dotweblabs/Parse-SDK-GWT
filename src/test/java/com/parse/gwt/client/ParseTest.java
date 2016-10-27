@@ -247,6 +247,7 @@ public class ParseTest extends GWTTestCase {
 
     public void testLogin() {
         delayTestFinish(3000);
+        Parse.SERVER_URL = PARSE_API_ROOT;
         Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY);
         Parse.Users.login("testUser", "testPassword", new AsyncCallback<ParseResponse>() {
             @Override
@@ -265,6 +266,35 @@ public class ParseTest extends GWTTestCase {
 
     public void testBecome() {
         delayTestFinish(3000);
+        Parse.SERVER_URL = PARSE_API_ROOT;
+        Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY);
+        Parse.Users.login("testUser", "testPassword", new AsyncCallback<ParseResponse>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                log(throwable.getMessage());
+                fail();
+                finishTest();
+            }
+            @Override
+            public void onSuccess(ParseResponse parseResponse) {
+                //log(parseResponse.toString());
+                String sessionToken = parseResponse.get("sessionToken").isString().stringValue();
+                Parse.Users.become(sessionToken, new AsyncCallback<ParseObject>() {
+                    @Override
+                    public void onFailure(Throwable throwable) {
+                        log(throwable.getMessage());
+                        fail();
+                        finishTest();
+                    }
+                    @Override
+                    public void onSuccess(ParseObject parseObject) {
+                        log(parseObject.toString());
+                        finishTest();
+                    }
+                });
+                finishTest();
+            }
+        });
     }
 
     public void testGetRelation(){

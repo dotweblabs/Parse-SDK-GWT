@@ -139,7 +139,7 @@ public class Parse {
         }
 
         public static void become(String sessionToken, final AsyncCallback<ParseObject> callback){
-            Shape.post(Parse.SERVER_URL + "sessions" + "/" + sessionToken)
+            Shape.get(Parse.SERVER_URL + "/users/me")
                     .header("X-Parse-Application-Id", X_Parse_Application_Id)
                     .header("X-Parse-REST-API-Key", X_Parse_REST_API_Key)
                     .header("X-Parse-Master-Key", X_Parse_Master_Key)
@@ -151,7 +151,16 @@ public class Parse {
                         }
                         @Override
                         public void onSuccess(String s) {
-                            System.out.println("Response: " + s);
+                            ParseResponse response = ParseResponse.parse(s);
+                            if(response.get("sessionToken") != null) {
+                                String sessionToken = response.get("sessionToken").isString().stringValue();
+                                Parse.X_Parse_Session_Token = sessionToken;
+                                callback.onSuccess(response.asParseObject("_User"));
+                            } else {
+                                HttpRequestException ex
+                                        = new HttpRequestException(response.getErrorMessage(), response.getErrorCode());
+                                callback.onFailure(ex);
+                            }
                         }
                     });
         }
