@@ -1,4 +1,7 @@
 ## 0-SNAPSHOT - 10/30/16
+- Read Parse config function
+- Create/Update Parse config function
+- Put parse URL into TestKeys
 - Added empty constructor for `Where`
 
 ## 0-SNAPSHOT - 10/27/16

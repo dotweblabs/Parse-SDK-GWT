@@ -16,22 +16,31 @@
  */
 package com.parse.gwt.client;
 
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONParser;
+import com.google.gwt.json.client.JSONValue;
+
+import java.util.Iterator;
+
 /**
  *
- * Test Keys
+ * Parse Config Object
  *
  * @author Kerby Martino
  * @since 0-SNAPSHOT
  * @version 0-SNAPSHOT
  *
  */
-public class TestKeys {
-    public static final String TEST_API_ROOT = "http://localhost:1337/parse";
-    public static final String TEST_APP_ID = "myAppId";
-    public static final String TEST_JAVASCRIPT_KEY = "";
-    public static final String TEST_MASTER_KEY = "myMasterKey";
-    public static final String TEST_REST_API_KEY = "myRESTApiKey";
-    public static final String TEST_DOTNET_KEY = "";
-    public static final String TEST_WEBHOOK_KEY = "";
-    public static final String TEST_FILE_KEY = "";
+public class Config extends JSONObject {
+    public static Config fromJSON(String json){
+        Config config = new Config();
+        JSONObject jsonObject = (JSONObject) JSONParser.parseStrict(json);
+        Iterator<String> it = jsonObject.keySet().iterator();
+        while(it.hasNext()) {
+            String key = it.next();
+            JSONValue value = jsonObject.get(key);
+            config.put(key, value);
+        }
+        return config;
+    }
 }

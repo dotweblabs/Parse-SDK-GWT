@@ -39,7 +39,6 @@ import java.util.List;
  */
 public class ParseTest extends GWTTestCase {
 
-    private static final String PARSE_API_ROOT = "http://localhost:1337/parse";
 
     @Override
     public String getModuleName() {
@@ -48,11 +47,49 @@ public class ParseTest extends GWTTestCase {
 
     public void testInitialize() {
         Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
-        Parse.SERVER_URL = PARSE_API_ROOT;
+        Parse.SERVER_URL = TestKeys.TEST_API_ROOT;
+    }
+
+    public void testCreateUpdateParam(){
+        delayTestFinish(20000);
+        Parse.SERVER_URL = TestKeys.TEST_API_ROOT;
+        Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
+        Parse.Config.update("TEST", new JSONString("test"), new AsyncCallback<com.parse.gwt.client.Config>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                log("GET Error: " + throwable.getMessage());
+                fail("GET Error: " + throwable.getMessage());
+                finishTest();
+            }
+            @Override
+            public void onSuccess(com.parse.gwt.client.Config config) {
+                log(config.toString());
+                finishTest();
+            }
+        });
+    }
+
+    public void testRetrieveConfig(){
+        delayTestFinish(20000);
+        Parse.SERVER_URL = TestKeys.TEST_API_ROOT;
+        Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
+        Parse.Config.get(new AsyncCallback<com.parse.gwt.client.Config>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                log("GET Error: " + throwable.getMessage());
+                fail("GET Error: " + throwable.getMessage());
+                finishTest();
+            }
+            @Override
+            public void onSuccess(com.parse.gwt.client.Config config) {
+                log(config.toString());
+                finishTest();
+            }
+        });
     }
 
     public void testCreateObject() {
-        Parse.SERVER_URL = PARSE_API_ROOT;
+        Parse.SERVER_URL = TestKeys.TEST_API_ROOT;
         Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
         ParseObject testObject = new ParseObject("TestObject");
         testObject.put("foo", new JSONString("bar"));
@@ -74,7 +111,7 @@ public class ParseTest extends GWTTestCase {
 
     public void testRetrieveObject() {
         delayTestFinish(20000);
-        Parse.SERVER_URL = PARSE_API_ROOT;
+        Parse.SERVER_URL = TestKeys.TEST_API_ROOT;
         Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
         ParseObject testObject = new ParseObject("TestObject");
         testObject.put("foo", new JSONString("bar"));
@@ -112,7 +149,7 @@ public class ParseTest extends GWTTestCase {
 
     public void testDeleteObject() {
         delayTestFinish(2000);
-        Parse.SERVER_URL = PARSE_API_ROOT;
+        Parse.SERVER_URL = TestKeys.TEST_API_ROOT;
         Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
         ParseObject testObject = new ParseObject("TestObject");
         testObject.put("boom", new JSONString("box"));
@@ -159,7 +196,7 @@ public class ParseTest extends GWTTestCase {
 
     public void testUpdateObject() {
         delayTestFinish(2000);
-        Parse.SERVER_URL = PARSE_API_ROOT;
+        Parse.SERVER_URL = TestKeys.TEST_API_ROOT;
         Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
         final ParseObject testObject = new ParseObject("TestObject");
         testObject.put("marko", new JSONString("marko"));
@@ -247,7 +284,7 @@ public class ParseTest extends GWTTestCase {
 
     public void testLogin() {
         delayTestFinish(3000);
-        Parse.SERVER_URL = PARSE_API_ROOT;
+        Parse.SERVER_URL = TestKeys.TEST_API_ROOT;
         Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY);
         Parse.Users.login("testUser", "testPassword", new AsyncCallback<ParseResponse>() {
             @Override
@@ -266,7 +303,7 @@ public class ParseTest extends GWTTestCase {
 
     public void testBecome() {
         delayTestFinish(3000);
-        Parse.SERVER_URL = PARSE_API_ROOT;
+        Parse.SERVER_URL = TestKeys.TEST_API_ROOT;
         Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY);
         Parse.Users.login("testUser", "testPassword", new AsyncCallback<ParseResponse>() {
             @Override
