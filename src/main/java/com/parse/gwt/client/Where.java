@@ -14,6 +14,10 @@ import com.google.gwt.json.client.JSONValue;
 public class Where extends JSONObject {
     //private JSONObject filters;
     String key;
+
+    public Where() {
+    }
+
     public Where(String key) {
         this.key = key;
     }

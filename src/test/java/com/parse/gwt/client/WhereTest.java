@@ -62,6 +62,14 @@ public class WhereTest extends GWTTestCase {
         log(where.toString());
     }
 
+    public void testOr() {
+        String searchQuery = "test query";
+        Where whereFirstName = new Where("firstname").regex(new JSONString("^" + searchQuery));
+        Where whereLastName = new Where("lastname").regex(new JSONString("^" + searchQuery));
+        Where where = new Where().or(whereFirstName).or(whereLastName);
+        log(where.toString());
+    }
+
     public static void log(String s){
         System.out.println(s);
     }

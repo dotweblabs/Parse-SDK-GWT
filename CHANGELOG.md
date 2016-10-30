@@ -1,3 +1,6 @@
+## 0-SNAPSHOT - 10/30/16
+- Added empty constructor for `Where`
+
 ## 0-SNAPSHOT - 10/27/16
 - Added Parse.Users.become function to login with sessionToken
 - Fix failing test `testCreateObject`
