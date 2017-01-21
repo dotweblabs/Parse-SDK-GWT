@@ -7,6 +7,7 @@
   <inherits name="com.google.common.collect.Collect"/>
   <inherits name="com.dotweblabs.shape.Shape"/>
   <inherits name="com.sksamuel.gwt.GwtWebsockets" />
+  <inherits name="elemental.Elemental"/>
   <!-- Specify the paths for translatable code -->
   <source path="client"/>
 </module>

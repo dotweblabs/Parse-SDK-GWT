@@ -1,3 +1,8 @@
+## 0-SNAPSHOT - 01/21/17
+- Implemented retrieveCurrentUser function
+- Store tokens in localstorage
+- Added GWT elemental
+
 ## 0-SNAPSHOT - 10/30/16
 - Read Parse config function
 - Create/Update Parse config function

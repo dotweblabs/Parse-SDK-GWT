@@ -109,6 +109,11 @@
 		<scope>test</scope>
 	</dependency>
 		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-elemental</artifactId>
+			<version>${gwt.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava-gwt</artifactId>
 			<version>19.0</version>

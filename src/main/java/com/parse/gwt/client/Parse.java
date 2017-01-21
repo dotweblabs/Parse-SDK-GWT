@@ -20,7 +20,9 @@ import com.dotweblabs.shape.client.HttpRequestException;
 import com.dotweblabs.shape.client.Shape;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.json.client.*;
+import com.google.gwt.storage.client.Storage;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import elemental.client.Browser;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -35,6 +37,10 @@ import java.util.Map;
  * @version 0-SNAPSHOT
  */
 public class Parse {
+
+    {
+        initializeFromLocalStorage();
+    }
 
     public static class Config {
         public static void get(final AsyncCallback<com.parse.gwt.client.Config> callback) {
@@ -150,16 +156,25 @@ public class Parse {
                         }
                         @Override
                         public void onSuccess(String s) {
-                            ParseResponse response = ParseResponse.parse(s);
-                            if(response.get("sessionToken") != null) {
-                                //createdAt, objectId, sessionToken
-                                sessionToken = response.get("sessionToken").isString().stringValue();
-                                Parse.X_Parse_Session_Token = sessionToken;
-                                callback.onSuccess(response);
-                            } else {
-                                HttpRequestException ex
-                                        = new HttpRequestException(response.getErrorMessage(), response.getErrorCode());
-                                callback.onFailure(ex);
+                            try {
+                                ParseResponse response = ParseResponse.parse(s);
+                                if(response.get("sessionToken") != null) {
+                                    //createdAt, objectId, sessionToken
+                                    sessionToken = response.get("sessionToken").isString().stringValue();
+                                    Parse.X_Parse_Session_Token = sessionToken;
+                                    Storage storage = Storage.getLocalStorageIfSupported();
+                                    if(storage != null) {
+                                        String key = "Parse/" + X_Parse_Application_Id + "/currentUser";
+                                        storage.setItem(key, response.toString());
+                                    }
+                                    callback.onSuccess(response);
+                                } else {
+                                    HttpRequestException ex
+                                            = new HttpRequestException(response.getErrorMessage(), response.getErrorCode());
+                                    callback.onFailure(ex);
+                                }
+                            } catch (Exception e) {
+                                callback.onFailure(e);
                             }
                         }
                     });
@@ -217,7 +232,21 @@ public class Parse {
 
         public static void requestPasswordReset() {}
         public static void retrieveUser(String objectId ){}
-        public static void retrieveCurrentUser() {}
+        public static ParseObject retrieveCurrentUser() {
+            Storage storage = Storage.getLocalStorageIfSupported();
+            if(storage != null) {
+                String key = "Parse/" + X_Parse_Application_Id + "/currentUser";
+                String user = storage.getItem(key);
+                if(user != null){
+                    ParseObject parseObject = ParseObject.parse("_User", user);
+                    X_Parse_Session_Token = parseObject.get("sessionToken").isString().stringValue();
+                    _sessionToken = parseObject.get("sessionToken").isString().stringValue();
+                    Users.sessionToken = parseObject.get("sessionToken").isString().stringValue();
+                    return parseObject;
+                }
+            }
+            return null;
+        }
         public static void updateUser(ParseObject update) {}
         public static void deleteUser(String objectId) {}
     }
@@ -642,6 +671,46 @@ public class Parse {
     public static String _masterKey = null;;
     public static String _sessionToken = null;
 
+    public static void initializeFromLocalStorage() {
+        Browser.getWindow().getConsole().log("Initializing Parse from localstorage");
+        if(_appId == null || X_Parse_Application_Id == null) {
+            Storage storage = Storage.getLocalStorageIfSupported();
+            if(storage != null) {
+                _appId = storage.getItem("X-Parse-Application-Id");
+                X_Parse_Application_Id = storage.getItem("X-Parse-Application-Id");
+            }
+        }
+        if(_restApiKey == null || X_Parse_REST_API_Key == null) {
+            Storage storage = Storage.getLocalStorageIfSupported();
+            if(storage != null) {
+                _appId = storage.getItem("X-Parse-REST-API-Key");
+                X_Parse_Application_Id = storage.getItem("X-Parse-REST-API-Key");
+            }
+        }
+        if(_masterKey == null || X_Parse_Master_Key == null) {
+            Storage storage = Storage.getLocalStorageIfSupported();
+            if(storage != null) {
+                _masterKey = storage.getItem("X-Parse_Master-Key");
+                X_Parse_Application_Id = storage.getItem("X-Parse-Master-Key");
+            }
+        }
+        if(_sessionToken == null || X_Parse_Session_Token == null) {
+            Storage storage = Storage.getLocalStorageIfSupported();
+            if(storage != null) {
+                _masterKey = storage.getItem("X-Parse-Session-Token");
+                X_Parse_Application_Id = storage.getItem("X-Parse-Session-Token");
+            }
+        }
+        if(Users.sessionToken == null && X_Parse_Application_Id != null) {
+            String key = "Parse/" + X_Parse_Application_Id + "/currentUser";
+            Storage storage = Storage.getLocalStorageIfSupported();
+            if(storage != null && storage.getItem(key) != null) {
+                ParseObject user = ParseObject.parse("_User", storage.getItem(key));
+                Users.sessionToken = user.get("sessionToken").isString().stringValue();
+            }
+        }
+    }
+
     public static void initialize(String appId, String restApiKey, String masterKey) {
         _appId = appId;
         _restApiKey = restApiKey;
@@ -651,6 +720,25 @@ public class Parse {
         X_Parse_Master_Key = masterKey;
         if(!SERVER_URL.endsWith("/")) {
             SERVER_URL = SERVER_URL + "/";
+        }
+        Storage storage = Storage.getLocalStorageIfSupported();
+        if(storage != null) {
+            storage.setItem("X-Parse-Application-Id", appId);
+            storage.setItem("X-Parse-REST-API-Key", restApiKey);
+            storage.setItem("X-Parse-Master-Key", masterKey);
+            if(storage.getItem("X-Parse-Session-Token") != null) {
+                X_Parse_Session_Token = storage.getItem("X-Parse-Session-Token");
+                _sessionToken = storage.getItem("X-Parse-Session-Token");
+                Users.sessionToken = storage.getItem("X-Parse-Session-Token");
+            }
+            String key = "Parse/" + X_Parse_Application_Id + "/currentUser";
+            if(storage.getItem(key) != null){
+                ParseObject user = ParseObject.parse("_User", storage.getItem(key));
+                String sessionToken = user.get("sessionToken").isString().stringValue();
+                X_Parse_Session_Token = sessionToken;
+                _sessionToken = sessionToken;
+                Users.sessionToken = sessionToken;
+            }
         }
     }
 
@@ -662,6 +750,23 @@ public class Parse {
         if(!SERVER_URL.endsWith("/")) {
             SERVER_URL = SERVER_URL + "/";
         }
+        Storage storage = Storage.getLocalStorageIfSupported();
+        if(storage != null) {
+            storage.setItem("X-Parse-Application-Id", appId);
+            storage.setItem("X-Parse-REST-API-Key", restApiKey);
+            if(storage.getItem("X-Parse-Session-Token") != null) {
+                X_Parse_Session_Token = storage.getItem("X-Parse-Session-Token");
+                _sessionToken = storage.getItem("X-Parse-Session-Token");
+            }
+            String key = "Parse/" + X_Parse_Application_Id + "/currentUser";
+            if(storage.getItem(key) != null){
+                ParseObject user = ParseObject.parse("_User", storage.getItem(key));
+                String sessionToken = user.get("sessionToken").isString().stringValue();
+                X_Parse_Session_Token = sessionToken;
+                _sessionToken = sessionToken;
+                Users.sessionToken = sessionToken;
+            }
+        }
     }
 
     public static void initializeSession(String appId, String restApiKey, String sessionToken) {
@@ -671,8 +776,15 @@ public class Parse {
         X_Parse_Application_Id = appId;
         X_Parse_REST_API_Key = restApiKey;
         X_Parse_Session_Token = sessionToken;
+        Users.sessionToken = sessionToken;
         if (!SERVER_URL.endsWith("/")) {
             SERVER_URL = SERVER_URL + "/";
+        }
+        Storage storage = Storage.getLocalStorageIfSupported();
+        if(storage != null) {
+            storage.setItem("X-Parse-Application-Id", appId);
+            storage.setItem("X-Parse-REST-API-Key", restApiKey);
+            storage.setItem("X-Parse-Session-Token", sessionToken);
         }
     }
 
