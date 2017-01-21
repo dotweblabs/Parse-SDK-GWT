@@ -194,7 +194,13 @@ public class Parse {
                         public void onSuccess(String s) {
                             try {
                                 ParseResponse response = ParseResponse.parse(s);
+                                X_Parse_Session_Token = null;
                                 sessionToken = null;
+                                String userKey = "Parse/" + X_Parse_Application_Id + "/currentUser";
+                                Storage storage = Storage.getLocalStorageIfSupported();
+                                if(storage != null) {
+                                    storage.removeItem(userKey);
+                                }
                                 callback.onSuccess(response);
                             } catch (Exception e) {
                                 callback.onFailure(e);
@@ -239,9 +245,11 @@ public class Parse {
                 String user = storage.getItem(key);
                 if(user != null){
                     ParseObject parseObject = ParseObject.parse("_User", user);
-                    X_Parse_Session_Token = parseObject.get("sessionToken").isString().stringValue();
-                    _sessionToken = parseObject.get("sessionToken").isString().stringValue();
-                    Users.sessionToken = parseObject.get("sessionToken").isString().stringValue();
+                    if(parseObject != null) {
+                        X_Parse_Session_Token = parseObject.get("sessionToken").isString().stringValue();
+                        _sessionToken = parseObject.get("sessionToken").isString().stringValue();
+                        Users.sessionToken = parseObject.get("sessionToken").isString().stringValue();
+                    }
                     return parseObject;
                 }
             }

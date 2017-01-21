@@ -1,4 +1,5 @@
 ## 0-SNAPSHOT - 01/21/17
+- Logout function
 - Implemented retrieveCurrentUser function
 - Store tokens in localstorage
 - Added GWT elemental
