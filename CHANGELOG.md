@@ -1,3 +1,6 @@
+## 0-SNAPSHOT - 01/25/17
+- Checks on ParseResponse
+
 ## 0-SNAPSHOT - 01/21/17
 - Update user function
 - Logout function

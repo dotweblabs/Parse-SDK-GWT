@@ -52,7 +52,12 @@ public class ParseResponse extends JSONObject {
         return ParseObject.clone(className, this);
     }
     public Boolean isEmpty() {
-        return getResults().size() == 0 ? true : false;
+        if(getResults() != null) {
+            return getResults().size() == 0 ? true : false;
+        } else if (getResult() != null && (getResult().isArray() != null)) {
+            return getResult().isArray().size() == 0 ? true : false;
+        }
+        return true;
     }
     public String getObjectId() {
         if(get("objectId") != null && get("objectId").isString() != null) {
