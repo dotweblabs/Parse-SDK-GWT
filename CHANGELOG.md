@@ -1,3 +1,6 @@
+0-SNAPSHOT - 01/26/17
+- Password reset request
+
 ## 0-SNAPSHOT - 01/25/17
 - Checks on ParseResponse
 
