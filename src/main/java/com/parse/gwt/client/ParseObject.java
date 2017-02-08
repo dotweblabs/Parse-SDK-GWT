@@ -123,4 +123,10 @@ public class ParseObject extends JSONObject {
         return query;
     }
 
+    public void setACL(ParseACL acl) {
+        if(acl != null) {
+            put("ACL", acl);
+        }
+    }
+
 }

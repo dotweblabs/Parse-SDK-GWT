@@ -1,4 +1,8 @@
-0-SNAPSHOT - 01/26/17
+## 0-SNAPSHOT - 02/08/17
+- Added ParseRole
+- Added ParseACL
+
+## 0-SNAPSHOT - 01/26/17
 - Password reset request
 
 ## 0-SNAPSHOT - 01/25/17

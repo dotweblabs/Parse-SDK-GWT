@@ -452,6 +452,24 @@ public class ParseTest extends GWTTestCase {
         log(uri);
     }
 
+    public void testCreateParseRole() {
+        ParseRole role = new ParseRole("Test Role");
+        ParseACL acl = new ParseACL();
+        acl.setPublicReadAccess(true);
+        acl.setPublicWriteAccess(false);
+        role.setACL(acl);
+        log((role.toString()));
+    }
+
+    public void testCreateParseACL() {
+        ParseRole role = new ParseRole("Test Role");
+        ParseACL acl = new ParseACL();
+        acl.setWriteAccess(role, true);
+        acl.setReadAccess(role, true);
+        log((acl.toString()));
+    }
+
+
     public static void log(String s){
         System.out.println(s);
     }
