@@ -39,6 +39,8 @@
 
 	<properties>
 		<gwt.version>2.8.0-beta1</gwt.version>
+		<gwt-maven.version>2.8.0-rc3</gwt-maven.version>
+		<test.mode>htmlunit</test.mode>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -64,7 +66,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>gwt-maven-plugin</artifactId>
-				<version>${gwt.version}</version>
+				<version>${gwt-maven.version}</version>
 			</plugin>
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -129,6 +131,11 @@
 			<version>1.0.4</version>
 		</dependency>
 		<dependency>
+			<groupId>com.promis.rtti</groupId>
+			<artifactId>gwt-rtti</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>3.8.2</version>
@@ -168,7 +175,7 @@
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>gwt-maven-plugin</artifactId>
-						<version>2.7.0</version>
+						<version>${gwt-maven.version}</version>
 						<executions>
 							<execution>
 								<goals>
