@@ -16,43 +16,22 @@
  */
 package com.parse.gwt.client;
 
-import com.google.gwt.json.client.JSONBoolean;
-import com.google.gwt.json.client.JSONNumber;
-import com.google.gwt.json.client.JSONString;
-import com.google.gwt.junit.client.GWTTestCase;
+import com.parse.gwt.client.annotations.Entity;
 
 /**
  *
- * Unit tests of {@link Order}
+ * GWT ParseObject to Object unmarshaller
  *
  * @author Kerby Martino
  * @since 0-SNAPSHOT
  * @version 0-SNAPSHOT
- *
  */
-public class OrderTest extends GWTTestCase {
-
-
+public class GwtUnmarshaller implements Unmarshaller {
     @Override
-    public String getModuleName() {
-        return "com.parse.gwt.Parse";
+    public Entity unmarshall(ParseObject parseObject) {
+        if(parseObject == null) {
+            return null;
+        }
+        return null;
     }
-
-    public void testOrder() {
-        Order order = new Order();
-        order.ascending("score");
-        log(order.toString());
-    }
-
-    public void testOrderDescending() {
-        Order order = new Order();
-        order.ascending("name");
-        order.descending("score");
-        log(order.toString());
-    }
-
-    public static void log(String s){
-        System.out.println(s);
-    }
-
 }

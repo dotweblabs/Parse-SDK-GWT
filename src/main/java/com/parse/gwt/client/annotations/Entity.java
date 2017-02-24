@@ -16,6 +16,8 @@
  */
 package com.parse.gwt.client.annotations;
 
+import com.promis.rtti.annotations.GenerateRtti;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

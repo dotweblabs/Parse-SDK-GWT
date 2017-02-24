@@ -16,22 +16,8 @@
  */
 package com.parse.gwt.client;
 
-/**
- *
- * Test Keys
- *
- * @author Kerby Martino
- * @since 0-SNAPSHOT
- * @version 0-SNAPSHOT
- *
- */
-public class TestKeys {
-    public static final String TEST_API_ROOT = "http://localhost:1337/parse";
-    public static final String TEST_APP_ID = "myAppId";
-    public static final String TEST_JAVASCRIPT_KEY = "";
-    public static final String TEST_MASTER_KEY = "myMasterKey";
-    public static final String TEST_REST_API_KEY = "myRESTApiKey";
-    public static final String TEST_DOTNET_KEY = "";
-    public static final String TEST_WEBHOOK_KEY = "";
-    public static final String TEST_FILE_KEY = "";
+import com.parse.gwt.client.annotations.Entity;
+
+public interface Unmarshaller {
+    public abstract Entity unmarshall(ParseObject parseObject);
 }

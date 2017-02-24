@@ -1,3 +1,6 @@
+## 0-SNAPSHOT - 02/24/17
+- Added GWT Object to Parse Object marshaller
+
 ## 0-SNAPSHOT - 02/08/17
 - Added ParseRole
 - Added ParseACL

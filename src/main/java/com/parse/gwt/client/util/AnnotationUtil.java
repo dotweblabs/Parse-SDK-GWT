@@ -131,7 +131,12 @@ public class AnnotationUtil {
 
     public static List<Annotation> getAnnotations(Object instance){
         RttiClass info = Rtti.getTypeInfo(instance);
-        return new ArrayList<Annotation>(Arrays.asList(info.getAnnotations()));
+        List<Annotation> annotations = new LinkedList<>();
+        if(info != null) {
+            return new ArrayList<Annotation>(Arrays.asList(info.getAnnotations()));
+        } else {
+            return annotations;
+        }
     }
 
     public static Annotation getClassAnnotation(Class<? extends Annotation> clazz, Object instance){
