@@ -44,7 +44,7 @@ public class TestObject {
     @Column
     public File file;
 
-    @Column
+    @Column(name="geoPoint")
     public GeoPoint geoPoint;
 
     @Column

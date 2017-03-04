@@ -19,5 +19,5 @@ package com.parse.gwt.client;
 import com.parse.gwt.client.annotations.Entity;
 
 public interface Unmarshaller {
-    public abstract Entity unmarshall(ParseObject parseObject);
+    public <T> T unmarshall(Class<T> clazz, Object instance, ParseObject parseObject);
 }

@@ -153,6 +153,16 @@ public class Array extends JSONArray {
             set(index, new JSONNumber(value));
         }
     }
+    public void putArray(int index, JSONArray value) {
+        if(value != null) {
+            set(index, value);
+        }
+    }
+    public void putObject(int index, JSONObject value) {
+        if(value != null) {
+            set(index, value);
+        }
+    }
     /*
     public void set(int index, Boolean value) {
 

@@ -29,7 +29,33 @@ public class MarshallerTest extends GWTTestCase {
     public String getModuleName() {
         return "com.parse.gwt.Parse";
     }
+
     public void testMarshall() {
+        ParseObject parseObject = createParseObject();
+        assertNotNull(parseObject);
+        assertEquals("sample-object-id", parseObject.getObjectId());
+        System.out.println(parseObject.toString());
+    }
+    public void testUnmarshall() {
+        TestObject testObject = new TestObject();
+        ParseObject parseObject = createParseObject();
+        System.out.println("Parse Object = " + parseObject.toString());
+        Parse.unmarshaller().unmarshall(TestObject.class, testObject, parseObject);
+        assertNotNull(parseObject);
+        assertEquals("sample-object-id", testObject.getId());
+//        assertEquals(testObject.getSomething(), null);
+        assertEquals(0.0, testObject.geoPoint.latitude);
+        assertEquals(1.1, testObject.geoPoint.longitude);
+        assertEquals("File Name", testObject.file.name);
+        assertEquals("http://url.com/file.txt", testObject.file.url);
+        assertEquals("test-object-id", testObject.pointer.objectId);
+        assertEquals("TestObject", testObject.pointer.className);
+        assertEquals("NewTestObject", testObject.relation.className);
+        assertEquals(0.0, testObject.array.get(0).isNumber().doubleValue());
+        assertEquals(1.1, testObject.array.get(1).isNumber().doubleValue());
+        assertEquals(2.2, testObject.array.get(2).isNumber().doubleValue());
+    }
+    private ParseObject createParseObject() {
         TestObject testObject = new TestObject();
         testObject.setId("sample-object-id");
         Map<String, Object> map = new HashMap<>();
@@ -70,8 +96,6 @@ public class MarshallerTest extends GWTTestCase {
 
         //testObject.setChildren(map);
         ParseObject parseObject = Parse.marshaller().marshall(testObject);
-        assertNotNull(parseObject);
-        assertEquals("sample-object-id", parseObject.getObjectId());
-        System.out.println(parseObject.toString());
+        return parseObject;
     }
 }
