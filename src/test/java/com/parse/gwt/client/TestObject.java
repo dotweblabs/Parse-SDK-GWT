@@ -26,7 +26,7 @@ import com.promis.rtti.annotations.GenerateRtti;
 
 @GenerateMethods
 @GenerateRtti
-@Entity
+@Entity(name="_TestObject")
 public class TestObject {
 
     @Column

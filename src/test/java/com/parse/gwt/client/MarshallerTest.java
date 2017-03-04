@@ -54,6 +54,7 @@ public class MarshallerTest extends GWTTestCase {
         assertEquals(0.0, testObject.array.get(0).isNumber().doubleValue());
         assertEquals(1.1, testObject.array.get(1).isNumber().doubleValue());
         assertEquals(2.2, testObject.array.get(2).isNumber().doubleValue());
+        assertEquals("_TestObject", parseObject.getClassName());
     }
     private ParseObject createParseObject() {
         TestObject testObject = new TestObject();

@@ -52,6 +52,13 @@ public class GwtMarshaller implements Marshaller {
         AnnotationUtil.AnnotatedField objectIdField = AnnotationUtil.getFieldWithAnnotation(ObjectId.class,
                 instance);
         ParseObject parseObject = new ParseObject();
+        Entity anno = (Entity) annotation;
+        String name = anno.name();
+        if(name != null && !name.isEmpty()){
+            parseObject.setClassName(name);
+        } else {
+            parseObject.setClassName(instance.getClass().getSimpleName());
+        }
         java.lang.Object objectId = objectIdField.getFieldValue();
         if(objectId != null && objectId.getClass().equals(String.class)) {
             parseObject.putString("objectId", String.valueOf(objectId));
