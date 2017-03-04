@@ -14,24 +14,14 @@
  * limitations under the License.
  *
  */
-package com.parse.gwt.client;
+package com.parse.gwt.client.annotations;
 
-/**
- *
- * Test Keys
- *
- * @author Kerby Martino
- * @since 0-SNAPSHOT
- * @version 0-SNAPSHOT
- *
- */
-public class TestKeys {
-    public static final String TEST_API_ROOT = "http://localhost:1337/parse";
-    public static final String TEST_APP_ID = "myAppId";
-    public static final String TEST_JAVASCRIPT_KEY = "";
-    public static final String TEST_MASTER_KEY = "myMasterKey";
-    public static final String TEST_REST_API_KEY = "myRESTApiKey";
-    public static final String TEST_DOTNET_KEY = "";
-    public static final String TEST_WEBHOOK_KEY = "";
-    public static final String TEST_FILE_KEY = "";
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ObjectId {
 }
