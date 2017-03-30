@@ -246,4 +246,11 @@
 			</pluginRepositories>
 		</profile>
 	</profiles>
+	<distributionManagement>
+		<snapshotRepository>
+			<id>bintray-dotweblabs-parse</id>
+			<name>oss-jfrog-artifactory-snapshots</name>
+			<url>http://oss.jfrog.org/artifactory/oss-snapshot-local</url>
+		</snapshotRepository>
+	</distributionManagement>
 </project>
