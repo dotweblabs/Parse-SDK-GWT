@@ -4,5 +4,5 @@ import com.google.web.bindery.autobean.shared.AutoBean;
 import com.google.web.bindery.autobean.shared.AutoBeanFactory;
 
 public interface BaseFactory<T> extends AutoBeanFactory {
-    AutoBean<T> bean();
+    public AutoBean<T> bean();
 }

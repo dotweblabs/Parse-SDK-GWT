@@ -1,3 +1,6 @@
+## 0-SNAPSHOT - 04/13/17
+- Added AutoBean implementation for Parse ACL, File and Pointer
+
 ## 0-SNAPSHOT - 04/12/17
 - Added AutoBeans serialization
 
