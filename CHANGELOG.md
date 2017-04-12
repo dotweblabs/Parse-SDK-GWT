@@ -1,3 +1,6 @@
+## 0-SNAPSHOT - 04/12/17
+- Added AutoBeans serialization
+
 ## 0-SNAPSHOT - 02/08/17
 - Added ParseRole
 - Added ParseACL

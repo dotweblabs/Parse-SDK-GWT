@@ -1,7 +1,9 @@
 package com.parse.gwt.client;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.json.client.*;
-
+import com.google.web.bindery.autobean.shared.AutoBeanFactory;
+import com.parse.gwt.client.autobean.AutoBeanSerializer;
 import java.util.Iterator;
 
 /**
@@ -127,6 +129,11 @@ public class ParseObject extends JSONObject {
         if(acl != null) {
             put("ACL", acl);
         }
+    }
+
+    // Helper
+    public <T> T as(Class<T> clazz, AutoBeanSerializer serializer) {
+        return serializer.decodeData(clazz, this.toString());
     }
 
 }
