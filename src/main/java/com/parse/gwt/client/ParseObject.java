@@ -131,7 +131,30 @@ public class ParseObject extends JSONObject {
         }
     }
 
-    // Helper
+    /**
+     * Creates a new {@ParseObject} from a AutoBean object.
+     *
+     * @param className Parse className
+     * @param object Source object
+     * @param clazz Source object type
+     * @param serializer Source object serializer
+     * @param <T>
+     * @return a new new {@ParseObject}
+     */
+    public static <T> ParseObject from(String className, T object, Class<T> clazz, AutoBeanSerializer serializer) {
+        String json = serializer.encodeData(object);
+        ParseObject parseObject = ParseObject.parse(className, json);
+        return parseObject;
+    }
+
+    /**
+     * Marshall this {@ParseObject} into a target object.
+     *
+     * @param clazz Target object class
+     * @param serializer Target object serializer
+     * @param <T> Target object type
+     * @return Target object
+     */
     public <T> T as(Class<T> clazz, AutoBeanSerializer serializer) {
         return serializer.decodeData(clazz, this.toString());
     }

@@ -4,10 +4,11 @@ import com.google.web.bindery.autobean.shared.Splittable;
 import com.google.web.bindery.autobean.shared.impl.StringQuoter;
 
 /**
- * AutoBean implementation for Parse ACL
+ * Parse ACL AutoBean overlay
  */
 public class ParseACL {
 
+    private static final String ASTERISK = "*";
     private Splittable acl = null;
 
     public ParseACL() {
@@ -15,24 +16,28 @@ public class ParseACL {
     }
 
     public ParseACL setPublicReadAccess(boolean isRead) {
-        Splittable asterisk = StringQuoter.createSplittable();
-        StringQuoter.create(isRead).assign(asterisk, "read");
-        if(acl.get("*") != null && acl.get("*").get("write") != null) {
-            boolean isWrite = acl.get("*").get("write").isBoolean();
-            StringQuoter.create(isWrite).assign(asterisk, "write");
+        if(acl != null && acl.get(ASTERISK) != null) {
+            Splittable asteriskACL = acl.get("*");
+            StringQuoter.create(isRead).assign(asteriskACL, "read");
+            asteriskACL.assign(acl, ASTERISK);
+        } else {
+            Splittable asteriskACL = StringQuoter.createSplittable();
+            StringQuoter.create(isRead).assign(asteriskACL, "read");
+            asteriskACL.assign(acl, ASTERISK);
         }
-        asterisk.assign(acl, "*");
         return this;
     }
 
     public ParseACL setPublicWriteAccess(boolean isWrite) {
-        Splittable asterisk = StringQuoter.createSplittable();
-        StringQuoter.create(isWrite).assign(asterisk, "write");
-        if(acl.get("*") !=null && acl.get("*").get("read") != null) {
-            boolean isRead = acl.get("*").get("read").isBoolean();
-            StringQuoter.create(isRead).assign(asterisk, "read");
+        if(acl != null && acl.get(ASTERISK) != null) {
+            Splittable asteriskACL = acl.get("*");
+            StringQuoter.create(isWrite).assign(asteriskACL, "write");
+            asteriskACL.assign(acl, ASTERISK);
+        } else {
+            Splittable asteriskACL = StringQuoter.createSplittable();
+            StringQuoter.create(isWrite).assign(asteriskACL, "write");
+            asteriskACL.assign(acl, ASTERISK);
         }
-        asterisk.assign(acl, "*");
         return this;
     }
 

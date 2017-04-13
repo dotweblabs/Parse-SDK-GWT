@@ -1,3 +1,6 @@
+## 0-SNAPSHOT - 04/14/17
+- Added JsInterop classes
+
 ## 0-SNAPSHOT - 04/13/17
 - Added AutoBean implementation for Parse ACL, File and Pointer
 

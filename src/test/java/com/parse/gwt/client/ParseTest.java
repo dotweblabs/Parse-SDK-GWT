@@ -336,8 +336,8 @@ public class ParseTest extends GWTTestCase {
 
     public void testGetRelation(){
         delayTestFinish(60000);
-        Parse.SERVER_URL = "http://localhost:1337/parse";
-        Parse.initialize("myAppId", "myRESTApiKey", "myMasterKey");
+//        Parse.SERVER_URL = "http://localhost:1337/parse";
+//        Parse.initialize("myAppId", "myRESTApiKey", "myMasterKey");
         final ParseObject parseObject = Parse.Objects.extend("TestObject");
         parseObject.put("foo", new JSONString("bar"));
         Parse.Objects.create(parseObject, new AsyncCallback<ParseResponse>() {

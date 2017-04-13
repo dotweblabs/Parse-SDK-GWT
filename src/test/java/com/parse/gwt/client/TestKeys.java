@@ -27,10 +27,10 @@ package com.parse.gwt.client;
  */
 public class TestKeys {
     public static final String TEST_API_ROOT = "http://localhost:1337/parse";
-    public static final String TEST_APP_ID = "myAppId";
+    public static final String TEST_APP_ID = "g8jg1hBROkN9yqAnSpLACU5ndl3RwX7gJEiQNhib";
     public static final String TEST_JAVASCRIPT_KEY = "";
-    public static final String TEST_MASTER_KEY = "myMasterKey";
-    public static final String TEST_REST_API_KEY = "myRESTApiKey";
+    public static final String TEST_MASTER_KEY = "MASTER_KEY";
+    public static final String TEST_REST_API_KEY = "jaSEx1cD1e0mLLcG8zN9VpSmf4KDEDco1A89pNhD";
     public static final String TEST_DOTNET_KEY = "";
     public static final String TEST_WEBHOOK_KEY = "";
     public static final String TEST_FILE_KEY = "";
