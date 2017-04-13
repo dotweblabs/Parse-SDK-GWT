@@ -1,4 +1,4 @@
-package com.parse.gwt.client.js;
+package com.parse.gwt.client.js.base;
 
 import jsinterop.annotations.JsFunction;
 

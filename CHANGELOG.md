@@ -1,4 +1,5 @@
 ## 0-SNAPSHOT - 04/14/17
+- Removed AutoBeans
 - Added JsInterop classes
 
 ## 0-SNAPSHOT - 04/13/17

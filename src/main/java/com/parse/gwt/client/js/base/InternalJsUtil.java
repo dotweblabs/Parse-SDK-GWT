@@ -1,4 +1,4 @@
-package com.parse.gwt.client.js;
+package com.parse.gwt.client.js.base;
 
 class InternalJsUtil {
     public static native Object get(Object obj, String key) /*-{ return obj[key]; }-*/;

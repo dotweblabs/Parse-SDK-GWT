@@ -3,7 +3,8 @@ package com.parse.gwt.client;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.json.client.*;
 import com.google.web.bindery.autobean.shared.AutoBeanFactory;
-import com.parse.gwt.client.autobean.AutoBeanSerializer;
+import com.parse.gwt.client.js.base.JSON;
+
 import java.util.Iterator;
 
 /**
@@ -132,17 +133,15 @@ public class ParseObject extends JSONObject {
     }
 
     /**
-     * Creates a new {@ParseObject} from a AutoBean object.
+     * Creates a new {@ParseObject} from a {@JsType} object
      *
      * @param className Parse className
      * @param object Source object
-     * @param clazz Source object type
-     * @param serializer Source object serializer
      * @param <T>
      * @return a new new {@ParseObject}
      */
-    public static <T> ParseObject from(String className, T object, Class<T> clazz, AutoBeanSerializer serializer) {
-        String json = serializer.encodeData(object);
+    public static <T> ParseObject from(String className, T object) {
+        String json = JSON.stringify(object);
         ParseObject parseObject = ParseObject.parse(className, json);
         return parseObject;
     }
@@ -151,12 +150,12 @@ public class ParseObject extends JSONObject {
      * Marshall this {@ParseObject} into a target object.
      *
      * @param clazz Target object class
-     * @param serializer Target object serializer
      * @param <T> Target object type
      * @return Target object
      */
-    public <T> T as(Class<T> clazz, AutoBeanSerializer serializer) {
-        return serializer.decodeData(clazz, this.toString());
+    public <T> T as(Class<T> clazz) {
+        T as = JSON.parse(this.toString());
+        return as;
     }
 
 }
