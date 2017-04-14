@@ -9,6 +9,13 @@
 ## 0-SNAPSHOT - 04/12/17
 - Added AutoBeans serialization
 
+## 0-SNAPSHOT - 03/04/17
+- Fix missing ParseObject class name
+- Added GWT Marshaller and Unmarshaller for ParseObject
+
+## 0-SNAPSHOT - 02/24/17
+- Added GWT Object to Parse Object marshaller
+
 ## 0-SNAPSHOT - 02/08/17
 - Added ParseRole
 - Added ParseACL

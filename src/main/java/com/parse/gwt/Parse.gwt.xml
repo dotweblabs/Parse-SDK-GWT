@@ -9,6 +9,7 @@
   <inherits name="com.dotweblabs.shape.Shape"/>
   <inherits name="com.sksamuel.gwt.GwtWebsockets" />
   <inherits name="elemental.Elemental"/>
+  <inherits name="com.promis.rtti.Rtti" />
   <!-- Specify the paths for translatable code -->
   <source path="client"/>
 </module>

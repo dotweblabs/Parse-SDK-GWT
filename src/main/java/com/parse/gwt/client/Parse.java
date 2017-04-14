@@ -877,4 +877,13 @@ public class Parse {
         return s;
     }
 
+    public static Marshaller marshaller() {
+        return new GwtMarshaller();
+    }
+
+    public static Unmarshaller unmarshaller() {
+        return new GwtUnmarshaller();
+    }
+
+
 }
