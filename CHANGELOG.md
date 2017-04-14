@@ -1,4 +1,5 @@
 ## 0-SNAPSHOT - 04/14/17
+- Rename package
 - Update README
 - Removed unused classes
 - Added .gitignore file

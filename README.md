@@ -7,8 +7,8 @@ Add dependency:
 
 ```maven
 <dependency>
-    <groupId>com.parse.gwt</groupId>
-    <artifactId>gwt-parse</artifactId>
+    <groupId>org.parseplatform</groupId>
+    <artifactId>parse-gwt</artifactId>
     <version>0-SNAPSHOT</version>
 </dependency>
 ```

@@ -1,16 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.parse.gwt</groupId>
-	<artifactId>gwt-parse</artifactId>
+	<groupId>org.parseplatform</groupId>
+	<artifactId>parse-gwt</artifactId>
 	<version>0-SNAPSHOT</version>
 
 	<name>Parse Client for GWT</name>
 	<description>A simple Parse Client for GWT</description>
-	<url>https://www.github.com/dotweblabs/gwt-parse</url>
+	<url>https://www.github.com/dotweblabs/Parse-SDK-GWT</url>
 
 	<issueManagement>
-		<url>https://www.github.com/dotweblabs/gwt-parse/issues</url>
+		<url>https://www.github.com/dotweblabs/Parse-SDK-GWT/issues</url>
 		<system>GitHub Issues</system>
 	</issueManagement>
 
@@ -23,9 +23,9 @@
 	</licenses>
 
 	<scm>
-		<url>https://github.com/dotweblabs/gwt-parse</url>
-		<connection>scm:git:git://www.github.com/dotweblabs/gwt-parse.git</connection>
-		<developerConnection>scm:git:www.github.com/dotweblabs/gwt-parse.git</developerConnection>
+		<url>https://github.com/dotweblabs/Parse-SDK-GWT</url>
+		<connection>scm:git:git://www.github.com/dotweblabs/Parse-SDK-GWT.git</connection>
+		<developerConnection>scm:git:www.github.com/dotweblabs/Parse-SDK-GWT.git</developerConnection>
 	</scm>
 
 	<developers>
