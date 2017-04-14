@@ -1,4 +1,5 @@
 ## 0-SNAPSHOT - 04/14/17
+- Update README
 - Removed unused classes
 - Added .gitignore file
 - Removed AutoBeans
