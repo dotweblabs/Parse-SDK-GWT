@@ -27,6 +27,7 @@ import elemental.client.Browser;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  *
@@ -41,6 +42,8 @@ public class Parse {
     {
         initializeFromLocalStorage();
     }
+
+    static final Logger logger = Logger.getLogger(Parse.class.getName());
 
     public static class Config {
         public static void get(final AsyncCallback<com.parse.gwt.client.Config> callback) {
@@ -330,7 +333,19 @@ public class Parse {
                         }
                         @Override
                         public void onSuccess(String s) {
-                            callback.onSuccess(ParseResponse.parse(s));
+                            try {
+                                JSONObject jsonObject = JSONParser.parseStrict(s).isObject();
+                                ParseResponse response = new ParseResponse();
+                                Iterator<String> it = jsonObject.keySet().iterator();
+                                while (it.hasNext()) {
+                                    String key = it.next();
+                                    JSONValue jsonValue = jsonObject.get(key);
+                                    response.put(key, jsonValue);
+                                }
+                                callback.onSuccess(response);
+                            } catch (Exception e) {
+                                callback.onFailure(e);
+                            }
                         }
                     });
         }

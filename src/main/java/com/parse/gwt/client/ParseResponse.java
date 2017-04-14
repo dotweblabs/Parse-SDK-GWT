@@ -20,6 +20,7 @@ import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
+import com.parse.gwt.client.js.base.JSON;
 
 import java.util.Iterator;
 
@@ -93,4 +94,30 @@ public class ParseResponse extends JSONObject {
         double code = get("code") != null ? get("code").isNumber().doubleValue() : null;
         return (int) code;
     }
+
+    /**
+     * Marshall this {@ParseResponse} into a target object.
+     *
+     * @param clazz Target object class
+     * @param <T> Target object type
+     * @return Target object
+     */
+    public <T> T as(Class<T> clazz) {
+        T as = JSON.parse(this.toString());
+        return as;
+    }
+
+    /**
+     * Check if this object is an error.
+     *
+     * @return true is this object is error, false if not
+     */
+    public boolean isError() {
+        if(get("code") != null
+            && get("error") != null) {
+            return true;
+        }
+        return false;
+    }
+
 }

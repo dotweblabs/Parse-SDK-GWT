@@ -15,27 +15,36 @@ import java.util.Iterator;
  * @version 0-SNAPSHOT
  */
 public class ParseObject extends JSONObject {
+
     private String className;
+
     public ParseObject(String className){
         this.className = className;
     }
     public ParseObject() {
     }
+
     public String getClassName() {
         return className;
     }
     public void setClassName(String classsName) {
         this.className = classsName;
     }
+    public static ParseObject parse( String json) {
+        JSONObject jsonObject = (JSONObject) JSONParser.parseStrict(json);
+        return ParseObject.clone(jsonObject);
+    }
+
     public static ParseObject parse(String className, String json) {
         JSONObject jsonObject = (JSONObject) JSONParser.parseStrict(json);
         return ParseObject.clone(className, jsonObject);
     }
+
     public static ParseObject clone(String className, JSONObject jsonObject) {
         ParseObject response = null;
         Iterator<String> it = jsonObject.keySet().iterator();
-        while(it.hasNext()) {
-            if(response == null) {
+        while (it.hasNext()) {
+            if (response == null) {
                 response = new ParseObject(className);
             }
             String key = it.next();
@@ -44,6 +53,21 @@ public class ParseObject extends JSONObject {
         }
         return response;
     }
+
+    public static ParseObject clone(JSONObject jsonObject) {
+        ParseObject response = null;
+        Iterator<String> it = jsonObject.keySet().iterator();
+        while(it.hasNext()) {
+            if(response == null) {
+                response = new ParseObject();
+            }
+            String key = it.next();
+            JSONValue value = jsonObject.get(key);
+            response.put(key, value);
+        }
+        return response;
+    }
+
     public void putNull(String key) {
         put(key, JSONNull.getInstance());
     }
@@ -132,6 +156,14 @@ public class ParseObject extends JSONObject {
         }
     }
 
+    public Integer getErrorCode() {
+        return get("code") != null ? (int) get("code").isNumber().doubleValue() : null;
+    }
+
+    public String getErrorMessage() {
+        return get("error").isString() != null ? get("error").isString().stringValue() : null;
+    }
+
     /**
      * Creates a new {@ParseObject} from a {@JsType} object
      *
@@ -156,6 +188,18 @@ public class ParseObject extends JSONObject {
     public <T> T as(Class<T> clazz) {
         T as = JSON.parse(this.toString());
         return as;
+    }
+
+    /**
+     * Check if this object is an error.
+     *
+     * @return true is this object is error, false if not
+     */
+    public boolean isError() {
+        if(getErrorCode() != null && getErrorMessage() != null) {
+            return  true;
+        }
+        return false;
     }
 
 }
