@@ -39,7 +39,7 @@ public class QueryTest extends GWTTestCase {
 
     @Override
     public String getModuleName() {
-        return "com.parse.gwt.Parse";
+        return "org.parseplatform.Parse";
     }
 
     public void testQuery() {
@@ -54,8 +54,7 @@ public class QueryTest extends GWTTestCase {
         query.where(where).find(new AsyncCallback<ParseResponse>() {
             @Override
             public void onFailure(Throwable throwable) {
-                HttpRequestException ex = (HttpRequestException) throwable;
-                log("Query error: " + ex.getCode());
+                log("Query error: " + throwable.getMessage());
                 fail();
             }
 
@@ -71,6 +70,7 @@ public class QueryTest extends GWTTestCase {
             }
         });
         log(query.toString());
+        delayTestFinish(5000);
     }
 
     public void testQueryPointer() {
@@ -103,6 +103,7 @@ public class QueryTest extends GWTTestCase {
                 finishTest();
             }
         });
+        delayTestFinish(5000);
     }
 
     public static void log(String s){
@@ -154,6 +155,34 @@ public class QueryTest extends GWTTestCase {
                 .and(new Where("color", new JSONString("red"))
                         .where("champion", JSONBoolean.getInstance(true)));
         return where;
+    }
+
+    public void testQuery1() {
+        Parse.SERVER_URL = TestKeys.TEST_API_ROOT;
+        Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
+        Where where = new Where("isPublished", JSONBoolean.getInstance(true));
+        ParseObject test = Parse.Objects.extend("Story");
+        Parse.Query query = Parse.Query.extend(test);
+        query.where(where);
+        query.skip(0);
+        query.limit(10);
+        query.order(new Order().descending("createdAt"));
+        //log("Query: " + query.toString());
+        query.find(new AsyncCallback<ParseResponse>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                log("Query Error: " + throwable.getMessage());
+                finishTest();
+            }
+            @Override
+            public void onSuccess(ParseResponse parseResponse) {
+                JSONArray jsonArray = parseResponse.getResults();
+                log(jsonArray.size() + "");
+//                log(parseResponse.toString());
+                finishTest();
+            }
+        });
+        delayTestFinish(10000);
     }
 
 }
