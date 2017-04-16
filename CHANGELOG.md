@@ -1,3 +1,7 @@
+## 0-SNAPSHOT - 04/16/17
+- Updated JUnit gwt.xml inherits
+- Updated algorithm to generate query parameters
+
 ## 0-SNAPSHOT - 04/14/17
 - Rename package
 - Update README

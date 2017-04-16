@@ -665,50 +665,85 @@ public class Parse {
 
         public void find(final AsyncCallback<ParseResponse> callback){
             String className = getClassName();
-            String where = "";
             String order = "";
-            String limit = "";
-            String skip = "";
-            if(get("where") != null) {
-                JSONObject jsonWhere = get("where").isObject();
-                where = jsonWhere.toString();
-                assert where != null;
-                where = "?where=" + URL.encode(where);
+            String where = (get("where").isObject() != null
+                && !get("where").isObject().toString().isEmpty()
+                && !get("where").isObject().toString().equals("{}")) ? "where=" + URL.encode(get("where").isObject().toString()) : null;
+            String limit = get("limit").isNumber() != null ? "limit=" + ((int)get("limit").isNumber().doubleValue()) : null;
+            String skip = get("skip").isNumber() != null ? "skip=" + ((int)get("skip").isNumber().doubleValue()) : null;
+            if(get("order") != null && get("order").isArray() != null) {
+                order = "order=";
+                JSONArray jsonArray = get("order").isArray();
+                String arrayString = jsonArray.toString();
+                arrayString = arrayString.substring(1, arrayString.length() -1);
+                arrayString = arrayString.replaceAll("\"", "");
+                order = order + URL.encode(arrayString);
             }
-            if(get("order") != null) {
-                JSONArray jsonOrder = get("order").isArray();
-                assert order != null;
-                order = where.isEmpty() ? "?order=" : "&order=";
-                for(int i=0;i<jsonOrder.size();i++){
-                    order = order + jsonOrder.get(i).isString().stringValue() + ",";
-                }
-                order = order.substring(0, order.lastIndexOf(","));
-            }
-            if(get("limit") != null) {
-                int l = (int) get("limit").isNumber().doubleValue();
-                if(order.isEmpty() && !where.isEmpty()) {
-                    limit = "&limit=" + l;
-                } else if(!order.isEmpty() && where.isEmpty()) {
-                    limit = "&limit=" + l;
-                } else if(order.isEmpty() && where.isEmpty()) {
-                    limit = "?limit=" + l;
-                }
-            }
-            if(get("skip") != null) {
-                int s = (int) get("skip").isNumber().doubleValue();
-                if(!where.isEmpty() && order.isEmpty() && limit.isEmpty())  {
-                    skip = "&skip=" + s;
-                } else if(where.isEmpty() && order.isEmpty() && !limit.isEmpty()) {
-                    skip = "&skip=" + s;
-                } else if(where.isEmpty() && !order.isEmpty() && limit.isEmpty()) {
-                    skip = "&skip=" + s;
-                } else if(where.isEmpty() && order.isEmpty() && limit.isEmpty()) {
-                    skip = "?skip=" + s;
+            String queryParams = "";
+            // where + order + limit + skip
+            if(where != null) {
+                if(order != null) {
+                    if(limit != null) {
+                        if(skip != null) {
+                            queryParams = "?" + where + "&" + order + "&" + limit + "&" + skip;
+                        } else {
+                            queryParams = "?" + where + "&" + order + "&" + limit;
+                        }
+                    } else {
+                        if(skip != null) {
+                            queryParams = "?" + where + "&" + order + "&" + skip;
+                        } else {
+                            queryParams = "?" + where + "&" + order;
+                        }
+                    }
                 } else {
-                    skip = "&skip=" + s;
+                    if(limit != null) {
+                        if(skip != null) {
+                            queryParams = "?" + where + "&" + limit + "&" + skip;
+                        } else {
+                            queryParams = "?" + where + "&" + limit;
+                        }
+                    } else {
+                        if(skip != null) {
+                            queryParams = "?" + where + "&" + skip;
+                        } else {
+                            queryParams = "?" + where;
+                        }
+                    }
+                }
+            } else {
+                if(order != null) {
+                    if(limit != null) {
+                        if(skip != null) {
+                            queryParams = "?" + order + "&" + limit + "&" + skip;
+                        } else {
+                            queryParams = "?" + order + "&" + limit;
+                        }
+                    } else {
+                        if(skip != null) {
+                            queryParams = "?" + order + "&" + skip;
+                        } else {
+                            queryParams = "?" + order;
+                        }
+                    }
+                } else {
+                    if(limit != null) {
+                        if(skip != null) {
+                            queryParams = "?" + limit + "&" + skip;
+                        } else {
+                            queryParams = "?" + limit;
+                        }
+                    } else {
+                        if(skip != null) {
+                            queryParams = "?" + skip;
+                        } else {
+                            queryParams = "";
+                        }
+                    }
                 }
             }
-            Shape.get(Parse.SERVER_URL + Parse.CLASSES_URI + className + where + order + limit + skip)
+            logger.info(Parse.SERVER_URL + Parse.CLASSES_URI + className + queryParams);
+            Shape.get(Parse.SERVER_URL + Parse.CLASSES_URI + className + queryParams)
                     .header("X-Parse-Application-Id", X_Parse_Application_Id)
                     .header("X-Parse-REST-API-Key", X_Parse_REST_API_Key)
                     .header("X-Parse-Master-Key", X_Parse_Master_Key)
