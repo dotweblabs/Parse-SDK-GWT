@@ -39,7 +39,7 @@ public class ParseTest extends GWTTestCase {
 
     @Override
     public String getModuleName() {
-        return "com.parse.gwt.Parse";
+        return "org.parseplatform.Parse";
     }
 
     public void testInitialize() {
@@ -96,14 +96,17 @@ public class ParseTest extends GWTTestCase {
                 HttpRequestException ex = (HttpRequestException) throwable;
                 log("POST Error: " + ex.getCode());
                 fail("POST Error: " + ex.getCode());
+                finishTest();
             }
             @Override
             public void onSuccess(ParseResponse parseResponse) {
                 log("POST Success objectId: " + parseResponse.getObjectId() + " createdAt: " + parseResponse.getCreatedAt());
                 assertNotNull(parseResponse.getObjectId());
                 assertNotNull(parseResponse.getCreatedAt());
+                finishTest();
             }
         });
+        delayTestFinish(5000);
     }
 
     public void testRetrieveObject() {
@@ -117,6 +120,7 @@ public class ParseTest extends GWTTestCase {
             public void onFailure(Throwable throwable) {
                 HttpRequestException ex = (HttpRequestException) throwable;
                 log("POST Error: " + ex.getCode());
+                fail();
                 finishTest();
             }
             @Override
@@ -142,6 +146,7 @@ public class ParseTest extends GWTTestCase {
                 });
             }
         });
+        delayTestFinish(5000);
     }
 
     public void testDeleteObject() {
@@ -411,6 +416,7 @@ public class ParseTest extends GWTTestCase {
                 });
             }
         });
+        delayTestFinish(10000);
     }
 
     public void testGetRelationWithParam(){

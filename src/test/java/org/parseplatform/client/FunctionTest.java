@@ -25,7 +25,7 @@ public class FunctionTest extends GWTTestCase {
 
     @Override
     public String getModuleName() {
-        return "com.parse.gwt.Parse";
+        return "org.parseplatform.Parse";
     }
     public void testFunction() {
         Parse.SERVER_URL = PARSE_API_ROOT;
@@ -35,6 +35,7 @@ public class FunctionTest extends GWTTestCase {
             @Override
             public void onFailure(Throwable throwable) {
                 log(throwable.getMessage());
+                finishTest();
             }
             @Override
             public void onSuccess(ParseResponse parseResponse) {
@@ -42,8 +43,10 @@ public class FunctionTest extends GWTTestCase {
                 assertNotNull(parseResponse.getResult().isString());
                 String hi = parseResponse.getResult().isString().stringValue();
                 assertEquals("Hi", hi);
+                finishTest();
             }
         });
+        delayTestFinish(10000);
     }
 
     public static void log(String s){

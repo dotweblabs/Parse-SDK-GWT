@@ -35,7 +35,7 @@ public class WhereTest extends GWTTestCase {
 
     @Override
     public String getModuleName() {
-        return "com.parse.gwt.Parse";
+        return "org.parseplatform.Parse";
     }
 
     public void testSimpleWhere() {
