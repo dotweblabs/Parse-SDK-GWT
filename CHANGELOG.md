@@ -1,3 +1,6 @@
+## 0-SNAPSHOT - 04/17/17
+- Updated POM, changed http to https
+
 ## 0-SNAPSHOT - 04/16/17
 - Updated JUnit gwt.xml inherits
 - Updated algorithm to generate query parameters

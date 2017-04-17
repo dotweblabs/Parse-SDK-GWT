@@ -123,18 +123,13 @@
 		<dependency>
 			<groupId>com.dotweblabs</groupId>
 			<artifactId>shape</artifactId>
-			<version>1-SNAPSHOT</version>
+			<version>0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sksamuel.gwt</groupId>
 			<artifactId>gwt-websockets</artifactId>
 			<version>1.0.4</version>
 		</dependency>
-		<!--<dependency>-->
-			<!--<groupId>com.promis.rtti</groupId>-->
-			<!--<artifactId>gwt-rtti</artifactId>-->
-			<!--<version>0.0.1-SNAPSHOT</version>-->
-		<!--</dependency>-->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -236,7 +231,7 @@
 				<repository>
 					<id>oss-jfrog-artifactory-snapshots</id>
 					<name>oss-jfrog-artifactory-snapshots</name>
-					<url>http://oss.jfrog.org/artifactory/oss-snapshot-local</url>
+					<url>https://oss.jfrog.org/artifactory/oss-snapshot-local</url>
 				</repository>
 			</repositories>
 		</profile>
@@ -245,7 +240,7 @@
 		<snapshotRepository>
 			<id>bintray-dotweblabs-parse</id>
 			<name>oss-jfrog-artifactory-snapshots</name>
-			<url>http://oss.jfrog.org/artifactory/oss-snapshot-local</url>
+			<url>https://oss.jfrog.org/artifactory/oss-snapshot-local</url>
 		</snapshotRepository>
 	</distributionManagement>
 </project>
