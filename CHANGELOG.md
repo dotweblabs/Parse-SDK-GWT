@@ -1,3 +1,6 @@
+## 0-SNAPSHOT - 04/28/17
+- Added "include" relation option for retrieve and query
+
 ## 0-SNAPSHOT - 04/17/17
 - Updated POM, changed http to https
 

@@ -18,6 +18,7 @@ package org.parseplatform.client;
 
 import com.dotweblabs.shape.client.HttpRequestException;
 import com.dotweblabs.shape.client.Shape;
+import com.google.common.base.Joiner;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.json.client.*;
 import com.google.gwt.storage.client.Storage;
@@ -26,6 +27,8 @@ import elemental.client.Browser;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -369,6 +372,34 @@ public class Parse {
                         }
                     });
         }
+        public static void retrieve(final ParseObject ref, final List<String> includes,
+                                    final AsyncCallback<ParseObject> callback) {
+            String objectId = ref.getObjectId();
+            String className = ref.getClassName();
+            String path = Parse.SERVER_URL + Parse.CLASSES_URI + className + "/" + objectId;
+
+            String stringIncludes = Joiner.on(",").join(includes);
+            if(stringIncludes != null && !stringIncludes.isEmpty()) {
+                path = path + "?include=" + stringIncludes;
+            }
+
+            Shape.get(path)
+                    .header("X-Parse-Application-Id", X_Parse_Application_Id)
+                    .header("X-Parse-REST-API-Key", X_Parse_REST_API_Key)
+                    .header("X-Parse-Master-Key", X_Parse_Master_Key)
+                    .header("X-Parse-Session-Token", X_Parse_Session_Token)
+                    .asJson(new AsyncCallback<String>() {
+                        @Override
+                        public void onFailure(Throwable throwable) {
+                            HttpRequestException ex = (HttpRequestException) throwable;
+                            callback.onFailure(ex);
+                        }
+                        @Override
+                        public void onSuccess(String s) {
+                            callback.onSuccess(ParseObject.parse(className, s));
+                        }
+                    });
+        }
         public static void delete(final ParseObject ref, final AsyncCallback<ParseResponse> callback) {
             String objectId = ref.getObjectId();
             final String className = ref.getClassName();
@@ -602,6 +633,7 @@ public class Parse {
         private int limit;
         private int skip;
 
+        private List<String> includes;
 
         public Query() {
 
@@ -647,6 +679,13 @@ public class Parse {
             return this;
         }
 
+        public Query include(String fieldName) {
+            if(includes == null) {
+                includes = new LinkedList<String>();
+            }
+            return this;
+        }
+
         public void get(String objectId, final AsyncCallback<ParseObject> response) {
             ParseObject ref = new ParseObject(getClassName());
             ref.setObjectId(objectId);
@@ -663,12 +702,16 @@ public class Parse {
             });
         }
 
-        public void find(final AsyncCallback<ParseResponse> callback){
+        public void find(final AsyncCallback<ParseResponse> callback) {
+            String stringIncludes = null;
+            if(includes != null) {
+                stringIncludes = Joiner.on(",").join(includes);
+            }
             String className = getClassName();
             String order = "";
             String where = (get("where").isObject() != null
-                && !get("where").isObject().toString().isEmpty()
-                && !get("where").isObject().toString().equals("{}")) ? "where=" + URL.encode(get("where").isObject().toString()) : null;
+                    && !get("where").isObject().toString().isEmpty()
+                    && !get("where").isObject().toString().equals("{}")) ? "where=" + URL.encode(get("where").isObject().toString()) : null;
             String limit = get("limit").isNumber() != null ? "limit=" + ((int)get("limit").isNumber().doubleValue()) : null;
             String skip = get("skip").isNumber() != null ? "skip=" + ((int)get("skip").isNumber().doubleValue()) : null;
             if(get("order") != null && get("order").isArray() != null) {
@@ -743,7 +786,15 @@ public class Parse {
                 }
             }
             logger.info(Parse.SERVER_URL + Parse.CLASSES_URI + className + queryParams);
-            Shape.get(Parse.SERVER_URL + Parse.CLASSES_URI + className + queryParams)
+            String queryUrl = Parse.SERVER_URL + Parse.CLASSES_URI + className + queryParams;
+            if(stringIncludes != null && !stringIncludes.isEmpty()) {
+                if(queryUrl.equals(Parse.SERVER_URL + Parse.CLASSES_URI + className)) {
+                    queryUrl = queryUrl + "?include=" + stringIncludes;
+                } else {
+                    queryUrl = queryUrl + "&include=" + stringIncludes;
+                }
+            }
+            Shape.get(queryUrl)
                     .header("X-Parse-Application-Id", X_Parse_Application_Id)
                     .header("X-Parse-REST-API-Key", X_Parse_REST_API_Key)
                     .header("X-Parse-Master-Key", X_Parse_Master_Key)
@@ -764,6 +815,7 @@ public class Parse {
                         }
                     });
         }
+
 
         public Subscription subscribe() {
             Subscription subscription = new Subscription(getClassName(), where);
