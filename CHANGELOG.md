@@ -1,4 +1,5 @@
 ## 0-SNAPSHOT - 04/28/17
+- Removed casting for Throwables
 - Update Object bug fix
 - Added "include" relation option for retrieve and query
 
