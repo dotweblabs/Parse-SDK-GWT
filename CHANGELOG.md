@@ -1,4 +1,5 @@
 ## 0-SNAPSHOT - 04/28/17
+- Update Object bug fix
 - Added "include" relation option for retrieve and query
 
 ## 0-SNAPSHOT - 04/17/17

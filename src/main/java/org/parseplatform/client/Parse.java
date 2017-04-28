@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -459,7 +460,13 @@ public class Parse {
                             }
                             @Override
                             public void onSuccess(String s) {
-                                callback.onSuccess(ParseResponse.parse(s));
+                                logger.log(Level.INFO, "Parse Update Response: " + s);
+                                try {
+                                    ParseResponse parseResponse = ParseResponse.parse(s);
+                                    callback.onSuccess(parseResponse);
+                                } catch (Exception e) {
+                                    callback.onFailure(e);
+                                }
                             }
                         });
 
