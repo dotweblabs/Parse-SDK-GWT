@@ -1,3 +1,5 @@
+## 0-SNAPSHOT - 04/29/17
+- Added Parse Upload function (base64)
 ## 0-SNAPSHOT - 04/28/17
 - Removed casting for Throwables
 - Update Object bug fix
