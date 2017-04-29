@@ -624,6 +624,19 @@ public class Parse {
 
         }
     }
+//
+//    _ApplicationId
+//:
+//        "g8jg1hBROkN9yqAnSpLACU5ndl3RwX7gJEiQNhib"
+//    _ClientVersion
+//:
+//        "js1.9.2"
+//    _InstallationId
+//:
+//        "310bbdb3-3ab7-b23e-927b-1bfecb802ffd"
+//    _JavaScriptKey
+//:
+//        "jaSEx1cD1e0mLLcG8zN9VpSmf4KDEDco1A89pNhD"
 
     public static class File {
         public static final String IMAGE_JPEG = "image/jpeg";
@@ -634,12 +647,15 @@ public class Parse {
             JSONObject data = new JSONObject();
             data.put("__ContentType", new JSONString(mimeType));
             data.put("base64", new JSONString(base64file));
+            data.put("_ApplicationId", new JSONString(X_Parse_Application_Id));
+            if(X_Parse_Javascript_Key != null && !X_Parse_Javascript_Key.isEmpty()) {
+                data.put("_JavaScriptKey", new JSONString(X_Parse_Javascript_Key));
+            }
+            if(X_Parse_Session_Token != null && !X_Parse_Session_Token.isEmpty()) {
+                data.put("_SessionToken", new JSONString(X_Parse_Session_Token));
+            }
             Shape.post(Parse.SERVER_URL + Parse.FILES_URI + fileName)
-                    .header("X-Parse-Application-Id", X_Parse_Application_Id)
-                    .header("X-Parse-REST-API-Key", X_Parse_REST_API_Key)
-                    .header("X-Parse-Master-Key", X_Parse_Master_Key)
-                    .header("X-Parse-Session-Token", X_Parse_Session_Token)
-                    .header("Content-Type", mimeType)
+                    .header("Content-Type", "plain-text")
                     .body(data.toString())
                     .asJson(new AsyncCallback<String>() {
                         @Override
@@ -873,6 +889,7 @@ public class Parse {
      */
     public static String X_Parse_Application_Id = null;
     public static String X_Parse_REST_API_Key = null;
+    public static String X_Parse_Javascript_Key = null;
     public static String X_Parse_Master_Key = null;
     public static String X_Parse_Session_Token = null;
 
@@ -997,6 +1014,11 @@ public class Parse {
             storage.setItem("X-Parse-REST-API-Key", restApiKey);
             storage.setItem("X-Parse-Session-Token", sessionToken);
         }
+    }
+
+    public static void initializeJavascriptKey(String javascriptKey) {
+        X_Parse_Javascript_Key = javascriptKey;
+        _javascriptKey = javascriptKey;
     }
 
     public static String getUri() {
