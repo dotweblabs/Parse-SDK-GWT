@@ -1,4 +1,5 @@
 ## 0-SNAPSHOT - 04/30/17
+- Added email payload for request password reset function
 - Fixed Parse Upload function (working version)
 ## 0-SNAPSHOT - 04/29/17
 - Added Parse Upload function (base64)

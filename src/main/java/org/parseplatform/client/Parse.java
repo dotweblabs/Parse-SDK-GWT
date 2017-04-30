@@ -262,6 +262,31 @@ public class Parse {
                         }
                     });
         }
+        public static void requestPasswordReset(final String email, final AsyncCallback<ParseResponse> callback) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("email", new JSONString(email));
+            Shape.post(Parse.SERVER_URL + "requestPasswordReset")
+                    .header("X-Parse-Application-Id", X_Parse_Application_Id)
+                    .header("X-Parse-REST-API-Key", X_Parse_REST_API_Key)
+                    .header("X-Parse-Master-Key", X_Parse_Master_Key)
+                    .header("X-Parse-Session-Token", sessionToken)
+                    .body(jsonObject.toString())
+                    .asJson(new AsyncCallback<String>() {
+                        @Override
+                        public void onFailure(Throwable throwable) {
+                            callback.onFailure(throwable);
+                        }
+                        @Override
+                        public void onSuccess(String s) {
+                            try {
+                                ParseResponse response = ParseResponse.parse(s);
+                                callback.onSuccess(response);
+                            } catch (Exception e) {
+                                callback.onFailure(e);
+                            }
+                        }
+                    });
+        }
         public static void retrieveUser(String objectId ){}
         public static ParseObject retrieveCurrentUser() {
             Storage storage = Storage.getLocalStorageIfSupported();
