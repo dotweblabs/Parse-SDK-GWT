@@ -764,6 +764,7 @@ public class Parse {
             if(includes == null) {
                 includes = new LinkedList<String>();
             }
+            includes.add(fieldName);
             return this;
         }
 
