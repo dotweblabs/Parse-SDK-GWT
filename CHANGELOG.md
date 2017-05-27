@@ -1,3 +1,5 @@
+## 0-SNAPSHOT - 05/27/17
+- Login/Logout local storage bug fix
 ## 0-SNAPSHOT - 04/30/17
 - Added email payload for request password reset function
 - Fixed Parse Upload function (working version)

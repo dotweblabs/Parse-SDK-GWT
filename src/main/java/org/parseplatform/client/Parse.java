@@ -146,6 +146,43 @@ public class Parse {
                         }
                     });
     }
+        public static void login(String username, String password, boolean remember, final AsyncCallback<ParseResponse> callback) {
+            String param = "username=" + username + "&" + "password=" + password;
+            Shape.get(Parse.SERVER_URL + "login?" + URL.encode(param))
+                    .header("X-Parse-Application-Id", X_Parse_Application_Id)
+                    .header("X-Parse-REST-API-Key", X_Parse_REST_API_Key)
+                    .header("X-Parse-Master-Key", X_Parse_Master_Key)
+                    .header("X-Parse-Revocable-Session", "1")
+                    .asJson(new AsyncCallback<String>() {
+                        @Override
+                        public void onFailure(Throwable throwable) {
+                            callback.onFailure(throwable);
+                        }
+                        @Override
+                        public void onSuccess(String s) {
+                            try {
+                                ParseResponse response = ParseResponse.parse(s);
+                                if(response.get("sessionToken") != null) {
+                                    //createdAt, objectId, sessionToken
+                                    sessionToken = response.get("sessionToken").isString().stringValue();
+                                    Parse.X_Parse_Session_Token = sessionToken;
+                                    Storage storage = Storage.getLocalStorageIfSupported();
+                                    if(storage != null && remember) {
+                                        String key = "Parse/" + X_Parse_Application_Id + "/currentUser";
+                                        storage.setItem(key, response.toString());
+                                    }
+                                    callback.onSuccess(response);
+                                } else {
+                                    HttpRequestException ex
+                                            = new HttpRequestException(response.getErrorMessage(), response.getErrorCode());
+                                    callback.onFailure(ex);
+                                }
+                            } catch (Exception e) {
+                                callback.onFailure(e);
+                            }
+                        }
+                    });
+        }
         public static void login(String username, String password, final AsyncCallback<ParseResponse> callback) {
             String param = "username=" + username + "&" + "password=" + password;
             Shape.get(Parse.SERVER_URL + "login?" + URL.encode(param))
@@ -202,7 +239,7 @@ public class Parse {
                                 sessionToken = null;
                                 String userKey = "Parse/" + X_Parse_Application_Id + "/currentUser";
                                 Storage storage = Storage.getLocalStorageIfSupported();
-                                if(storage != null) {
+                                if(storage != null && storage.getItem(userKey) != null) {
                                     storage.removeItem(userKey);
                                 }
                                 callback.onSuccess(response);
