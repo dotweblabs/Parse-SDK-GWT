@@ -133,15 +133,19 @@ public class Parse {
                         }
                         @Override
                         public void onSuccess(String s) {
-                            ParseResponse response = ParseResponse.parse(s);
-                            if(response.get("sessionToken") != null) {
-                                //createdAt, objectId, sessionToken
-                                sessionToken = response.get("sessionToken").isString().stringValue();
-                                callback.onSuccess(response);
-                            } else {
-                                HttpRequestException ex
-                                        = new HttpRequestException(response.getErrorMessage(), response.getErrorCode());
-                                callback.onFailure(ex);
+                            try {
+                                ParseResponse response = ParseResponse.parse(s);
+                                if(response.get("sessionToken") != null) {
+                                    //createdAt, objectId, sessionToken
+                                    sessionToken = response.get("sessionToken").isString().stringValue();
+                                    callback.onSuccess(response);
+                                } else {
+                                    HttpRequestException ex
+                                            = new HttpRequestException(response.getErrorMessage(), response.getErrorCode());
+                                    callback.onFailure(ex);
+                                }
+                            } catch (Exception e) {
+                                callback.onFailure(e);
                             }
                         }
                     });
@@ -686,19 +690,6 @@ public class Parse {
 
         }
     }
-//
-//    _ApplicationId
-//:
-//        "g8jg1hBROkN9yqAnSpLACU5ndl3RwX7gJEiQNhib"
-//    _ClientVersion
-//:
-//        "js1.9.2"
-//    _InstallationId
-//:
-//        "310bbdb3-3ab7-b23e-927b-1bfecb802ffd"
-//    _JavaScriptKey
-//:
-//        "jaSEx1cD1e0mLLcG8zN9VpSmf4KDEDco1A89pNhD"
 
     public static class File {
         public static final String IMAGE_JPEG = "image/jpeg";
@@ -955,12 +946,14 @@ public class Parse {
     public static String X_Parse_Javascript_Key = null;
     public static String X_Parse_Master_Key = null;
     public static String X_Parse_Session_Token = null;
+    public static String X_Parse_Server_URL = null;
 
     public static String _appId = null;;
     public static String _javascriptKey = null;;
     public static String _restApiKey = null;;
     public static String _masterKey = null;;
     public static String _sessionToken = null;
+    public static String _serverUrl = null;
 
     public static void initializeFromLocalStorage() {
         Browser.getWindow().getConsole().log("Initializing Parse from localstorage");
@@ -1082,6 +1075,22 @@ public class Parse {
     public static void initializeJavascriptKey(String javascriptKey) {
         X_Parse_Javascript_Key = javascriptKey;
         _javascriptKey = javascriptKey;
+    }
+
+    public static void setServerUrl(String serverUrl) {
+        SERVER_URL = serverUrl;
+    }
+
+    /**
+     * Setup to connect to a different parse-server for authentication
+     * and different parse-server for storing classes and functions
+     *
+     * @param authProxyServerUrl
+     * @param serverUrl
+     */
+    public static void setServerUrl(String authProxyServerUrl, String serverUrl) {
+        SERVER_URL = authProxyServerUrl;
+        X_Parse_Server_URL  = serverUrl;
     }
 
     public static String getUri() {
