@@ -1,10 +1,16 @@
+## 0-SNAPSHOT - 10/26/17
+- Added safe getters for ParseObject
+
 ## 0-SNAPSHOT - 05/27/17
 - Login/Logout local storage bug fix
+
 ## 0-SNAPSHOT - 04/30/17
 - Added email payload for request password reset function
 - Fixed Parse Upload function (working version)
+
 ## 0-SNAPSHOT - 04/29/17
 - Added Parse Upload function (base64)
+
 ## 0-SNAPSHOT - 04/28/17
 - Removed casting for Throwables
 - Update Object bug fix

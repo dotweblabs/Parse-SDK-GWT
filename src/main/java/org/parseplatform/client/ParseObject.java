@@ -121,6 +121,16 @@ public class ParseObject extends JSONObject {
         }
         return null;
     }
+
+    public ParseACL getACL() {
+        if(get("ACL") != null && get("ACL").isObject() != null) {
+            JSONObject acl = get("ACL").isObject();
+            ParseACL parseACL = (ParseACL) acl;
+            return parseACL;
+        }
+        return null;
+    }
+
     public String getCreatedAt() {
         if(get("createdAt") != null && get("createdAt").isString() != null) {
             return get("createdAt").isString().stringValue();
@@ -136,6 +146,53 @@ public class ParseObject extends JSONObject {
     public ParsePointer getPointer() {
         ParsePointer pointer = new ParsePointer(this);
         return pointer;
+    }
+
+    public String getString(String key) {
+        if(this.get(key) != null && this.get(key).isString() != null) {
+            return this.get(key).isString().stringValue();
+        }
+        return null;
+    }
+
+    public Long getLong(String key) {
+        if(this.get(key) != null && this.get(key).isString() != null) {
+            Double db = this.get(key).isNumber().doubleValue();
+            return Long.valueOf(db + "");
+        }
+        return null;
+    }
+
+    public Double getDouble(String key) {
+        if(this.get(key) != null && this.get(key).isNumber() != null) {
+            Double db = this.get(key).isNumber().doubleValue();
+            return db;
+        }
+        return null;
+    }
+
+    public Boolean getBoolean(String key) {
+        if(this.get(key) != null && this.get(key).isBoolean() != null) {
+            boolean booleanValue = this.get(key).isBoolean().booleanValue();
+            return booleanValue;
+        }
+        return null;
+    }
+
+    public JSONArray getJSONArray(String key) {
+        if(this.get(key) != null && this.get(key).isArray() != null) {
+            JSONArray array = this.get(key).isArray();
+            return array;
+        }
+        return null;
+    }
+
+    public JSONObject getJSONObject(String key) {
+        if(this.get(key) != null && this.get(key).isObject() != null) {
+            JSONObject jso = this.get(key).isObject();
+            return jso;
+        }
+        return null;
     }
 
     public Parse.Query relation(String key) {
