@@ -116,6 +116,23 @@ public class Parse {
                         }
                     });
         }
+        public static void run(String function, final AsyncCallback<ParseResponse> callback) {
+            Shape.post(Parse.SERVER_URL + "functions/" + function)
+                    .header("X-Parse-Application-Id", X_Parse_Application_Id)
+                    .header("X-Parse-REST-API-Key", X_Parse_REST_API_Key)
+                    .header("X-Parse-Master-Key", X_Parse_Master_Key)
+                    .body(new JSONObject().toString())
+                    .asJson(new AsyncCallback<String>() {
+                        @Override
+                        public void onFailure(Throwable throwable) {
+                            callback.onFailure(throwable);
+                        }
+                        @Override
+                        public void onSuccess(String s) {
+                            callback.onSuccess(ParseResponse.parse(s));
+                        }
+                    });
+        }
     }
 
     public static class Users {

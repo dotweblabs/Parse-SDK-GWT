@@ -1,4 +1,5 @@
 ## 0-SNAPSHOT - 10/26/17
+- Added helper methods
 - Added safe getters for ParseObject
 
 ## 0-SNAPSHOT - 05/27/17

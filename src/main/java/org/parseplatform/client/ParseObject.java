@@ -122,6 +122,20 @@ public class ParseObject extends JSONObject {
         return null;
     }
 
+    public ParsePointer getPointer(String key) {
+        if(this.get(key) != null && this.get(key).isObject() != null) {
+            JSONObject jso = this.get(key).isObject();
+            String type = jso.get("__type").isString() != null ? jso.get("__type").isString().stringValue() : null;
+            if(type != null && type.equals("Pointer")){
+                String className = jso.get("className").isString() != null ? jso.get("className").isString().stringValue() : null;
+                String objectId = jso.get("objectId").isString() != null ? jso.get("objectId").isString().stringValue() : null;
+                ParsePointer parsePointer = ParsePointer.parse(className, objectId);
+                return parsePointer;
+            }
+        }
+        return null;
+    }
+
     public ParseACL getACL() {
         if(get("ACL") != null && get("ACL").isObject() != null) {
             JSONObject acl = get("ACL").isObject();

@@ -23,6 +23,8 @@ import com.google.gwt.json.client.JSONValue;
 import org.parseplatform.client.js.base.JSON;
 
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -77,6 +79,34 @@ public class ParseResponse extends JSONObject {
             return get("updatedAt").isString().stringValue();
         }
         return null;
+    }
+    public JSONValue getFirstResult() {
+        JSONArray results = getResults();
+        for(int i=0;i<results.size();i++) {
+            return results.get(i);
+        }
+        return null;
+    }
+    public ParseObject getFirstResultAsParseObject() {
+        JSONArray results = getResults();
+        for(int i=0;i<results.size();i++) {
+            if(results.get(i).isObject() != null) {
+                ParseObject parseObject = ParseObject.clone(results.get(i).isObject());
+                return parseObject;
+            }
+        }
+        return null;
+    }
+    public List<ParseObject> getResultsAsParseObject() {
+        List<ParseObject> resultList = new LinkedList<ParseObject>();
+        JSONArray results = getResults();
+        for(int i=0;i<results.size();i++) {
+            if(results.get(i).isObject() != null) {
+                ParseObject parseObject = ParseObject.clone(results.get(i).isObject());
+                resultList.add(parseObject);
+            }
+        }
+        return resultList;
     }
     public JSONArray getResults() {
         JSONArray results =  get("results") != null ? get("results").isArray() : null;
