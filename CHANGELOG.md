@@ -1,3 +1,6 @@
+## 0-SNAPSHOT - 11/02/17
+- Added ParseDate
+
 ## 0-SNAPSHOT - 10/26/17
 - Added helper methods
 - Added safe getters for ParseObject
