@@ -90,11 +90,17 @@ public class ParseQuery extends JSONObject {
         }
         String className = getClassName();
         String order = "";
-        String where = (get("where").isObject() != null
+        String where = (get("where") != null && get("where").isObject() != null
                 && !get("where").isObject().toString().isEmpty()
                 && !get("where").isObject().toString().equals("{}")) ? "where=" + URL.encode(get("where").isObject().toString()) : null;
-        String limit = get("limit").isNumber() != null ? "limit=" + ((int)get("limit").isNumber().doubleValue()) : null;
-        String skip = get("skip").isNumber() != null ? "skip=" + ((int)get("skip").isNumber().doubleValue()) : null;
+        String limit = null;
+        String skip = null;
+        if(get("limit") != null) {
+            limit = get("limit").isNumber() != null ? "limit=" + ((int)get("limit").isNumber().doubleValue()) : null;
+        }
+        if(get("skip") != null) {
+            skip = get("skip").isNumber() != null ? "skip=" + ((int)get("skip").isNumber().doubleValue()) : null;
+        }
         if(get("order") != null && get("order").isArray() != null) {
             order = "order=";
             JSONArray jsonArray = get("order").isArray();

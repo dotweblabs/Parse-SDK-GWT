@@ -1,4 +1,5 @@
 ## 0-SNAPSHOT - 11/03/17
+- Fixed null limit and skip bug
 - Restructure methods and functions
 
 ## 0-SNAPSHOT - 11/02/17

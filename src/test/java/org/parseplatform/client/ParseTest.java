@@ -414,7 +414,7 @@ public class ParseTest extends GWTTestCase {
     public void testGetRelationWithParam(){
         delayTestFinish(60000);
         Parse.SERVER_URL = "http://localhost:1337/parse";
-        Parse.initialize("myAppId", "myRESTApiKey", "myMasterKey");
+        Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
         ParseObject storeObject = new ParseObject("Store");
         ParseObject productObject = new ParseObject("Product");
         storeObject.setObjectId("tTJv7g8aDf");
