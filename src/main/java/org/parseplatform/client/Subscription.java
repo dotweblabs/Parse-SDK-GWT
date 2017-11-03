@@ -26,6 +26,7 @@ import com.sksamuel.gwt.websockets.WebsocketListener;
 
 /**
  *
+ * Subscription object
  *
  * @author Kerby Martino
  * @since 0-SNAPSHOT
@@ -62,7 +63,7 @@ public class Subscription {
                 if((message.get("op") != null) && (message.get("op").isString() != null)) {
                     String op = message.get("op").isString().stringValue();
                     if(op.equalsIgnoreCase("connected")) {
-                        isConnected = true;
+                        setIsConnected(true);
                         JSONObject connect = new JSONObject();
                         connect.put("op", new JSONString("subscribe"));
                         connect.put("requestId", new JSONNumber(1L));
@@ -91,14 +92,19 @@ public class Subscription {
 //                    Browser.getWindow().getConsole().log("onOpen");
                 JSONObject connect = new JSONObject();
                 connect.put("op", new JSONString("connect"));
-                connect.put("applicationId", new JSONString(Parse._appId));
-                connect.put("restAPIKey", new JSONString(Parse._restApiKey));
+                connect.put("applicationId", new JSONString(Parse.X_Parse_Application_Id));
+                connect.put("restAPIKey", new JSONString(Parse.X_Parse_REST_API_Key));
                 socket.send(connect.toString());
             }
         });
     }
     public void unsubscribe(){
         socket.close();
-        isConnected = false;
+        setIsConnected(false);
     }
+
+    private void setIsConnected(Boolean connected) {
+        isConnected = connected;
+    }
+
 }

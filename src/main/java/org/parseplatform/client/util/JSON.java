@@ -14,23 +14,13 @@
  * limitations under the License.
  *
  */
-package org.parseplatform.client.js.parse;
+package org.parseplatform.client.util;
 
-import jsinterop.annotations.JsOverlay;
 import jsinterop.annotations.JsPackage;
-import jsinterop.annotations.JsProperty;
 import jsinterop.annotations.JsType;
 
-@JsType(isNative = true, namespace = JsPackage.GLOBAL, name = "Object")
-public class ParseFile {
-    @JsProperty(name = "__type")
-    public String type;
-    public String name;
-    public String url;
-    @JsOverlay
-    public static ParseFile create() {
-        ParseFile parseFile = new ParseFile();
-        parseFile.type = "File";
-        return parseFile;
-    }
+@JsType(isNative = true, namespace = JsPackage.GLOBAL)
+public class JSON {
+    public static native String stringify(Object o);
+    public static native <O> O parse(String json);
 }

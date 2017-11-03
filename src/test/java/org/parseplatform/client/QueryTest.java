@@ -26,7 +26,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
  *
- * Unit tests of {@link Parse.Query}
+ * Unit tests of {@link ParseQuery}
  *
  * @author Kerby Martino
  * @since 0-SNAPSHOT
@@ -46,8 +46,8 @@ public class QueryTest extends GWTTestCase {
 
         Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
         Parse.SERVER_URL = PARSE_API_ROOT;
-        ParseObject testObject = Parse.Objects.extend("TestObject");
-        Parse.Query query = Parse.Query.extend(testObject);
+        ParseObject testObject = new ParseObject("TestObject");
+        ParseQuery query = new ParseQuery(testObject);
 
         Where where = new Where("marko", new JSONString("marko"));
 
@@ -78,8 +78,8 @@ public class QueryTest extends GWTTestCase {
         Parse.SERVER_URL = PARSE_API_ROOT;
         Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
         createParseObject();
-        ParseObject talentObject = Parse.Objects.extend("TestObject");
-        Parse.Query query = Parse.Query.extend(talentObject);
+        ParseObject talentObject = new ParseObject("TestObject");
+        ParseQuery query = new ParseQuery(talentObject);
 
         ParseObject pointer = new ParseObject();
         pointer.putString("__type", "Pointer");
@@ -122,7 +122,7 @@ public class QueryTest extends GWTTestCase {
 
         testObject.put("userId", pointer);
 
-        Parse.Objects.create(testObject, new AsyncCallback<ParseResponse>() {
+        testObject.create(new AsyncCallback<ParseResponse>() {
             @Override
             public void onFailure(Throwable throwable) {
                 HttpRequestException ex = (HttpRequestException) throwable;
@@ -161,8 +161,8 @@ public class QueryTest extends GWTTestCase {
         Parse.SERVER_URL = TestKeys.TEST_API_ROOT;
         Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
         Where where = new Where("isPublished", JSONBoolean.getInstance(true));
-        ParseObject test = Parse.Objects.extend("Story");
-        Parse.Query query = Parse.Query.extend(test);
+        ParseObject test = new ParseObject("Story");
+        ParseQuery query = new ParseQuery(test);
         query.where(where);
         query.skip(0);
         query.limit(10);

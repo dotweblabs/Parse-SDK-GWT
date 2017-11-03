@@ -1,3 +1,6 @@
+## 0-SNAPSHOT - 11/03/17
+- Restructure methods and functions
+
 ## 0-SNAPSHOT - 11/02/17
 - Added ParseDate
 

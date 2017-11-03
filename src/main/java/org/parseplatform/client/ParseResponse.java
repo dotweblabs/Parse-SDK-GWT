@@ -20,7 +20,7 @@ import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
-import org.parseplatform.client.js.base.JSON;
+import org.parseplatform.client.util.JSON;
 
 import java.util.Iterator;
 import java.util.LinkedList;

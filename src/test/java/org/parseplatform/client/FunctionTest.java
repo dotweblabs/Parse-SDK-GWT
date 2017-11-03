@@ -31,7 +31,7 @@ public class FunctionTest extends GWTTestCase {
         Parse.SERVER_URL = PARSE_API_ROOT;
         Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
         ParseObject object = new ParseObject();
-        Parse.Cloud.run("hello", object, new AsyncCallback<ParseResponse>() {
+        ParseCloud.run("hello", object, new AsyncCallback<ParseResponse>() {
             @Override
             public void onFailure(Throwable throwable) {
                 log(throwable.getMessage());
