@@ -44,18 +44,16 @@ public class ParseTest extends GWTTestCase {
 
     public void testInitialize() {
         Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
-        Parse.SERVER_URL = TestKeys.TEST_API_ROOT;
     }
 
     public void testCreateUpdateParam(){
         delayTestFinish(20000);
-        Parse.SERVER_URL = TestKeys.TEST_API_ROOT;
         Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
-        ParseConfig.update("TEST", new JSONString("test"), new AsyncCallback<Config>() {
+        ParseConfig.update("TEST", new JSONString("test"), new ParseAsyncCallback<Config>() {
             @Override
-            public void onFailure(Throwable throwable) {
-                log("GET Error: " + throwable.getMessage());
-                fail("GET Error: " + throwable.getMessage());
+            public void onFailure(ParseError error) {
+                log("GET Code: " + error.getCode());
+                fail("GET Error: " + error.getError());
                 finishTest();
             }
             @Override
@@ -68,13 +66,11 @@ public class ParseTest extends GWTTestCase {
 
     public void testRetrieveConfig(){
         delayTestFinish(20000);
-        Parse.SERVER_URL = TestKeys.TEST_API_ROOT;
         Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
-        ParseConfig.get(new AsyncCallback<Config>() {
+        ParseConfig.get(new ParseAsyncCallback<Config>() {
             @Override
-            public void onFailure(Throwable throwable) {
-                log("GET Error: " + throwable.getMessage());
-                fail("GET Error: " + throwable.getMessage());
+            public void onFailure(ParseError error) {
+                error.log();
                 finishTest();
             }
             @Override
@@ -86,16 +82,13 @@ public class ParseTest extends GWTTestCase {
     }
 
     public void testCreateObject() {
-        Parse.SERVER_URL = TestKeys.TEST_API_ROOT;
         Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
         ParseObject testObject = new ParseObject("TestObject");
         testObject.put("foo", new JSONString("bar"));
-        testObject.create(new AsyncCallback<ParseResponse>() {
+        testObject.create(new ParseAsyncCallback<ParseResponse>() {
             @Override
-            public void onFailure(Throwable throwable) {
-                HttpRequestException ex = (HttpRequestException) throwable;
-                log("POST Error: " + ex.getCode());
-                fail("POST Error: " + ex.getCode());
+            public void onFailure(ParseError error) {
+                error.log();
                 finishTest();
             }
             @Override
@@ -111,16 +104,14 @@ public class ParseTest extends GWTTestCase {
 
     public void testRetrieveObject() {
         delayTestFinish(20000);
-        Parse.SERVER_URL = TestKeys.TEST_API_ROOT;
         Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
         ParseObject testObject = new ParseObject("TestObject");
         testObject.put("foo", new JSONString("bar"));
-        testObject.create(new AsyncCallback<ParseResponse>() {
+        testObject.create(new ParseAsyncCallback<ParseResponse>() {
             @Override
-            public void onFailure(Throwable throwable) {
-                HttpRequestException ex = (HttpRequestException) throwable;
-                log("POST Error: " + ex.getCode());
-                fail();
+            public void onFailure(ParseError error) {
+                error.log();
+                fail(error.getError());
                 finishTest();
             }
             @Override
@@ -129,12 +120,10 @@ public class ParseTest extends GWTTestCase {
                 ParseObject ref = new ParseObject("TestObject");
                 ref.setObjectId(parseResponse.getObjectId());
                 log("POST Success: " + ref.getObjectId());
-                ref.retrieve(new AsyncCallback<ParseObject>() {
+                ref.retrieve(new ParseAsyncCallback<ParseObject>() {
                     @Override
-                    public void onFailure(Throwable throwable) {
-                        HttpRequestException ex = (HttpRequestException) throwable;
-                        log("GET Error: " + ex.getCode());
-                        fail("GET Error: " + ex.getCode());
+                    public void onFailure(ParseError error) {
+                        error.log();
                         finishTest();
                     }
                     @Override
@@ -151,7 +140,6 @@ public class ParseTest extends GWTTestCase {
 
     public void testDeleteObject() {
         delayTestFinish(2000);
-        Parse.SERVER_URL = TestKeys.TEST_API_ROOT;
         Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
         ParseObject testObject = new ParseObject("TestObject");
         testObject.put("boom", new JSONString("box"));
@@ -162,11 +150,10 @@ public class ParseTest extends GWTTestCase {
         asterisk.put("read", JSONBoolean.getInstance(true));
         acl.put("*", asterisk);
         testObject.put("ACL", acl);
-        testObject.create(new AsyncCallback<ParseResponse>() {
+        testObject.create(new ParseAsyncCallback<ParseResponse>() {
             @Override
-            public void onFailure(Throwable throwable) {
-                HttpRequestException ex = (HttpRequestException) throwable;
-                log("POST Error: " + ex.getCode());
+            public void onFailure(ParseError error) {
+                error.log();
                 finishTest();
             }
             @Override
@@ -174,12 +161,10 @@ public class ParseTest extends GWTTestCase {
                 ParseObject ref = new ParseObject("TestObject");
                 ref.setObjectId(parseResponse.getObjectId());
                 log("POST Success: " + ref.getObjectId());
-                ref.delete(new AsyncCallback<ParseResponse>() {
+                ref.delete(new ParseAsyncCallback<ParseResponse>() {
                     @Override
-                    public void onFailure(Throwable throwable) {
-                        HttpRequestException ex = (HttpRequestException) throwable;
-                        log("DELETE Error: " + ex.getCode());
-                        fail("DELETE Error: " + ex.getCode());
+                    public void onFailure(ParseError error) {
+                        error.log();
                         finishTest();
                     }
                     @Override
@@ -197,15 +182,13 @@ public class ParseTest extends GWTTestCase {
 
     public void testUpdateObject() {
         delayTestFinish(2000);
-        Parse.SERVER_URL = TestKeys.TEST_API_ROOT;
         Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
         final ParseObject testObject = new ParseObject("TestObject");
         testObject.put("marko", new JSONString("marko"));
-        testObject.create(new AsyncCallback<ParseResponse>() {
+        testObject.create(new ParseAsyncCallback<ParseResponse>() {
             @Override
-            public void onFailure(Throwable throwable) {
-                HttpRequestException ex = (HttpRequestException) throwable;
-                log("POST Error: " + ex.getCode());
+            public void onFailure(ParseError error) {
+                error.log();
                 finishTest();
             }
             @Override
@@ -217,12 +200,10 @@ public class ParseTest extends GWTTestCase {
                 ref.putBoolean("status", false);
                 ref.putNumber("count", 1L);
                 log("POST Success: " + ref.getObjectId());
-                ref.update(new AsyncCallback<ParseResponse>() {
+                ref.update(new ParseAsyncCallback<ParseResponse>() {
                     @Override
-                    public void onFailure(Throwable throwable) {
-                        HttpRequestException ex = (HttpRequestException) throwable;
-                        log("UPDATE Error: " + ex.getCode());
-                        fail("UPDATE Error: " + ex.getCode());
+                    public void onFailure(ParseError error) {
+                        error.log();
                         finishTest();
                     }
                     @Override
@@ -242,10 +223,10 @@ public class ParseTest extends GWTTestCase {
         Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY);
         ParseUser parseUser = new ParseUser("testUser", "testPassword");
         parseUser.putNumber("age", 18L);
-        parseUser.signup(new AsyncCallback<ParseResponse>() {
+        parseUser.signup(new ParseAsyncCallback<ParseResponse>() {
             @Override
-            public void onFailure(Throwable throwable) {
-                log(throwable.getMessage());
+            public void onFailure(ParseError error) {
+                error.log();
                 finishTest();
             }
             @Override
@@ -262,11 +243,11 @@ public class ParseTest extends GWTTestCase {
         Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY);
         ParseUser parseUser = new ParseUser("testUser"  + new Date().toString(), "testPassword");
         parseUser.putNumber("age", 18L);
-        parseUser.signup(new AsyncCallback<ParseResponse>() {
+        parseUser.signup(new ParseAsyncCallback<ParseResponse>() {
             @Override
-            public void onFailure(Throwable throwable) {
-                log(throwable.getMessage());
-                fail();
+            public void onFailure(ParseError error) {
+                error.log();
+                fail(error.getError());
                 finishTest();
             }
             @Override
@@ -279,14 +260,13 @@ public class ParseTest extends GWTTestCase {
 
     public void testLogin() {
         delayTestFinish(3000);
-        Parse.SERVER_URL = TestKeys.TEST_API_ROOT;
         Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY);
         ParseUser parseUser = new ParseUser("testUser", "testPassword");
-        parseUser.login("testUser", "testPassword", new AsyncCallback<ParseResponse>() {
+        parseUser.login("testUser", "testPassword", new ParseAsyncCallback<ParseResponse>() {
             @Override
-            public void onFailure(Throwable throwable) {
-                log(throwable.getMessage());
-                fail();
+            public void onFailure(ParseError error) {
+                error.log();
+                fail(error.getError());
                 finishTest();
             }
             @Override
@@ -299,25 +279,24 @@ public class ParseTest extends GWTTestCase {
 
     public void testBecome() {
         delayTestFinish(3000);
-        Parse.SERVER_URL = TestKeys.TEST_API_ROOT;
         Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY);
         ParseUser parseUser = new ParseUser("testUser", "testPassword");
-        parseUser.login("testUser", "testPassword", new AsyncCallback<ParseResponse>() {
+        parseUser.login("testUser", "testPassword", new ParseAsyncCallback<ParseResponse>() {
             @Override
-            public void onFailure(Throwable throwable) {
-                log(throwable.getMessage());
-                fail();
+            public void onFailure(ParseError error) {
+                error.log();
+                fail(error.getError());
                 finishTest();
             }
             @Override
             public void onSuccess(ParseResponse parseResponse) {
                 //log(parseResponse.toString());
                 String sessionToken = parseResponse.get("sessionToken").isString().stringValue();
-                ParseUser.become(sessionToken, new AsyncCallback<ParseObject>() {
+                ParseUser.become(sessionToken, new ParseAsyncCallback<ParseObject>() {
                     @Override
-                    public void onFailure(Throwable throwable) {
-                        log(throwable.getMessage());
-                        fail();
+                    public void onFailure(ParseError error) {
+                        error.log();
+                        fail(error.getError());
                         finishTest();
                     }
                     @Override
@@ -337,34 +316,33 @@ public class ParseTest extends GWTTestCase {
 //        Parse.initialize("myAppId", "myRESTApiKey", "myMasterKey");
         final ParseObject parseObject = new ParseObject("TestObject");
         parseObject.put("foo", new JSONString("bar"));
-        parseObject.create(new AsyncCallback<ParseResponse>() {
+        parseObject.create(new ParseAsyncCallback<ParseResponse>() {
             @Override
-            public void onFailure(Throwable throwable) {
-                log(throwable.getMessage());
-                fail();
+            public void onFailure(ParseError error) {
+                error.log();
+                fail(error.getError());
                 finishTest();
             }
             @Override
             public void onSuccess(ParseResponse parseResponse) {
                 parseObject.setObjectId(parseResponse.getObjectId());
                 final ParseObject relatedObject = new ParseObject("TestRelatedObject");
-                relatedObject.create(new AsyncCallback<ParseResponse>() {
+                relatedObject.create(new ParseAsyncCallback<ParseResponse>() {
                     @Override
-                    public void onFailure(Throwable throwable) {
-                        log(throwable.getMessage());
-                        fail();
+                    public void onFailure(ParseError error) {
+                        error.log();
+                        fail(error.getError());
                         finishTest();
                     }
                     @Override
                     public void onSuccess(ParseResponse parseResponse) {
                         String objectId = parseResponse.getObjectId();
                         relatedObject.setObjectId(objectId);
-                        parseObject.createRelation("testRelatedObjects", relatedObject.getPointer(), new AsyncCallback<ParseResponse>() {
+                        parseObject.createRelation("testRelatedObjects", relatedObject.getPointer(), new ParseAsyncCallback<ParseResponse>() {
                             @Override
-                            public void onFailure(Throwable throwable) {
-                                throwable.printStackTrace();
-                                log(throwable.getMessage());
-                                fail();
+                            public void onFailure(ParseError error) {
+                                error.log();
+                                fail(error.getError());
                                 finishTest();
                             }
                             @Override
@@ -372,11 +350,11 @@ public class ParseTest extends GWTTestCase {
                                 log(parseResponse.toString());
                                 log("Testing relation():");
                                 parseObject.put("testRelatedObjects", ParseRelation.clone(relatedObject.getClassName()));
-                                parseObject.relation("testRelatedObjects").find(new AsyncCallback<ParseResponse>() {
+                                parseObject.relation("testRelatedObjects").find(new ParseAsyncCallback<ParseResponse>() {
                                     @Override
-                                    public void onFailure(Throwable throwable) {
-                                        log("Failed: " + throwable.getMessage());
-                                        fail();
+                                    public void onFailure(ParseError error) {
+                                        error.log();
+                                        fail(error.getError());
                                         finishTest();
                                     }
                                     @Override
@@ -388,11 +366,11 @@ public class ParseTest extends GWTTestCase {
                                 });
                                 final String[] response = new String[1];
                                 log("Testing Parse.Objects.getRelation():");
-                                parseObject.getRelation("testRelatedObjects", relatedObject, new AsyncCallback<ParseResponse>() {
+                                parseObject.getRelation("testRelatedObjects", relatedObject, new ParseAsyncCallback<ParseResponse>() {
                                     @Override
-                                    public void onFailure(Throwable throwable) {
-                                        log("Failed: " + throwable.getMessage());
-                                        fail();
+                                    public void onFailure(ParseError error) {
+                                        error.log();
+                                        fail(error.getError());
                                         finishTest();
                                     }
                                     @Override
@@ -413,17 +391,16 @@ public class ParseTest extends GWTTestCase {
 
     public void testGetRelationWithParam(){
         delayTestFinish(60000);
-        Parse.SERVER_URL = "http://localhost:1337/parse";
         Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
         ParseObject storeObject = new ParseObject("Store");
         ParseObject productObject = new ParseObject("Product");
         storeObject.setObjectId("tTJv7g8aDf");
         storeObject.getRelation("products", productObject,"name", "E",
-                new AsyncCallback<ParseResponse>() {
+                new ParseAsyncCallback<ParseResponse>() {
             @Override
-            public void onFailure(Throwable throwable) {
-                log("Failed: " + throwable.getMessage());
-                fail();
+            public void onFailure(ParseError error) {
+                error.log();
+                fail(error.getError());
                 finishTest();
             }
 

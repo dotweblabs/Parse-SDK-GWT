@@ -6,7 +6,7 @@ import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class ParseConfig {
-    public static void get(final AsyncCallback<Config> callback) {
+    public static void get(final ParseAsyncCallback<Config> callback) {
         Shape.get(Parse.SERVER_URL + "/config")
                 .header("X-Parse-Application-Id", Parse.X_Parse_Application_Id)
                 .header("X-Parse-REST-API-Key", Parse.X_Parse_REST_API_Key)
@@ -14,7 +14,7 @@ public class ParseConfig {
                 .asJson(new AsyncCallback<String>() {
                     @Override
                     public void onFailure(Throwable throwable) {
-                        callback.onFailure(throwable);
+                        callback.onFailure(new ParseError(throwable));
                     }
                     @Override
                     public void onSuccess(String s) {
@@ -22,12 +22,12 @@ public class ParseConfig {
                             org.parseplatform.client.Config config = org.parseplatform.client.Config.fromJSON(s);
                             callback.onSuccess(config);
                         } catch (Exception e){
-                            callback.onFailure(e);
+                            callback.onFailure(new ParseError(e));
                         }
                     }
                 });
     }
-    public static void update(String parameter, JSONValue value, final AsyncCallback<org.parseplatform.client.Config> callback) {
+    public static void update(String parameter, JSONValue value, final ParseAsyncCallback<org.parseplatform.client.Config> callback) {
         JSONObject params = new JSONObject();
         params.put(parameter, value);
         JSONObject body = new JSONObject();
@@ -40,7 +40,7 @@ public class ParseConfig {
                 .asJson(new AsyncCallback<String>() {
                     @Override
                     public void onFailure(Throwable throwable) {
-                        callback.onFailure(throwable);
+                        callback.onFailure(new ParseError(throwable));
                     }
                     @Override
                     public void onSuccess(String s) {
@@ -48,7 +48,7 @@ public class ParseConfig {
                             org.parseplatform.client.Config config = org.parseplatform.client.Config.fromJSON(s);
                             callback.onSuccess(config);
                         } catch (Exception e){
-                            callback.onFailure(e);
+                            callback.onFailure(new ParseError(e));
                         }
                     }
                 });

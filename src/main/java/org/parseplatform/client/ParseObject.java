@@ -297,7 +297,7 @@ public class ParseObject extends JSONObject {
     Methods
      */
 
-    public void create(final AsyncCallback<ParseResponse> callback) {
+    public void create(final ParseAsyncCallback<ParseResponse> callback) {
         final ParseObject object = this;
         Shape.post(Parse.SERVER_URL + Parse.CLASSES_URI + object.getClassName())
                 .header("X-Parse-Application-Id", Parse.X_Parse_Application_Id)
@@ -308,7 +308,7 @@ public class ParseObject extends JSONObject {
                 .asJson(new AsyncCallback<String>() {
                     @Override
                     public void onFailure(Throwable throwable) {
-                        callback.onFailure(throwable);
+                        callback.onFailure(new ParseError(throwable));
                     }
                     @Override
                     public void onSuccess(String s) {
@@ -323,12 +323,12 @@ public class ParseObject extends JSONObject {
                             }
                             callback.onSuccess(response);
                         } catch (Exception e) {
-                            callback.onFailure(e);
+                            callback.onFailure(new ParseError(e));
                         }
                     }
                 });
     }
-    public void retrieve(final AsyncCallback<ParseObject> callback) {
+    public void retrieve(final ParseAsyncCallback<ParseObject> callback) {
         final ParseObject ref = this;
         String objectId = ref.getObjectId();
         final String className = ref.getClassName();
@@ -341,7 +341,7 @@ public class ParseObject extends JSONObject {
                 .asJson(new AsyncCallback<String>() {
                     @Override
                     public void onFailure(Throwable throwable) {
-                        callback.onFailure(throwable);
+                        callback.onFailure(new ParseError(throwable));
                     }
                     @Override
                     public void onSuccess(String s) {
@@ -350,7 +350,7 @@ public class ParseObject extends JSONObject {
                 });
     }
     public static void retrieve(final ParseObject ref, final List<String> includes,
-                                final AsyncCallback<ParseObject> callback) {
+                                final ParseAsyncCallback<ParseObject> callback) {
         String objectId = ref.getObjectId();
         String className = ref.getClassName();
         String path = Parse.SERVER_URL + Parse.CLASSES_URI + className + "/" + objectId;
@@ -368,7 +368,7 @@ public class ParseObject extends JSONObject {
                 .asJson(new AsyncCallback<String>() {
                     @Override
                     public void onFailure(Throwable throwable) {
-                        callback.onFailure(throwable);
+                        callback.onFailure(new ParseError(throwable));
                     }
                     @Override
                     public void onSuccess(String s) {
@@ -376,7 +376,7 @@ public class ParseObject extends JSONObject {
                     }
                 });
     }
-    public void delete(final AsyncCallback<ParseResponse> callback) {
+    public void delete(final ParseAsyncCallback<ParseResponse> callback) {
         final ParseObject ref = this;
         String objectId = ref.getObjectId();
         final String className = ref.getClassName();
@@ -394,7 +394,7 @@ public class ParseObject extends JSONObject {
                 .asJson(new AsyncCallback<String>() {
                     @Override
                     public void onFailure(Throwable throwable) {
-                        callback.onFailure(throwable);
+                        callback.onFailure(new ParseError(throwable));
                     }
                     @Override
                     public void onSuccess(String s) {
@@ -402,7 +402,7 @@ public class ParseObject extends JSONObject {
                     }
                 });
     }
-    public void update(final AsyncCallback<ParseResponse> callback) {
+    public void update(final ParseAsyncCallback<ParseResponse> callback) {
         try {
             final ParseObject ref = this;
             String objectId = ref.getObjectId();
@@ -431,7 +431,7 @@ public class ParseObject extends JSONObject {
                     .asJson(new AsyncCallback<String>() {
                         @Override
                         public void onFailure(Throwable throwable) {
-                            callback.onFailure(throwable);
+                            callback.onFailure(new ParseError(throwable));
                         }
                         @Override
                         public void onSuccess(String s) {
@@ -440,18 +440,18 @@ public class ParseObject extends JSONObject {
                                 ParseResponse parseResponse = ParseResponse.parse(s);
                                 callback.onSuccess(parseResponse);
                             } catch (Exception e) {
-                                callback.onFailure(e);
+                                callback.onFailure(new ParseError(e));
                             }
                         }
                     });
 
         } catch (Exception e) {
-            callback.onFailure(e);
+            callback.onFailure(new ParseError(e));
         }
     }
 
     public void getRelation(String referenceKey, ParseObject referencee,
-                                   final AsyncCallback<ParseResponse> callback) {
+                                   final ParseAsyncCallback<ParseResponse> callback) {
         ParseObject reference = this;
         ParseQuery query = new ParseQuery(referencee);
         JSONObject jsonObject = new JSONObject();
@@ -460,10 +460,10 @@ public class ParseObject extends JSONObject {
         jsonObject.put("key", new JSONString(referenceKey));
         Where where = new Where("$relatedTo", jsonObject);
         query.where(where);
-        query.find(new AsyncCallback<ParseResponse>() {
+        query.find(new ParseAsyncCallback<ParseResponse>() {
             @Override
-            public void onFailure(Throwable throwable) {
-                callback.onFailure(throwable);
+            public void onFailure(ParseError error) {
+                callback.onFailure(error);
             }
             @Override
             public void onSuccess(ParseResponse parseResponse) {
@@ -473,7 +473,7 @@ public class ParseObject extends JSONObject {
     }
 
     public void getRelation(String referenceKey, ParseObject referencee,
-                                   String filterField, String filterValue, final AsyncCallback<ParseResponse> callback) {
+                                   String filterField, String filterValue, final ParseAsyncCallback<ParseResponse> callback) {
         ParseObject reference = this;
         String regex = "(?i)(?:.*";
 
@@ -494,10 +494,10 @@ public class ParseObject extends JSONObject {
         jsonObject.put("key", new JSONString(referenceKey));
         Where where = new Where("$relatedTo", jsonObject).where(filterField).regex(jsonValueRegex);
         query.where(where);
-        query.find(new AsyncCallback<ParseResponse>() {
+        query.find(new ParseAsyncCallback<ParseResponse>() {
             @Override
-            public void onFailure(Throwable throwable) {
-                callback.onFailure(throwable);
+            public void onFailure(ParseError e) {
+                callback.onFailure(e);
             }
             @Override
             public void onSuccess(ParseResponse parseResponse) {
@@ -507,7 +507,7 @@ public class ParseObject extends JSONObject {
     }
 
     public void getRelationOrderAscending(String referenceKey, ParseObject referencee,
-                                                 final AsyncCallback<ParseResponse> callback) {
+                                                 final ParseAsyncCallback<ParseResponse> callback) {
         ParseObject reference = this;
         ParseQuery query = new ParseQuery(referencee);
         JSONObject jsonObject = new JSONObject();
@@ -517,10 +517,10 @@ public class ParseObject extends JSONObject {
         Where where = new Where("$relatedTo", jsonObject);
         query.where(where);
 
-        query.find(new AsyncCallback<ParseResponse>() {
+        query.find(new ParseAsyncCallback<ParseResponse>() {
             @Override
-            public void onFailure(Throwable throwable) {
-                callback.onFailure(throwable);
+            public void onFailure(ParseError error) {
+                callback.onFailure(error);
             }
             @Override
             public void onSuccess(ParseResponse parseResponse) {
@@ -531,7 +531,7 @@ public class ParseObject extends JSONObject {
 
 
     public void createRelation(String key, ParsePointer target,
-                                      final AsyncCallback<ParseResponse> callback) {
+                                      final ParseAsyncCallback<ParseResponse> callback) {
         ParseObject object = this;
         String objectId = object.getObjectId();
         final String className = object.getClassName();
@@ -552,7 +552,7 @@ public class ParseObject extends JSONObject {
                 .asJson(new AsyncCallback<String>() {
                     @Override
                     public void onFailure(Throwable throwable) {
-                        callback.onFailure(throwable);
+                        callback.onFailure(new ParseError(throwable));
                     }
                     @Override
                     public void onSuccess(String s) {
@@ -560,7 +560,7 @@ public class ParseObject extends JSONObject {
                             ParseResponse parseResponse = ParseResponse.parse(s);
                             callback.onSuccess(parseResponse);
                         } catch (Exception e) {
-                            callback.onFailure(e);
+                            callback.onFailure(new ParseError(e));
                         }
                     }
                 });
@@ -569,7 +569,7 @@ public class ParseObject extends JSONObject {
     }
 
     public void createRelation(String key, ParsePointer[] targets,
-                                      final AsyncCallback<ParseResponse> callback) {
+                                      final ParseAsyncCallback<ParseResponse> callback) {
         final ParseObject object = this;
         String objectId = object.getObjectId();
         final String className = object.getClassName();
@@ -594,7 +594,7 @@ public class ParseObject extends JSONObject {
                 .asJson(new AsyncCallback<String>() {
                     @Override
                     public void onFailure(Throwable throwable) {
-                        callback.onFailure(throwable);
+                        callback.onFailure(new ParseError(throwable));
                     }
                     @Override
                     public void onSuccess(String s) {

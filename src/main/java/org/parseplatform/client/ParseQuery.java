@@ -68,13 +68,13 @@ public class ParseQuery extends JSONObject {
         return this;
     }
 
-    public void get(String objectId, final AsyncCallback<ParseObject> response) {
+    public void get(String objectId, final ParseAsyncCallback<ParseObject> response) {
         ParseObject ref = new ParseObject(getClassName());
         ref.setObjectId(objectId);
-        ref.retrieve(new AsyncCallback<ParseObject>() {
+        ref.retrieve(new ParseAsyncCallback<ParseObject>() {
             @Override
-            public void onFailure(Throwable throwable) {
-                response.onFailure(throwable);
+            public void onFailure(ParseError error) {
+                response.onFailure(error);
             }
             @Override
             public void onSuccess(ParseObject parseObject) {
@@ -83,7 +83,7 @@ public class ParseQuery extends JSONObject {
         });
     }
 
-    public void find(final AsyncCallback<ParseResponse> callback) {
+    public void find(final ParseAsyncCallback<ParseResponse> callback) {
         String stringIncludes = null;
         if(includes != null) {
             stringIncludes = Joiner.on(",").join(includes);
@@ -189,15 +189,15 @@ public class ParseQuery extends JSONObject {
                 .asJson(new AsyncCallback<String>() {
                     @Override
                     public void onFailure(Throwable throwable) {
-                        callback.onFailure(throwable);
+                        callback.onFailure(new ParseError(throwable));
                     }
                     @Override
                     public void onSuccess(String s) {
-                        try {
+                        if(s != null && !s.isEmpty()) {
                             ParseResponse resp = ParseResponse.parse(s);
                             callback.onSuccess(resp);
-                        } catch (Exception e) {
-                            callback.onFailure(e);
+                        } else {
+                            callback.onFailure(new ParseError(204, "No response"));
                         }
                     }
                 });

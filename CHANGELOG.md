@@ -1,4 +1,5 @@
 ## 0-SNAPSHOT - 11/03/17
+- Major library update
 - Fixed null limit and skip bug
 - Restructure methods and functions
 

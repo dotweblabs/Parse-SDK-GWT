@@ -13,7 +13,7 @@ public class ParseFile extends JSONObject {
     public static final String IMAGE_JPEG = "image/jpeg";
     public static final String IMAGE_PNG = "image/png";
 
-    public static void upload(String base64file, String fileName, String mimeType, final AsyncCallback<ParseResponse> callback) {
+    public static void upload(String base64file, String fileName, String mimeType, final ParseAsyncCallback<ParseResponse> callback) {
 //            String data = "{__ContentType : \"" + mimeType + "\", base64 : " + base64file + "}";
         JSONObject data = new JSONObject();
         data.put("__ContentType", new JSONString(mimeType));
@@ -31,7 +31,7 @@ public class ParseFile extends JSONObject {
                 .asJson(new AsyncCallback<String>() {
                     @Override
                     public void onFailure(Throwable throwable) {
-                        callback.onFailure(throwable);
+                        callback.onFailure(new ParseError(throwable));
                     }
                     @Override
                     public void onSuccess(String s) {
@@ -46,7 +46,7 @@ public class ParseFile extends JSONObject {
                             }
                             callback.onSuccess(response);
                         } catch (Exception e) {
-                            callback.onFailure(e);
+                            callback.onFailure(new ParseError(e));
                         }
                     }
                 });

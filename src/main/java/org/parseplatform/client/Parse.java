@@ -87,14 +87,19 @@ public class Parse {
     }
 
     public static void initialize(String appId, String restApiKey, String masterKey) {
-        initialize(appId, restApiKey, null, masterKey);
+        initialize(SERVER_URL, appId, restApiKey, null, masterKey);
     }
 
-    public static void initialize(String appId, String restApiKey, String javascriptKey, String masterKey) {
+    public static void initialize(String path, String appId, String restApiKey, String masterKey) {
+        initialize(path, appId, restApiKey, null, masterKey);
+    }
+
+    public static void initialize(String path, String appId, String restApiKey, String javascriptKey, String masterKey) {
         X_Parse_Application_Id = appId;
         X_Parse_REST_API_Key = restApiKey;
         X_Parse_Master_Key = masterKey;
         X_Parse_Javascript_Key = javascriptKey;
+        SERVER_URL = path;
         if(!SERVER_URL.endsWith("/")) {
             SERVER_URL = SERVER_URL + "/";
         }

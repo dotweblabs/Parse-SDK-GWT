@@ -5,7 +5,7 @@ import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class ParseCloud {
-    public static void run(String function, ParseObject object, final AsyncCallback<ParseResponse> callback) {
+    public static void run(String function, ParseObject object, final ParseAsyncCallback<ParseResponse> callback) {
         Shape.post(Parse.SERVER_URL + "functions/" + function)
                 .header("X-Parse-Application-Id", Parse.X_Parse_Application_Id)
                 .header("X-Parse-REST-API-Key", Parse.X_Parse_REST_API_Key)
@@ -14,7 +14,7 @@ public class ParseCloud {
                 .asJson(new AsyncCallback<String>() {
                     @Override
                     public void onFailure(Throwable throwable) {
-                        callback.onFailure(throwable);
+                        callback.onFailure(new ParseError(throwable));
                     }
 
                     @Override
@@ -24,7 +24,7 @@ public class ParseCloud {
                 });
     }
 
-    public static void run(String function, final AsyncCallback<ParseResponse> callback) {
+    public static void run(String function, final ParseAsyncCallback<ParseResponse> callback) {
         Shape.post(Parse.SERVER_URL + "functions/" + function)
                 .header("X-Parse-Application-Id", Parse.X_Parse_Application_Id)
                 .header("X-Parse-REST-API-Key", Parse.X_Parse_REST_API_Key)
@@ -33,7 +33,7 @@ public class ParseCloud {
                 .asJson(new AsyncCallback<String>() {
                     @Override
                     public void onFailure(Throwable throwable) {
-                        callback.onFailure(throwable);
+                        callback.onFailure(new ParseError(throwable));
                     }
 
                     @Override

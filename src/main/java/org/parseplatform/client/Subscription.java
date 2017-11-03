@@ -46,7 +46,7 @@ public class Subscription {
         this.isConnected = false;
     }
 
-    public void on(String event, final AsyncCallback<ParseObject> callback){
+    public void on(String event, final ParseAsyncCallback<ParseObject> callback){
         //throw new RuntimeException("Websocket is not yet connected");
         final String subcribeOp = event;
         socket = new Websocket("ws://" + Parse.getUri());

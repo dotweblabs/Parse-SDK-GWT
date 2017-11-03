@@ -34,7 +34,7 @@ public class ParseUser extends ParseObject {
     }
 
 
-    public void signup(final AsyncCallback<ParseResponse> callback) {
+    public void signup(final ParseAsyncCallback<ParseResponse> callback) {
 
         ParseObject user = this;
 
@@ -46,7 +46,7 @@ public class ParseUser extends ParseObject {
                 .asJson(new AsyncCallback<String>() {
                     @Override
                     public void onFailure(Throwable throwable) {
-                        callback.onFailure(throwable);
+                        callback.onFailure(new ParseError(throwable));
                     }
                     @Override
                     public void onSuccess(String s) {
@@ -59,15 +59,15 @@ public class ParseUser extends ParseObject {
                             } else {
                                 HttpRequestException ex
                                         = new HttpRequestException(response.getErrorMessage(), response.getErrorCode());
-                                callback.onFailure(ex);
+                                callback.onFailure(new ParseError(ex));
                             }
                         } catch (Exception e) {
-                            callback.onFailure(e);
+                            callback.onFailure(new ParseError(e));
                         }
                     }
                 });
     }
-    public void login(boolean remember, final AsyncCallback<ParseResponse> callback) {
+    public void login(boolean remember, final ParseAsyncCallback<ParseResponse> callback) {
         String username = getString("username");
         String password = getString("password");
         String param = "username=" + username + "&" + "password=" + password;
@@ -79,7 +79,7 @@ public class ParseUser extends ParseObject {
                 .asJson(new AsyncCallback<String>() {
                     @Override
                     public void onFailure(Throwable throwable) {
-                        callback.onFailure(throwable);
+                        callback.onFailure(new ParseError(throwable));
                     }
                     @Override
                     public void onSuccess(String s) {
@@ -98,15 +98,15 @@ public class ParseUser extends ParseObject {
                             } else {
                                 HttpRequestException ex
                                         = new HttpRequestException(response.getErrorMessage(), response.getErrorCode());
-                                callback.onFailure(ex);
+                                callback.onFailure(new ParseError(ex));
                             }
                         } catch (Exception e) {
-                            callback.onFailure(e);
+                            callback.onFailure(new ParseError(e));
                         }
                     }
                 });
     }
-    public static void login(String username, String password, final AsyncCallback<ParseResponse> callback) {
+    public static void login(String username, String password, final ParseAsyncCallback<ParseResponse> callback) {
         String param = "username=" + username + "&" + "password=" + password;
         Shape.get(Parse.SERVER_URL + "login?" + URL.encode(param))
                 .header("X-Parse-Application-Id", Parse.X_Parse_Application_Id)
@@ -116,7 +116,7 @@ public class ParseUser extends ParseObject {
                 .asJson(new AsyncCallback<String>() {
                     @Override
                     public void onFailure(Throwable throwable) {
-                        callback.onFailure(throwable);
+                        callback.onFailure(new ParseError(throwable));
                     }
                     @Override
                     public void onSuccess(String s) {
@@ -135,15 +135,15 @@ public class ParseUser extends ParseObject {
                             } else {
                                 HttpRequestException ex
                                         = new HttpRequestException(response.getErrorMessage(), response.getErrorCode());
-                                callback.onFailure(ex);
+                                callback.onFailure(new ParseError(ex));
                             }
                         } catch (Exception e) {
-                            callback.onFailure(e);
+                            callback.onFailure(new ParseError(e));
                         }
                     }
                 });
     }
-    public void logout(final AsyncCallback<ParseResponse> callback) {
+    public void logout(final ParseAsyncCallback<ParseResponse> callback) {
         Shape.post(Parse.SERVER_URL + "logout")
                 .header("X-Parse-Application-Id", Parse.X_Parse_Application_Id)
                 .header("X-Parse-REST-API-Key", Parse.X_Parse_REST_API_Key)
@@ -152,7 +152,7 @@ public class ParseUser extends ParseObject {
                 .asJson(new AsyncCallback<String>() {
                     @Override
                     public void onFailure(Throwable throwable) {
-                        callback.onFailure(throwable);
+                        callback.onFailure(new ParseError(throwable));
                     }
                     @Override
                     public void onSuccess(String s) {
@@ -167,13 +167,13 @@ public class ParseUser extends ParseObject {
                             }
                             callback.onSuccess(response);
                         } catch (Exception e) {
-                            callback.onFailure(e);
+                            callback.onFailure(new ParseError(e));
                         }
                     }
                 });
     }
 
-    public static void become(String sessionToken, final AsyncCallback<ParseObject> callback){
+    public static void become(String sessionToken, final ParseAsyncCallback<ParseObject> callback){
         Shape.get(Parse.SERVER_URL + "/users/me")
                 .header("X-Parse-Application-Id", Parse.X_Parse_Application_Id)
                 .header("X-Parse-REST-API-Key", Parse.X_Parse_REST_API_Key)
@@ -182,7 +182,7 @@ public class ParseUser extends ParseObject {
                 .asJson(new AsyncCallback<String>() {
                     @Override
                     public void onFailure(Throwable throwable) {
-                        callback.onFailure(throwable);
+                        callback.onFailure(new ParseError(throwable));
                     }
                     @Override
                     public void onSuccess(String s) {
@@ -194,13 +194,13 @@ public class ParseUser extends ParseObject {
                         } else {
                             HttpRequestException ex
                                     = new HttpRequestException(response.getErrorMessage(), response.getErrorCode());
-                            callback.onFailure(ex);
+                            callback.onFailure(new ParseError(ex));
                         }
                     }
                 });
     }
 
-    public void requestPasswordReset(final AsyncCallback<ParseResponse> callback) {
+    public void requestPasswordReset(final ParseAsyncCallback<ParseResponse> callback) {
         Shape.post(Parse.SERVER_URL + "requestPasswordReset")
                 .header("X-Parse-Application-Id", Parse.X_Parse_Application_Id)
                 .header("X-Parse-REST-API-Key", Parse.X_Parse_REST_API_Key)
@@ -209,7 +209,7 @@ public class ParseUser extends ParseObject {
                 .asJson(new AsyncCallback<String>() {
                     @Override
                     public void onFailure(Throwable throwable) {
-                        callback.onFailure(throwable);
+                        callback.onFailure(new ParseError(throwable));
                     }
                     @Override
                     public void onSuccess(String s) {
@@ -217,12 +217,12 @@ public class ParseUser extends ParseObject {
                             ParseResponse response = ParseResponse.parse(s);
                             callback.onSuccess(response);
                         } catch (Exception e) {
-                            callback.onFailure(e);
+                            callback.onFailure(new ParseError(e));
                         }
                     }
                 });
     }
-    public void requestPasswordReset(final String email, final AsyncCallback<ParseResponse> callback) {
+    public void requestPasswordReset(final String email, final ParseAsyncCallback<ParseResponse> callback) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("email", new JSONString(email));
         Shape.post(Parse.SERVER_URL + "requestPasswordReset")
@@ -234,7 +234,7 @@ public class ParseUser extends ParseObject {
                 .asJson(new AsyncCallback<String>() {
                     @Override
                     public void onFailure(Throwable throwable) {
-                        callback.onFailure(throwable);
+                        callback.onFailure(new ParseError(throwable));
                     }
                     @Override
                     public void onSuccess(String s) {
@@ -242,7 +242,7 @@ public class ParseUser extends ParseObject {
                             ParseResponse response = ParseResponse.parse(s);
                             callback.onSuccess(response);
                         } catch (Exception e) {
-                            callback.onFailure(e);
+                            callback.onFailure(new ParseError(e));
                         }
                     }
                 });
@@ -263,7 +263,7 @@ public class ParseUser extends ParseObject {
         }
         return null;
     }
-    public void updateUser(ParseObject ref, final AsyncCallback<ParseResponse> callback) {
+    public void updateUser(ParseObject ref, final ParseAsyncCallback<ParseResponse> callback) {
         String objectId = ref.getObjectId();
         final String className = ref.getClassName();
         final String path = Parse.SERVER_URL + "/users/" + objectId;
@@ -286,8 +286,7 @@ public class ParseUser extends ParseObject {
                 .asJson(new AsyncCallback<String>() {
                     @Override
                     public void onFailure(Throwable throwable) {
-                        HttpRequestException ex = (HttpRequestException) throwable;
-                        callback.onFailure(ex);
+                        callback.onFailure(new ParseError(throwable));
                     }
                     @Override
                     public void onSuccess(String s) {
