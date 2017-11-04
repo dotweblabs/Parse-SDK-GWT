@@ -20,7 +20,6 @@ import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONString;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.sksamuel.gwt.websockets.Websocket;
 import com.sksamuel.gwt.websockets.WebsocketListener;
 
@@ -75,13 +74,13 @@ public class Subscription {
                     } else if (op.equalsIgnoreCase("enter")||op.equalsIgnoreCase("create")||op.equalsIgnoreCase("leave")) {
                         if(subcribeOp.equals(op)) {
                             JSONObject jsonObject = message.get("object").isObject();
-                            ParseObject parseObject = ParseObject.clone(className, jsonObject);
+                            ParseObject parseObject = new ParseObject(className, jsonObject);
                             callback.onSuccess(parseObject);
                         }
                     } else if (op.equalsIgnoreCase("update")) {
                         if(subcribeOp.equals(op)) {
                             JSONObject jsonObject = message.get("object").isObject();
-                            ParseObject parseObject = ParseObject.clone(className, jsonObject);
+                            ParseObject parseObject = new ParseObject(className, jsonObject);
                             callback.onSuccess(parseObject);
                         }
                     }

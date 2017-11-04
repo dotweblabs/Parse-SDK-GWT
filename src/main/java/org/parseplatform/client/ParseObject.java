@@ -25,7 +25,6 @@ import org.parseplatform.client.util.JSON;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
 
 /**
  *
@@ -38,89 +37,143 @@ public class ParseObject extends JSONObject {
 
     private String className;
 
+    public ParseObject() {
+    }
+
+    public ParseObject(JSONObject jsonObject) {
+        if(jsonObject != null) {
+            Iterator<String> it = jsonObject.keySet().iterator();
+            while (it.hasNext()) {
+                String key = it.next();
+                JSONValue value = jsonObject.get(key);
+                this.put(key, value);
+            }
+        }
+    }
+
+    public ParseObject(String className, String json) {
+        ParseObject parseObject = ParseObject.parse(className, json);
+        if(parseObject != null) {
+            Iterator<String> it = parseObject.keySet().iterator();
+            while(it.hasNext()) {
+                String key = it.next();
+                JSONValue value = parseObject.get(key);
+                put(key, value);
+            }
+        }
+    }
+
+    public ParseObject(String className, JSONObject jsonObject) {
+        ParseObject parseObject = new ParseObject(jsonObject);
+        if(parseObject != null) {
+            Iterator<String> it = parseObject.keySet().iterator();
+            while(it.hasNext()) {
+                String key = it.next();
+                JSONValue value = parseObject.get(key);
+                put(key, value);
+            }
+            parseObject.setClassName(className);
+        }
+    }
+
+
     public ParseObject(String className){
         this.className = className;
-    }
-    public ParseObject() {
     }
 
     public String getClassName() {
         return className;
     }
+
     public void setClassName(String classsName) {
         this.className = classsName;
     }
-    public static ParseObject parse( String json) {
-        JSONObject jsonObject = (JSONObject) JSONParser.parseStrict(json);
-        return ParseObject.clone(jsonObject);
+
+    public static ParseObject parse(String json) {
+        JSONValue jsonValue = JSONParser.parseStrict(json);
+        if(jsonValue != null && jsonValue.isObject() != null) {
+            JSONObject jsonObject = (JSONObject) JSONParser.parseStrict(json);
+            return new ParseObject(jsonObject);
+        }
+        return null;
     }
 
     public static ParseObject parse(String className, String json) {
-        JSONObject jsonObject = (JSONObject) JSONParser.parseStrict(json);
-        return ParseObject.clone(className, jsonObject);
+        ParseObject parseObject = parse(json);
+        if(parseObject != null) {
+            parseObject.setClassName(className);
+        }
+        return parseObject;
     }
 
-    public static ParseObject clone(String className, JSONObject jsonObject) {
-        ParseObject response = null;
-        Iterator<String> it = jsonObject.keySet().iterator();
-        while (it.hasNext()) {
-            if (response == null) {
-                response = new ParseObject(className);
-            }
-            String key = it.next();
-            JSONValue value = jsonObject.get(key);
-            response.put(key, value);
-        }
-        return response;
-    }
-
-    public static ParseObject clone(JSONObject jsonObject) {
-        ParseObject response = null;
-        Iterator<String> it = jsonObject.keySet().iterator();
-        while(it.hasNext()) {
-            if(response == null) {
-                response = new ParseObject();
-            }
-            String key = it.next();
-            JSONValue value = jsonObject.get(key);
-            response.put(key, value);
-        }
-        return response;
-    }
+//    public static ParseObject clone(String className, JSONObject jsonObject) {
+//        ParseObject response = null;
+//        Iterator<String> it = jsonObject.keySet().iterator();
+//        while (it.hasNext()) {
+//            if (response == null) {
+//                response = new ParseObject(className);
+//            }
+//            String key = it.next();
+//            JSONValue value = jsonObject.get(key);
+//            response.put(key, value);
+//        }
+//        return response;
+//    }
+//
+//    public static ParseObject clone(JSONObject jsonObject) {
+//        ParseObject response = null;
+//        Iterator<String> it = jsonObject.keySet().iterator();
+//        while(it.hasNext()) {
+//            if(response == null) {
+//                response = new ParseObject();
+//            }
+//            String key = it.next();
+//            JSONValue value = jsonObject.get(key);
+//            response.put(key, value);
+//        }
+//        return response;
+//    }
 
     public void putNull(String key) {
         put(key, JSONNull.getInstance());
     }
+
     public void putBoolean(String key, Boolean value) {
         if(value != null) {
             put(key, JSONBoolean.getInstance(value));
         }
     }
+
     public void putString(String key, String value) {
         if(value != null) {
             put(key, new JSONString(value));
         }
     }
+
     public void putNumber(String key, Integer value) {
         if(value != null) {
             put(key, new JSONNumber(value));
         }
     }
+
     public void putNumber(String key, Long value) {
         if(value != null) {
             put(key, new JSONNumber(value));
         }
     }
+
     public void putNumber(String key, Double value) {
         if(value != null) {
             put(key, new JSONNumber(value));
         }
     }
+
     public void setObjectId(String objectId) {
         if(objectId != null) {
             put("objectId", new JSONString(objectId));
         }
     }
+
     public String getObjectId() {
         if(get("objectId") != null && get("objectId").isString() != null) {
             return get("objectId").isString().stringValue();
@@ -157,12 +210,14 @@ public class ParseObject extends JSONObject {
         }
         return null;
     }
+
     public String getUpdatedAt() {
         if(get("updatedAt") != null && get("updatedAt").isString() != null) {
             return get("updatedAt").isString().stringValue();
         }
         return null;
     }
+
     public ParsePointer getPointer() {
         ParsePointer pointer = new ParsePointer(this);
         return pointer;

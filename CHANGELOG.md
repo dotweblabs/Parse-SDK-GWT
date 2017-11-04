@@ -1,3 +1,9 @@
+## 0-SNAPSHOT - 11/04/17
+- Added ParseContants 
+- Added ParseObject contructor methods
+- Simplify ParseObject JSON string parsing
+- Added null checks
+
 ## 0-SNAPSHOT - 11/03/17
 - Major library update
 - Fixed null limit and skip bug

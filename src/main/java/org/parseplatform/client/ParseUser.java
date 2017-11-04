@@ -25,6 +25,10 @@ public class ParseUser extends ParseObject {
         setPassword(password);
     }
 
+    public ParseUser(String json) {
+        super(ParseConstants.CLASSNAME_USER, json);
+    }
+
     public void setUsername(String username) {
         putString("username", username);
     }
@@ -39,9 +43,9 @@ public class ParseUser extends ParseObject {
         ParseObject user = this;
 
         Shape.post(Parse.SERVER_URL + "users")
-                .header("X-Parse-Application-Id", Parse.X_Parse_Application_Id)
-                .header("X-Parse-REST-API-Key", Parse.X_Parse_REST_API_Key)
-                .header("X-Parse-Master-Key", Parse.X_Parse_Master_Key)
+                .header(ParseConstants.FIELD_REST_APP_ID, Parse.X_Parse_Application_Id)
+                .header(ParseConstants.FIELD_REST_REST_API_KEY, Parse.X_Parse_REST_API_Key)
+                .header(ParseConstants.FIELD_REST_MASTER_KEY, Parse.X_Parse_Master_Key)
                 .body(user.toString())
                 .asJson(new AsyncCallback<String>() {
                     @Override
@@ -72,9 +76,9 @@ public class ParseUser extends ParseObject {
         String password = getString("password");
         String param = "username=" + username + "&" + "password=" + password;
         Shape.get(Parse.SERVER_URL + "login?" + URL.encode(param))
-                .header("X-Parse-Application-Id", Parse.X_Parse_Application_Id)
-                .header("X-Parse-REST-API-Key", Parse.X_Parse_REST_API_Key)
-                .header("X-Parse-Master-Key", Parse.X_Parse_Master_Key)
+                .header(ParseConstants.FIELD_REST_APP_ID, Parse.X_Parse_Application_Id)
+                .header(ParseConstants.FIELD_REST_REST_API_KEY, Parse.X_Parse_REST_API_Key)
+                .header(ParseConstants.FIELD_REST_MASTER_KEY, Parse.X_Parse_Master_Key)
                 .header("X-Parse-Revocable-Session", "1")
                 .asJson(new AsyncCallback<String>() {
                     @Override
@@ -109,9 +113,9 @@ public class ParseUser extends ParseObject {
     public static void login(String username, String password, final ParseAsyncCallback<ParseResponse> callback) {
         String param = "username=" + username + "&" + "password=" + password;
         Shape.get(Parse.SERVER_URL + "login?" + URL.encode(param))
-                .header("X-Parse-Application-Id", Parse.X_Parse_Application_Id)
-                .header("X-Parse-REST-API-Key", Parse.X_Parse_REST_API_Key)
-                .header("X-Parse-Master-Key", Parse.X_Parse_Master_Key)
+                .header(ParseConstants.FIELD_REST_APP_ID, Parse.X_Parse_Application_Id)
+                .header(ParseConstants.FIELD_REST_REST_API_KEY, Parse.X_Parse_REST_API_Key)
+                .header(ParseConstants.FIELD_REST_MASTER_KEY, Parse.X_Parse_Master_Key)
                 .header("X-Parse-Revocable-Session", "1")
                 .asJson(new AsyncCallback<String>() {
                     @Override
@@ -143,12 +147,12 @@ public class ParseUser extends ParseObject {
                     }
                 });
     }
-    public void logout(final ParseAsyncCallback<ParseResponse> callback) {
+    public static void logout(final ParseAsyncCallback<ParseResponse> callback) {
         Shape.post(Parse.SERVER_URL + "logout")
-                .header("X-Parse-Application-Id", Parse.X_Parse_Application_Id)
-                .header("X-Parse-REST-API-Key", Parse.X_Parse_REST_API_Key)
-                .header("X-Parse-Master-Key", Parse.X_Parse_Master_Key)
-                .header("X-Parse-Session-Token", sessionToken)
+                .header(ParseConstants.FIELD_REST_APP_ID, Parse.X_Parse_Application_Id)
+                .header(ParseConstants.FIELD_REST_REST_API_KEY, Parse.X_Parse_REST_API_Key)
+                .header(ParseConstants.FIELD_REST_MASTER_KEY, Parse.X_Parse_Master_Key)
+                .header(ParseConstants.FIELD_REST_SESSION_TOKEN, Parse.X_Parse_Session_Token)
                 .asJson(new AsyncCallback<String>() {
                     @Override
                     public void onFailure(Throwable throwable) {
@@ -175,10 +179,10 @@ public class ParseUser extends ParseObject {
 
     public static void become(String sessionToken, final ParseAsyncCallback<ParseObject> callback){
         Shape.get(Parse.SERVER_URL + "/users/me")
-                .header("X-Parse-Application-Id", Parse.X_Parse_Application_Id)
-                .header("X-Parse-REST-API-Key", Parse.X_Parse_REST_API_Key)
-                .header("X-Parse-Master-Key", Parse.X_Parse_Master_Key)
-                .header("X-Parse-Session-Token", sessionToken)
+                .header(ParseConstants.FIELD_REST_APP_ID, Parse.X_Parse_Application_Id)
+                .header(ParseConstants.FIELD_REST_REST_API_KEY, Parse.X_Parse_REST_API_Key)
+                .header(ParseConstants.FIELD_REST_MASTER_KEY, Parse.X_Parse_Master_Key)
+                .header(ParseConstants.FIELD_REST_SESSION_TOKEN, Parse.X_Parse_Session_Token)
                 .asJson(new AsyncCallback<String>() {
                     @Override
                     public void onFailure(Throwable throwable) {
@@ -202,10 +206,10 @@ public class ParseUser extends ParseObject {
 
     public void requestPasswordReset(final ParseAsyncCallback<ParseResponse> callback) {
         Shape.post(Parse.SERVER_URL + "requestPasswordReset")
-                .header("X-Parse-Application-Id", Parse.X_Parse_Application_Id)
-                .header("X-Parse-REST-API-Key", Parse.X_Parse_REST_API_Key)
-                .header("X-Parse-Master-Key", Parse.X_Parse_Master_Key)
-                .header("X-Parse-Session-Token", sessionToken)
+                .header(ParseConstants.FIELD_REST_APP_ID, Parse.X_Parse_Application_Id)
+                .header(ParseConstants.FIELD_REST_REST_API_KEY, Parse.X_Parse_REST_API_Key)
+                .header(ParseConstants.FIELD_REST_MASTER_KEY, Parse.X_Parse_Master_Key)
+                .header(ParseConstants.FIELD_REST_SESSION_TOKEN, Parse.X_Parse_Session_Token)
                 .asJson(new AsyncCallback<String>() {
                     @Override
                     public void onFailure(Throwable throwable) {
@@ -226,10 +230,10 @@ public class ParseUser extends ParseObject {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("email", new JSONString(email));
         Shape.post(Parse.SERVER_URL + "requestPasswordReset")
-                .header("X-Parse-Application-Id", Parse.X_Parse_Application_Id)
-                .header("X-Parse-REST-API-Key", Parse.X_Parse_REST_API_Key)
-                .header("X-Parse-Master-Key", Parse.X_Parse_Master_Key)
-                .header("X-Parse-Session-Token", sessionToken)
+                .header(ParseConstants.FIELD_REST_APP_ID, Parse.X_Parse_Application_Id)
+                .header(ParseConstants.FIELD_REST_REST_API_KEY, Parse.X_Parse_REST_API_Key)
+                .header(ParseConstants.FIELD_REST_MASTER_KEY, Parse.X_Parse_Master_Key)
+                .header(ParseConstants.FIELD_REST_SESSION_TOKEN, Parse.X_Parse_Session_Token)
                 .body(jsonObject.toString())
                 .asJson(new AsyncCallback<String>() {
                     @Override
@@ -248,17 +252,17 @@ public class ParseUser extends ParseObject {
                 });
     }
     public void retrieveUser(String objectId ){}
-    public ParseObject retrieveCurrentUser() {
+    public static ParseUser retrieveCurrentUser() {
         Storage storage = Storage.getLocalStorageIfSupported();
         if(storage != null) {
             String key = "Parse/" + Parse.X_Parse_Application_Id + "/currentUser";
             String user = storage.getItem(key);
             if(user != null){
-                ParseObject parseObject = ParseObject.parse("_User", user);
-                if(parseObject != null) {
-                    Parse.X_Parse_Session_Token = parseObject.get("sessionToken").isString().stringValue();
+                ParseUser parseUser = new ParseUser(user);
+                if(parseUser != null) {
+                    Parse.X_Parse_Session_Token = parseUser.getString("sessionToken");
                 }
-                return parseObject;
+                return parseUser;
             }
         }
         return null;
@@ -278,10 +282,10 @@ public class ParseUser extends ParseObject {
             }
         }
         Shape.put(path)
-                .header("X-Parse-Application-Id", Parse.X_Parse_Application_Id)
-                .header("X-Parse-REST-API-Key", Parse.X_Parse_REST_API_Key)
-                .header("X-Parse-Master-Key", Parse.X_Parse_Master_Key)
-                .header("X-Parse-Session-Token", Parse.X_Parse_Session_Token)
+                .header(ParseConstants.FIELD_REST_APP_ID, Parse.X_Parse_Application_Id)
+                .header(ParseConstants.FIELD_REST_REST_API_KEY, Parse.X_Parse_REST_API_Key)
+                .header(ParseConstants.FIELD_REST_MASTER_KEY, Parse.X_Parse_Master_Key)
+                .header(ParseConstants.FIELD_REST_SESSION_TOKEN, Parse.X_Parse_Session_Token)
                 .body(payload.toString())
                 .asJson(new AsyncCallback<String>() {
                     @Override

@@ -52,7 +52,11 @@ public class ParseResponse extends JSONObject {
         return response;
     }
     public ParseObject asParseObject(String className) {
-        return ParseObject.clone(className, this);
+        if(!isError() && getResult() == null && getResult() == null) {
+            return new ParseObject(className, this);
+        } else {
+            return null;
+        }
     }
     public Boolean isEmpty() {
         if(getResults() != null) {
@@ -91,7 +95,7 @@ public class ParseResponse extends JSONObject {
         JSONArray results = getResults();
         for(int i=0;i<results.size();i++) {
             if(results.get(i).isObject() != null) {
-                ParseObject parseObject = ParseObject.clone(results.get(i).isObject());
+                ParseObject parseObject = new ParseObject(results.get(i).isObject());
                 return parseObject;
             }
         }
@@ -102,7 +106,7 @@ public class ParseResponse extends JSONObject {
         JSONArray results = getResults();
         for(int i=0;i<results.size();i++) {
             if(results.get(i).isObject() != null) {
-                ParseObject parseObject = ParseObject.clone(results.get(i).isObject());
+                ParseObject parseObject = new ParseObject(results.get(i).isObject());
                 resultList.add(parseObject);
             }
         }
