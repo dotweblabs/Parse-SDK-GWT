@@ -8,6 +8,7 @@ import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.storage.client.Storage;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import elemental.client.Browser;
 
 import java.util.Iterator;
 
@@ -55,7 +56,7 @@ public class ParseUser extends ParseObject {
                     @Override
                     public void onSuccess(String s) {
                         try {
-                            ParseResponse response = ParseResponse.parse(s);
+                            ParseResponse response = new ParseResponse(s);
                             if(response.get("sessionToken") != null) {
                                 //createdAt, objectId, sessionToken
                                 sessionToken = response.get("sessionToken").isString().stringValue();
@@ -83,69 +84,46 @@ public class ParseUser extends ParseObject {
                 .asJson(new AsyncCallback<String>() {
                     @Override
                     public void onFailure(Throwable throwable) {
+                        Browser.getWindow().getConsole().log("Parse login exception " + throwable.getMessage());
                         callback.onFailure(new ParseError(throwable));
                     }
                     @Override
                     public void onSuccess(String s) {
-                        try {
-                            ParseResponse response = ParseResponse.parse(s);
-                            if(response.get("sessionToken") != null) {
-                                //createdAt, objectId, sessionToken
-                                sessionToken = response.get("sessionToken").isString().stringValue();
-                                Parse.X_Parse_Session_Token = sessionToken;
-                                Storage storage = Storage.getLocalStorageIfSupported();
-                                if(storage != null && remember) {
-                                    String key = "Parse/" + Parse.X_Parse_Application_Id + "/currentUser";
-                                    storage.setItem(key, response.toString());
+                        if(s != null && !s.isEmpty()) {
+                            ParseResponse response = new ParseResponse(s);
+                            if(response.isError()) {
+                                callback.onFailure(new ParseError(response.getErrorCode(), response.getErrorMessage()));
+                            } else {
+                                if(response.get("sessionToken") != null) {
+                                    //createdAt, objectId, sessionToken
+                                    sessionToken = response.get("sessionToken").isString().stringValue();
+                                    Parse.X_Parse_Session_Token = sessionToken;
+                                    Storage storage = Storage.getLocalStorageIfSupported();
+                                    if(storage != null && remember) {
+                                        String key = "Parse/" + Parse.X_Parse_Application_Id + "/currentUser";
+                                        storage.setItem(key, response.toString());
+                                    }
                                 }
                                 callback.onSuccess(response);
-                            } else {
-                                HttpRequestException ex
-                                        = new HttpRequestException(response.getErrorMessage(), response.getErrorCode());
-                                callback.onFailure(new ParseError(ex));
                             }
-                        } catch (Exception e) {
-                            callback.onFailure(new ParseError(e));
                         }
                     }
                 });
     }
-    public static void login(String username, String password, final ParseAsyncCallback<ParseResponse> callback) {
-        String param = "username=" + username + "&" + "password=" + password;
-        Shape.get(Parse.SERVER_URL + "login?" + URL.encode(param))
-                .header(ParseConstants.FIELD_REST_APP_ID, Parse.X_Parse_Application_Id)
-                .header(ParseConstants.FIELD_REST_REST_API_KEY, Parse.X_Parse_REST_API_Key)
-                .header(ParseConstants.FIELD_REST_MASTER_KEY, Parse.X_Parse_Master_Key)
-                .header("X-Parse-Revocable-Session", "1")
-                .asJson(new AsyncCallback<String>() {
-                    @Override
-                    public void onFailure(Throwable throwable) {
-                        callback.onFailure(new ParseError(throwable));
-                    }
-                    @Override
-                    public void onSuccess(String s) {
-                        try {
-                            ParseResponse response = ParseResponse.parse(s);
-                            if(response.get("sessionToken") != null) {
-                                //createdAt, objectId, sessionToken
-                                sessionToken = response.get("sessionToken").isString().stringValue();
-                                Parse.X_Parse_Session_Token = sessionToken;
-                                Storage storage = Storage.getLocalStorageIfSupported();
-                                if(storage != null) {
-                                    String key = "Parse/" + Parse.X_Parse_Application_Id + "/currentUser";
-                                    storage.setItem(key, response.toString());
-                                }
-                                callback.onSuccess(response);
-                            } else {
-                                HttpRequestException ex
-                                        = new HttpRequestException(response.getErrorMessage(), response.getErrorCode());
-                                callback.onFailure(new ParseError(ex));
-                            }
-                        } catch (Exception e) {
-                            callback.onFailure(new ParseError(e));
-                        }
-                    }
-                });
+
+    public void login(String username, String password, final ParseAsyncCallback<ParseResponse> callback) {
+        putString(ParseConstants.FIELD_USERNAME, username);
+        putString(ParseConstants.FIELD_PASSWORD, password);
+        login(true, new ParseAsyncCallback<ParseResponse>() {
+            @Override
+            public void onFailure(ParseError error) {
+                callback.onFailure(error);
+            }
+            @Override
+            public void onSuccess(ParseResponse var1) {
+                callback.onSuccess(var1);
+            }
+        });
     }
     public static void logout(final ParseAsyncCallback<ParseResponse> callback) {
         Shape.post(Parse.SERVER_URL + "logout")
@@ -161,7 +139,7 @@ public class ParseUser extends ParseObject {
                     @Override
                     public void onSuccess(String s) {
                         try {
-                            ParseResponse response = ParseResponse.parse(s);
+                            ParseResponse response = new ParseResponse(s);
                             Parse.X_Parse_Session_Token = null;
                             sessionToken = null;
                             String userKey = "Parse/" + Parse.X_Parse_Application_Id + "/currentUser";
@@ -190,7 +168,7 @@ public class ParseUser extends ParseObject {
                     }
                     @Override
                     public void onSuccess(String s) {
-                        ParseResponse response = ParseResponse.parse(s);
+                        ParseResponse response = new ParseResponse(s);
                         if(response.get("sessionToken") != null) {
                             String sessionToken = response.get("sessionToken").isString().stringValue();
                             Parse.X_Parse_Session_Token = sessionToken;
@@ -218,7 +196,7 @@ public class ParseUser extends ParseObject {
                     @Override
                     public void onSuccess(String s) {
                         try {
-                            ParseResponse response = ParseResponse.parse(s);
+                            ParseResponse response = new ParseResponse(s);
                             callback.onSuccess(response);
                         } catch (Exception e) {
                             callback.onFailure(new ParseError(e));
@@ -243,7 +221,7 @@ public class ParseUser extends ParseObject {
                     @Override
                     public void onSuccess(String s) {
                         try {
-                            ParseResponse response = ParseResponse.parse(s);
+                            ParseResponse response = new ParseResponse(s);
                             callback.onSuccess(response);
                         } catch (Exception e) {
                             callback.onFailure(new ParseError(e));
@@ -294,7 +272,7 @@ public class ParseUser extends ParseObject {
                     }
                     @Override
                     public void onSuccess(String s) {
-                        callback.onSuccess(ParseResponse.parse(s));
+                        callback.onSuccess(new ParseResponse(s));
                     }
                 });
     }

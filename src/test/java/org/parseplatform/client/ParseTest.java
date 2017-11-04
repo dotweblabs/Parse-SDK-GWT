@@ -259,7 +259,6 @@ public class ParseTest extends GWTTestCase {
     }
 
     public void testLogin() {
-        delayTestFinish(3000);
         Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY);
         ParseUser parseUser = new ParseUser("testUser", "testPassword");
         parseUser.login("testUser", "testPassword", new ParseAsyncCallback<ParseResponse>() {
@@ -271,10 +270,15 @@ public class ParseTest extends GWTTestCase {
             }
             @Override
             public void onSuccess(ParseResponse parseResponse) {
-                log(parseResponse.toString());
+                assertNotNull(parseResponse);
+                ParseObject parseObject = parseResponse.asParseObject(ParseConstants.CLASSNAME_USER);
+                assertNotNull(parseObject);
+                assertEquals(ParseConstants.CLASSNAME_USER, parseObject.getClassName());
+                log(parseObject.toString());
                 finishTest();
             }
         });
+        delayTestFinish(3000);
     }
 
     public void testBecome() {

@@ -30,6 +30,8 @@ public class ParseError extends JSONObject {
                 this.code = d.intValue();
                 this.error = (error.get("error") != null && error.get("error").isString() != null)
                         ? error.get("error").isString().stringValue() : null;
+            } else {
+                this.error = message;
             }
         }
     }

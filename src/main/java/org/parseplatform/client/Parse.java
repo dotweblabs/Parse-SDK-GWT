@@ -97,7 +97,9 @@ public class Parse {
     public static void initialize(String path, String appId, String restApiKey, String javascriptKey, String masterKey) {
         X_Parse_Application_Id = appId;
         X_Parse_REST_API_Key = restApiKey;
-        X_Parse_Master_Key = masterKey;
+        if(masterKey != null) {
+            X_Parse_Master_Key = masterKey;
+        }
         X_Parse_Javascript_Key = javascriptKey;
         SERVER_URL = path;
         if(!SERVER_URL.endsWith("/")) {
@@ -107,7 +109,9 @@ public class Parse {
         if(storage != null) {
             storage.setItem("X-Parse-Application-Id", appId);
             storage.setItem("X-Parse-REST-API-Key", restApiKey);
-            storage.setItem("X-Parse-Master-Key", masterKey);
+            if(masterKey != null) {
+                storage.setItem("X-Parse-Master-Key", masterKey);
+            }
             if(storage.getItem("X-Parse-Session-Token") != null) {
                 X_Parse_Session_Token = storage.getItem("X-Parse-Session-Token");
             }

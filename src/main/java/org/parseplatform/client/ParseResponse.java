@@ -34,10 +34,32 @@ import java.util.List;
  * @version 0-SNAPSHOT
  */
 public class ParseResponse extends JSONObject {
+
+    public ParseResponse() {}
+    public ParseResponse(String json) {
+        if(json != null && !json.isEmpty()) {
+            JSONValue value = JSONParser.parseStrict(json);
+            if(value != null) {
+                if(value.isObject() != null) {
+                    JSONObject jsonObject = value.isObject();
+                    if(jsonObject != null) {
+                        Iterator<String> it = jsonObject.keySet().iterator();
+                        while(it.hasNext()) {
+                            String key = it.next();
+                            JSONValue jsonValue = jsonObject.get(key);
+                            put(key, jsonValue);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    @Deprecated
     public static ParseResponse parse(String json) {
         JSONObject jsonObject = (JSONObject) JSONParser.parseStrict(json);
         return ParseResponse.clone(jsonObject);
     }
+    @Deprecated
     public static ParseResponse clone(JSONObject jsonObject) {
         ParseResponse response = new ParseResponse();
         Iterator<String> it = jsonObject.keySet().iterator();
@@ -51,13 +73,7 @@ public class ParseResponse extends JSONObject {
         }
         return response;
     }
-    public ParseObject asParseObject(String className) {
-        if(!isError() && getResult() == null && getResult() == null) {
-            return new ParseObject(className, this);
-        } else {
-            return null;
-        }
-    }
+
     public Boolean isEmpty() {
         if(getResults() != null) {
             return getResults().size() == 0 ? true : false;
@@ -139,6 +155,10 @@ public class ParseResponse extends JSONObject {
     public <T> T as(Class<T> clazz) {
         T as = JSON.parse(this.toString());
         return as;
+    }
+
+    public ParseObject asParseObject(String className) {
+        return new ParseObject(className, this);
     }
 
     /**

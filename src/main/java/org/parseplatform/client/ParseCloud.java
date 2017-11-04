@@ -19,7 +19,7 @@ public class ParseCloud {
 
                     @Override
                     public void onSuccess(String s) {
-                        callback.onSuccess(ParseResponse.parse(s));
+                        callback.onSuccess(new ParseResponse(s));
                     }
                 });
     }
@@ -38,7 +38,7 @@ public class ParseCloud {
 
                     @Override
                     public void onSuccess(String s) {
-                        callback.onSuccess(ParseResponse.parse(s));
+                        callback.onSuccess(new ParseResponse(s));
                     }
                 });
     }

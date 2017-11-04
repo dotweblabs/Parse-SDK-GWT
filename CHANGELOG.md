@@ -1,6 +1,7 @@
 ## 0-SNAPSHOT - 11/04/17
+- Fixed ParseResponse.asParseObject method
 - Added ParseContants 
-- Added ParseObject contructor methods
+- Added ParseObject contructor metho11ds
 - Simplify ParseObject JSON string parsing
 - Added null checks
 

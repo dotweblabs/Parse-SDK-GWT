@@ -52,30 +52,23 @@ public class ParseObject extends JSONObject {
     }
 
     public ParseObject(String className, String json) {
-        ParseObject parseObject = ParseObject.parse(className, json);
-        if(parseObject != null) {
-            Iterator<String> it = parseObject.keySet().iterator();
+        JSONValue jsonValue = JSONParser.parseStrict(json);
+        if(jsonValue != null && jsonValue.isObject() != null) {
+            JSONObject jsonObject = jsonValue.isObject();
+            Iterator<String> it = jsonObject.keySet().iterator();
             while(it.hasNext()) {
                 String key = it.next();
-                JSONValue value = parseObject.get(key);
+                JSONValue value = jsonObject.get(key);
                 put(key, value);
             }
         }
+        setClassName(className);
     }
 
     public ParseObject(String className, JSONObject jsonObject) {
-        ParseObject parseObject = new ParseObject(jsonObject);
-        if(parseObject != null) {
-            Iterator<String> it = parseObject.keySet().iterator();
-            while(it.hasNext()) {
-                String key = it.next();
-                JSONValue value = parseObject.get(key);
-                put(key, value);
-            }
-            parseObject.setClassName(className);
-        }
+        this(jsonObject);
+        setClassName(className);
     }
-
 
     public ParseObject(String className){
         this.className = className;
@@ -453,7 +446,7 @@ public class ParseObject extends JSONObject {
                     }
                     @Override
                     public void onSuccess(String s) {
-                        callback.onSuccess(ParseResponse.parse(s));
+                        callback.onSuccess(new ParseResponse(s));
                     }
                 });
     }
@@ -492,7 +485,7 @@ public class ParseObject extends JSONObject {
                         public void onSuccess(String s) {
                             //logger.log(Level.INFO, "Parse Update Response: " + s);
                             try {
-                                ParseResponse parseResponse = ParseResponse.parse(s);
+                                ParseResponse parseResponse = new ParseResponse(s);
                                 callback.onSuccess(parseResponse);
                             } catch (Exception e) {
                                 callback.onFailure(new ParseError(e));
@@ -612,7 +605,7 @@ public class ParseObject extends JSONObject {
                     @Override
                     public void onSuccess(String s) {
                         try{
-                            ParseResponse parseResponse = ParseResponse.parse(s);
+                            ParseResponse parseResponse = new ParseResponse(s);
                             callback.onSuccess(parseResponse);
                         } catch (Exception e) {
                             callback.onFailure(new ParseError(e));
@@ -653,7 +646,7 @@ public class ParseObject extends JSONObject {
                     }
                     @Override
                     public void onSuccess(String s) {
-                        callback.onSuccess(ParseResponse.parse(s));
+                        callback.onSuccess(new ParseResponse(s));
                     }
                 });
     }

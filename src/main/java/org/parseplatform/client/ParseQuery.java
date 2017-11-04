@@ -194,7 +194,7 @@ public class ParseQuery extends JSONObject {
                     @Override
                     public void onSuccess(String s) {
                         if(s != null && !s.isEmpty()) {
-                            ParseResponse resp = ParseResponse.parse(s);
+                            ParseResponse resp = new ParseResponse(s);
                             callback.onSuccess(resp);
                         } else {
                             callback.onFailure(new ParseError(204, "No response"));
