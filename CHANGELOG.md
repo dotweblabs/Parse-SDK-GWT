@@ -1,3 +1,6 @@
+## 0-SNAPSHOT - 11/09/17
+- Fixed Parse config not being loaded to JSON object
+
 ## 0-SNAPSHOT - 11/04/17
 - Fixed ParseResponse.asParseObject method
 - Added ParseContants 

@@ -2,6 +2,7 @@ package org.parseplatform.client;
 
 import com.dotweblabs.shape.client.Shape;
 import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -19,8 +20,13 @@ public class ParseConfig {
                     @Override
                     public void onSuccess(String s) {
                         try {
-                            org.parseplatform.client.Config config = org.parseplatform.client.Config.fromJSON(s);
-                            callback.onSuccess(config);
+                            JSONValue jso = JSONParser.parseStrict(s);
+                            if(jso != null && jso.isObject() != null) {
+                                JSONObject params = jso.isObject().get("params").isObject();
+                                org.parseplatform.client.Config config = org.parseplatform.client.Config.fromJSON(params.toString());
+                                callback.onSuccess(config);
+                            }
+
                         } catch (Exception e){
                             callback.onFailure(new ParseError(e));
                         }
