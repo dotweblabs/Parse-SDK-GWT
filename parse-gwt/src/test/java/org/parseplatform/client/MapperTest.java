@@ -50,6 +50,43 @@ public class MapperTest extends GWTTestCase {
         assertEquals("Sample name", mappedBean.getName());
     }
 
+    public void testParseMapperMap() {
+        JSONObject testObject = new JSONObject();
+        testObject.put("ainteger", new JSONNumber(1));
+        testObject.put("aInteger", new JSONNumber(2));
+        testObject.put("adouble", new JSONNumber(1.0));
+        testObject.put("aDouble", new JSONNumber(2.0));
+        System.out.println(testObject.toString());
+        //ParseBean parseBean = new ParseBean_mapper().map(testObject);
+        //assertEquals(1, parseBean.getaInteger().intValue());
+        //assertEquals(2, parseBean.getAinteger());
+        //assertEquals(1.0, parseBean.getAdouble());
+        //assertEquals(2.0, parseBean.getaDouble());
+    }
+
+    public void testParseMapperUnmap() {
+        JSONObject testObject = new JSONObject();
+        testObject.put("ainteger", new JSONNumber(1));
+        testObject.put("aInteger", new JSONNumber(2));
+        testObject.put("adouble", new JSONNumber(1.0));
+        testObject.put("aDouble", new JSONNumber(2.0));
+
+        ParseBean parseBean = new ParseBean_mapper().map(testObject);
+
+        assertEquals(1, parseBean.getaInteger().intValue());
+        assertEquals(2, parseBean.getAinteger());
+        assertEquals(1.0, parseBean.getAdouble());
+        assertEquals(2.0, parseBean.getaDouble());
+
+        //ParseObject parseObject = new ParseBean_mapper().unmap(parseBean);
+
+        //assertEquals(1, parseObject.getDouble("ainteger").intValue());
+        //assertEquals(2, parseObject.getDouble("aInteger").intValue());
+        //assertEquals(1.0, parseObject.getDouble("adouble").intValue());
+        //assertEquals(2.0, parseObject.getDouble("aDouble").intValue());
+
+    }
+
     public static void log(String s){
         System.out.println(s);
     }

@@ -1,4 +1,5 @@
 ## 0-SNAPSHOT - 11/10/17
+- Added sample mapper test
 - Refactor package to add processor module
 
 ## 0-SNAPSHOT - 11/09/17
