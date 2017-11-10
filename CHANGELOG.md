@@ -1,3 +1,6 @@
+## 0-SNAPSHOT - 11/10/17
+- Refactor package to add processor module
+
 ## 0-SNAPSHOT - 11/09/17
 - Fixed Parse config not being loaded to JSON object
 
