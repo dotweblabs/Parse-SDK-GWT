@@ -1,3 +1,6 @@
+## 0-SNAPSHOT - 11/11/17
+- User XAPI (gwt-sandbox) to use reflection on GWT
+
 ## 0-SNAPSHOT - 11/09/17
 - Fixed Parse config not being loaded to JSON object
 
