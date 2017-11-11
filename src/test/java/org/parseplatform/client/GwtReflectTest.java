@@ -16,6 +16,7 @@
  */
 package org.parseplatform.client;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.json.client.JSONBoolean;
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONString;
@@ -56,6 +57,30 @@ public class GwtReflectTest extends GWTTestCase {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void testMarshall() {
+        GwtMarshaller marshaller = GWT.create(GwtMarshaller.class);
+        SimpleBean simpleBean = new SimpleBean();
+        simpleBean.setAge(50);
+        simpleBean.setName("Old Guy");
+        ParseObject parseObject = marshaller.marshall(simpleBean);
+
+        assertEquals(50, parseObject.getLong("age").intValue());
+        assertEquals("Old Guy", parseObject.getString("name"));
+    }
+
+    public void testUnmarshaller() {
+        GwtUnmarshaller unmarshaller = GWT.create(GwtUnmarshaller.class);
+        ParseObject parseObject = new ParseObject();
+        parseObject.putString("name", "Old Man");
+        parseObject.putNumber("age", 40);
+
+        SimpleBean simpleBean = new SimpleBean();
+        simpleBean = unmarshaller.unmarshall(SimpleBean.class, simpleBean, parseObject);
+
+        assertEquals(40, simpleBean.getAge());
+        assertEquals("Old Man", simpleBean.getName());
     }
 
     public static void log(String s){
