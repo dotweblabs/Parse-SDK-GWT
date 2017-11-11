@@ -38,11 +38,12 @@
 	</developers>
 
 	<properties>
-		<gwt.version>2.8.0-beta1</gwt.version>
+		<!--<gwt.version>2.8.0-beta1</gwt.version>-->
 		<gwt.sandbox.version>2.8.2-rc1</gwt.sandbox.version>
 		<gwt-maven.version>2.8.0-rc3</gwt-maven.version>
 		<test.mode>htmlunit</test.mode>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jetty.version>9.2.14.v20151106</jetty.version>
 	</properties>
 
 	<build>
@@ -81,14 +82,14 @@
 					<forkMode>always</forkMode>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-				</configuration>
-			</plugin>
+			<!--<plugin>-->
+				<!--<groupId>org.apache.maven.plugins</groupId>-->
+				<!--<artifactId>maven-compiler-plugin</artifactId>-->
+				<!--<configuration>-->
+					<!--<source>1.8</source>-->
+					<!--<target>1.8</target>-->
+				<!--</configuration>-->
+			<!--</plugin>-->
 		</plugins>
 	</build>
 
@@ -129,11 +130,29 @@
 			<!--<version>${gwt.version}</version>-->
 			<!--&lt;!&ndash;<scope>test</scope>&ndash;&gt;-->
 		<!--</dependency>-->
+		<!--<dependency>-->
+			<!--<groupId>com.google.gwt</groupId>-->
+			<!--<artifactId>gwt-elemental</artifactId>-->
+			<!--<version>${gwt.version}</version>-->
+		<!--</dependency>-->
 		<dependency>
-			<groupId>com.google.gwt</groupId>
+			<groupId>net.wetheinter</groupId>
 			<artifactId>gwt-elemental</artifactId>
-			<version>${gwt.version}</version>
+			<version>${gwt.sandbox.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>net.wetheinter</groupId>
+			<artifactId>jsinterop-annotations</artifactId>
+			<version>${gwt.sandbox.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.wetheinter</groupId>
+			<artifactId>jsinterop-annotations</artifactId>
+			<version>${gwt.sandbox.version}</version>
+			<classifier>sources</classifier>
+		</dependency>
+
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava-gwt</artifactId>
@@ -154,6 +173,112 @@
 			<artifactId>junit</artifactId>
 			<version>3.8.2</version>
 			<scope>test</scope>
+		</dependency>
+
+		<!-- gwt-dev dependencies -->
+		<dependency>
+			<groupId>com.google.code.findbugs</groupId>
+			<artifactId>jsr305</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.ow2.asm</groupId>
+			<artifactId>asm</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.ow2.asm</groupId>
+			<artifactId>asm-util</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.ow2.asm</groupId>
+			<artifactId>asm-commons</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>colt</groupId>
+			<artifactId>colt</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>concurrent</groupId>
+					<artifactId>concurrent</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>ant</groupId>
+			<artifactId>ant</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.ibm.icu</groupId>
+			<artifactId>icu4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>tapestry</groupId>
+			<artifactId>tapestry</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>javassist</groupId>
+					<artifactId>javassist</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>commons-codec</groupId>
+					<artifactId>commons-codec</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>commons-fileupload</groupId>
+					<artifactId>commons-fileupload</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>ognl</groupId>
+					<artifactId>ognl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>oro</groupId>
+					<artifactId>oro</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>hivemind</groupId>
+					<artifactId>hivemind</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>hivemind</groupId>
+					<artifactId>hivemind-lib</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.htmlunit</groupId>
+			<artifactId>htmlunit</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-webapp</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-servlets</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-annotations</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>apache-jsp</artifactId>
 		</dependency>
 	</dependencies>
 
@@ -181,6 +306,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-compiler-plugin</artifactId>
+						<version>3.7.0</version>
 						<configuration>
 							<source>1.8</source>
 							<target>1.8</target>
@@ -212,6 +338,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-jar-plugin</artifactId>
+						<version>3.0.2</version>
 						<configuration>
 							<archive>
 								<manifest>
@@ -252,11 +379,11 @@
 					<url>https://repo.vertispan.com/xapi</url>
 				</repository>
 				<!-- Snapshot repository -->
-				<repository>
-					<id>oss-jfrog-artifactory-snapshots</id>
-					<name>oss-jfrog-artifactory-snapshots</name>
-					<url>https://oss.jfrog.org/artifactory/oss-snapshot-local</url>
-				</repository>
+				<!--<repository>-->
+					<!--<id>oss-jfrog-artifactory-snapshots</id>-->
+					<!--<name>oss-jfrog-artifactory-snapshots</name>-->
+					<!--<url>https://oss.jfrog.org/artifactory/oss-snapshot-local</url>-->
+				<!--</repository>-->
 			</repositories>
 		</profile>
 	</profiles>
@@ -267,4 +394,213 @@
 			<url>https://oss.jfrog.org/artifactory/oss-snapshot-local</url>
 		</snapshotRepository>
 	</distributionManagement>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>net.wetheinter</groupId>
+				<artifactId>gwt-user</artifactId>
+				<version>${gwt.sandbox.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.wetheinter</groupId>
+				<artifactId>gwt-dev</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.wetheinter</groupId>
+				<artifactId>gwt-codeserver</artifactId>
+				<version>${gwt.sandbox.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.wetheinter</groupId>
+				<artifactId>gwt-servlet</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.wetheinter</groupId>
+				<artifactId>gwt-elemental</artifactId>
+				<version>${gwt.sandbox.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.wetheinter</groupId>
+				<!--<groupId>com.google.web.bindery</groupId>-->
+				<artifactId>requestfactory</artifactId>
+				<version>${gwt.sandbox.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.google.jsinterop</groupId>
+				<artifactId>jsinterop</artifactId>
+				<version>1.0.2</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>javax.servlet-api</artifactId>
+				<version>3.1.0</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.validation</groupId>
+				<artifactId>validation-api</artifactId>
+				<version>1.0.0.GA</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.validation</groupId>
+				<artifactId>validation-api</artifactId>
+				<version>1.0.0.GA</version>
+				<!-- Note: use classifier=sources rather than type=java-sources so they're added to the classpath -->
+				<classifier>sources</classifier>
+			</dependency>
+			<dependency>
+				<groupId>com.google.code.gson</groupId>
+				<artifactId>gson</artifactId>
+				<version>2.6.2</version>
+			</dependency>
+			<dependency>
+				<groupId>org.ow2.asm</groupId>
+				<artifactId>asm-parent</artifactId>
+				<version>5.0.3</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>colt</groupId>
+				<artifactId>colt</artifactId>
+				<version>1.2.0</version>
+			</dependency>
+			<dependency>
+				<groupId>ant</groupId>
+				<artifactId>ant</artifactId>
+				<version>1.6.5</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-collections</groupId>
+				<artifactId>commons-collections</artifactId>
+				<version>3.2.2</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>2.4</version>
+			</dependency>
+			<dependency>
+				<groupId>com.ibm.icu</groupId>
+				<artifactId>icu4j</artifactId>
+				<version>50.1.1</version>
+			</dependency>
+			<dependency>
+				<groupId>net.sourceforge.htmlunit</groupId>
+				<artifactId>htmlunit</artifactId>
+				<version>2.19</version>
+			</dependency>
+			<dependency>
+				<groupId>org.w3c.css</groupId>
+				<artifactId>sac</artifactId>
+				<version>1.3</version>
+			</dependency>
+			<dependency>
+				<groupId>tapestry</groupId>
+				<artifactId>tapestry</artifactId>
+				<version>4.0.2</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.code.findbugs</groupId>
+				<artifactId>jsr305</artifactId>
+				<version>1.3.9</version>
+			</dependency>
+			<!-- For DevMode / JUnitShell (transitive dependency on jetty-server for CodeServer) -->
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-webapp</artifactId>
+				<version>${jetty.version}</version>
+			</dependency>
+			<!-- For CodeServer (GZip support) -->
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-servlets</artifactId>
+				<version>${jetty.version}</version>
+			</dependency>
+			<!-- For JSPs (and annotations scanning) in DevMode -->
+			<!-- Those two dependencies are actually optional, included here mostly for backwards compatibility -->
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-annotations</artifactId>
+				<version>${jetty.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>apache-jsp</artifactId>
+				<version>${jetty.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.eclipse.jetty.orbit</groupId>
+						<artifactId>org.eclipse.jdt.core</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<!-- Some transitive dependencies of the above, to (tentatively) prevent conflicts -->
+			<dependency>
+				<groupId>org.eclipse.jetty.websocket</groupId>
+				<artifactId>websocket-api</artifactId>
+				<version>${jetty.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.jetty.websocket</groupId>
+				<artifactId>websocket-common</artifactId>
+				<version>${jetty.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-continuation</artifactId>
+				<version>${jetty.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-http</artifactId>
+				<version>${jetty.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-io</artifactId>
+				<version>${jetty.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-jndi</artifactId>
+				<version>${jetty.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-plus</artifactId>
+				<version>${jetty.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-util</artifactId>
+				<version>${jetty.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-security</artifactId>
+				<version>${jetty.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-server</artifactId>
+				<version>${jetty.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-servlet</artifactId>
+				<version>${jetty.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-xml</artifactId>
+				<version>${jetty.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>
