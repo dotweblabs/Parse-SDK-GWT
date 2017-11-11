@@ -51,7 +51,7 @@ public class GwtReflectTest extends GWTTestCase {
 //            Browser.getWindow().getConsole().log(simpleBean.getAge());
             Window.alert(simpleBean.getName());
             Window.alert(simpleBean.getAge() + "");
-            assertEquals(11, simpleBean.getAge());
+            assertEquals(10, simpleBean.getAge());
             assertEquals("Juan Dela Cruz", simpleBean.getName());
         } catch (Exception e) {
             e.printStackTrace();
