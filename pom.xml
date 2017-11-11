@@ -3,7 +3,7 @@
 
 	<groupId>org.parseplatform</groupId>
 	<artifactId>parse-gwt</artifactId>
-	<version>XAPI</version>
+	<version>XAPI-SNAPSHOT</version>
 
 	<name>Parse Client for GWT</name>
 	<description>A simple Parse Client for GWT</description>
