@@ -95,7 +95,8 @@ public class GwtMarshaller implements Marshaller {
                 Class<?> classType = fields[c].getType();
                 //string type to string type
                 String fieldName = fields[c].getName();
-                //Browser.getWindow().getConsole().log(fields[c].getName());
+
+                //Browser.getWindow().getConsole().log(classType.getName());
                 //System.out.println("ClassType: " + classType.getName());
                 //object value to field object value
                 java.lang.Object value = fields[c].get(instance);
@@ -114,11 +115,11 @@ public class GwtMarshaller implements Marshaller {
         if(value != null) {
             //fieldType get name
             if(classType.getName() == String.class.getName()) {
-                Browser.getWindow().getConsole().log("String type found");
+
                 String stringValue = (String) value;
                 parseObject.put(fieldName, new JSONString(stringValue));
             } else if(classType.getName() == Boolean.class.getName() || classType.getName() == boolean.class.getName()) {
-                Browser.getWindow().getConsole().log("Boolean type found");
+
                 Boolean booleanValue = (Boolean) value;
                 if(booleanValue != null) {
                     parseObject.put(fieldName, JSONBoolean.getInstance(booleanValue));
@@ -140,12 +141,12 @@ public class GwtMarshaller implements Marshaller {
                     parseObject.put(fieldName, new JSONNumber((Long) value));
 
                 }
-            } else if(classType.getName() == double.class.getName() || classType.getName() == int.class.getName() || classType.getName() ==long.class.getName()) {
+            } else if(classType.getName() == float.class.getName() || classType.getName() == int.class.getName() || classType.getName() ==long.class.getName()) {
 
-                Browser.getWindow().getConsole().log(value.getClass().getTypeName());
-                if(value.getClass().getName() == double.class.getName()) {
 
-                    parseObject.put(fieldName, new JSONNumber((Double) value));
+                if(value.getClass().getName() == float.class.getName()) {
+
+                    parseObject.put(fieldName, new JSONNumber((float) value));
 
                 } else if(value.getClass().getTypeName() == int.class.getName()) {
 
@@ -158,16 +159,19 @@ public class GwtMarshaller implements Marshaller {
                 }
                 else if(value.getClass().getTypeName() == Integer.class.getName()) {
 
-                    Browser.getWindow().getConsole().log(value.getClass().getTypeName());
 
                     parseObject.put(fieldName, new JSONNumber((Integer) value));
 
                 }
                 else if(classType.getName() == int.class.getName()) {
 
-                    Browser.getWindow().getConsole().log(value.getClass().getTypeName());
-
                     parseObject.put(fieldName, new JSONNumber((int) value));
+
+                }
+                else if(value.getClass().getName() == Double.class.getName()) {
+
+
+                    parseObject.put(fieldName, new JSONNumber((Double) value));
 
                 }
 

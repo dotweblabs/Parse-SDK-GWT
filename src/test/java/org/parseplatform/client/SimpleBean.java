@@ -7,7 +7,7 @@ public class SimpleBean {
 
     public int age;
     public String name;
-    public Double cash;
+    //public Double cash;
     public double balance;
     public int i0;
     public int i1;
@@ -46,13 +46,14 @@ public class SimpleBean {
         this.name = name;
     }
 
-    public Double getCash() {
-        return cash;
-    }
+   // public Double getCash() {
+   //     return cash;
+   // }
 
-    public void setCash(Double cash) {
-        this.cash = cash;
-    }
+   // public void setCash(Double cash) {
+
+    //this.cash = cash;
+    //}
 
 
     public int getI0() {
@@ -135,13 +136,14 @@ public class SimpleBean {
         this.i1 = i1;
     }
 
+
     public double getBalance() {
-        return balance;
+    return balance;
+    }
+    public void setBalance(double balance) {
+    this.balance = balance;
     }
 
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
 
     public String getObjectId() {
         return objectId;
