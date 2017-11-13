@@ -98,7 +98,7 @@ public class GwtReflectTest extends GWTTestCase {
         simpleBean.setBalance(999.00);
         try {
 
-            GwtReflect.fieldSet(SimpleBean.class, "objectId", simpleBean, "object");
+            GwtReflect.fieldSet(SimpleBean.class, "objectId", simpleBean, "123");
             simpleBean.setI0(0);
             simpleBean.setI1(1);
             simpleBean.setI2(2);
@@ -109,35 +109,44 @@ public class GwtReflectTest extends GWTTestCase {
 
 
         }
+
         catch (Exception e){}
+
         //simple bean to parse objects using accessors and mutators
 
         ParseObject parseObject = marshaller.marshall(simpleBean);
         Window.alert(">>>>>>>>" + parseObject.toString());
+        //get non null values from model
+        //populate expectation list
+        //assert test expectation to mutant
+
         //assertEquals(50, parseObject.getLong("age").intValue());
-        //assertEquals("Old Guy", parseObject.getString("name"));
+        assertEquals("Old Guy", parseObject.getString("name"));
     }
 
     public void testUnmarshaller() {
         GwtReflect.magicClass(SimpleBean.class);
         GwtUnmarshaller unmarshaller = GWT.create(GwtUnmarshaller.class);
-        double testDOUBLE = 100.50;
+        double testDOUBLE = 10600.50;
         ParseObject parseObject = new ParseObject();
+        parseObject.putString("objectId", "123");
         parseObject.putString("name", "Old Man"); // String
         parseObject.putNumber("age", 40); // integer
-        parseObject.putNumber("balance", 10600.50); // double
         parseObject.putNumber("i1", 1);
         parseObject.putNumber("i2", 2);
         parseObject.putNumber("i3", 3);
         parseObject.putNumber("i0", 0);
         parseObject.putNumber("balance", testDOUBLE);
-
+        Window.alert("<<<<<<<<" + parseObject.toString());
         SimpleBean simpleBean = new SimpleBean();
+
+        //get non null values from model
 
         simpleBean = unmarshaller.unmarshall(SimpleBean.class, simpleBean, parseObject);
         //get field names, get method names
-        //assertEquals(40, simpleBean.getAge());
-        //assertEquals("Old Man", simpleBean.getName());
+        assertEquals(40, simpleBean.getAge());
+        assertEquals(("Old Man").toString(), simpleBean.getName());
+        assertEquals(10600.50, simpleBean.getBalance());
 
     }
 

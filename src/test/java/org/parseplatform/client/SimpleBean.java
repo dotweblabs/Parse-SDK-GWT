@@ -1,11 +1,14 @@
 package org.parseplatform.client;
 
 public class SimpleBean {
-
+    
+    @Column
     public String objectId;
 
-
+    @Column
     public int age;
+
+    @Column
     public String name;
     //public Double cash;
     public double balance;
@@ -28,6 +31,18 @@ public class SimpleBean {
 
 
     public int i9;
+
+    public long longint;
+    public short testshort;
+
+
+    public byte testbyte;
+
+    public boolean testboolean;
+
+    public float testfloat;
+    public char testchar;
+
 
 
     public int getAge() {

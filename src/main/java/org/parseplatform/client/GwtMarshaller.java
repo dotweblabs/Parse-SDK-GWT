@@ -87,19 +87,18 @@ public class GwtMarshaller implements Marshaller {
         //iterate for every annotated field since annotations will be done later change this to simple iterator
         for(int c = 0; c <fields.length ; c++) {
 
-            //if(objectFIELD != null && objectFIELD.getName().equals(fields[c].getName())){
-             //   continue;
-            //}
+
             try {
                 //mutable class match to gettype class value
                 Class<?> classType = fields[c].getType();
+
                 //string type to string type
                 String fieldName = fields[c].getName();
 
-                //Browser.getWindow().getConsole().log(classType.getName());
-                //System.out.println("ClassType: " + classType.getName());
+
                 //object value to field object value
                 java.lang.Object value = fields[c].get(instance);
+
                 //field name, field type, value conform to model object
                 marshallValue(fieldName, classType, value, parseMODEL);
 

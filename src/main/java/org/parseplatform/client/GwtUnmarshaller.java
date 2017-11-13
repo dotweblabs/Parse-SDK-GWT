@@ -33,7 +33,7 @@ public class GwtUnmarshaller implements Unmarshaller {
 
         //check if model object has objectId field
         if(objID != null ) {
-            // parseMODEL.putString("objectId", String.valueOf(objID));
+            //parseMODEL.putString("objectId", String.valueOf(objID));
         }
 
         //get type information of object in parameter
@@ -74,17 +74,14 @@ public class GwtUnmarshaller implements Unmarshaller {
                             stringVal = parseObject.get(k).isString();
                             numVal = parseObject.get(k).isNumber();
 
+
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+
                         if (value != null) {
                             //fieldType get name
-                            if (parseObject.get(k).isString() != null) {
-
-                                String stringValue = (String) value;
-                                GwtReflect.fieldSet(declaringClass, fieldName, instance, stringValue);
-                                //parseObject.put(fieldName, new JSONString(stringValue));
-                            } else if (boolVal != null) {
+                         if (boolVal != null) {
                                 //Browser.getWindow().getConsole().log("Boolean type found");
 
                                 Boolean booleanValue = (Boolean) value;
@@ -97,6 +94,7 @@ public class GwtUnmarshaller implements Unmarshaller {
                             } else if (numVal != null) {
 
                                 try {
+                                    //Browser.getWindow().getConsole().log("test int");
                                     int testINT =  Integer.parseInt(parseObject.get(k).toString());
                                     GwtReflect.fieldSet(declaringClass, fieldName, instance, testINT);
                                 }
@@ -107,7 +105,15 @@ public class GwtUnmarshaller implements Unmarshaller {
 
                                 }
 
-                            }
+                            } else if (stringVal != null) {
+
+                             //String stringValue = (String) value;
+                             String getstring = parseObject.getString(fieldName);
+                             //Browser.getWindow().getConsole().log("string");
+                             //Browser.getWindow().getConsole().log(stringValue);
+                             GwtReflect.fieldSet(declaringClass, fieldName, instance, getstring);
+                             //parseObject.put(fieldName, new JSONString(stringValue));
+                         }
                         }
                     }
                 } catch (Exception e) {}
