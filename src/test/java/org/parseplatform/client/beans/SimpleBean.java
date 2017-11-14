@@ -1,4 +1,4 @@
-package org.parseplatform.client;
+package org.parseplatform.client.beans;
 
 import com.google.gwt.reflect.client.strategy.ReflectionStrategy;
 import org.parseplatform.client.annotations.Column;

@@ -15,14 +15,19 @@
 package org.parseplatform.client;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONNumber;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONString;
 import com.google.gwt.junit.client.GWTTestCase;
 import com.google.gwt.reflect.shared.GwtReflect;
 import com.google.gwt.user.client.Window;
+import org.parseplatform.client.beans.ChildBean;
+import org.parseplatform.client.beans.ParentBean;
+import org.parseplatform.client.beans.SimpleBean;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -114,6 +119,63 @@ public class TestGwtUnmarshaller extends GWTTestCase {
 
 
         } while (i.hasNext());
+    }
+
+    public void testParentChildUnmarshaller() {
+
+        ParseObject firstChildObject = new ParseObject();
+        ParseObject secondChildObject = new ParseObject();
+        ParseObject thirdChildObject = new ParseObject();
+
+        firstChildObject.putString("name", "First Child");
+        firstChildObject.putNumber("age", 10);
+        firstChildObject.put("birthdate", new ParseDate("2017-06-23T02:59:59.255Z"));
+        firstChildObject.put("ACL", new ParseACL());
+        ParseRole role = new ParseRole("parserole");
+        firstChildObject.put("role", role);
+        ParseRelation relation = new ParseRelation(new ParseObject("TestObject"));
+        firstChildObject.put("relation", relation);
+
+        JSONObject geoPointRef = new JSONObject();
+        geoPointRef.put("longitude", new JSONNumber(100.10));
+        geoPointRef.put("latitude", new JSONNumber(200.10));
+        firstChildObject.put("geoPoint", ParseGeoPoint.clone(geoPointRef));
+
+        ParseFile file = new ParseFile();
+        firstChildObject.put("file", file);
+
+        ParseObject parseObjectRef = new ParseObject("ReferenceObject");
+        parseObjectRef.setObjectId("0");
+        firstChildObject.put("pointer", new ParsePointer(parseObjectRef));
+
+        firstChildObject.putString("name", "Second Child");
+        firstChildObject.putNumber("age", 20);
+
+        firstChildObject.putString("name", "Third Child");
+        firstChildObject.putNumber("age", 30);
+
+        ParseObject parentObject = new ParseObject();
+        parentObject.putString("name", "The Parent");
+        parentObject.putNumber("age", 80);
+        parentObject.put("favorite", firstChildObject);
+
+        JSONArray children = new JSONArray();
+        children.set(0, firstChildObject);
+        children.set(1, secondChildObject);
+        children.set(3, thirdChildObject);
+
+        parentObject.put("children", children);
+
+        Window.alert(">>>>>>>>  " + parentObject.toString());
+
+        GwtReflect.magicClass(ChildBean.class);
+        GwtReflect.magicClass(ParentBean.class);
+
+        GwtUnmarshaller unmarshaller = GWT.create(GwtUnmarshaller.class);
+
+        ParentBean parentBean = new ParentBean();
+        unmarshaller.unmarshall(ParentBean.class, parentBean, parentObject);
+
     }
 
     public static void log(String s) {

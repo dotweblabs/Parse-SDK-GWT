@@ -15,14 +15,18 @@
 package org.parseplatform.client;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.json.client.JSONNumber;
+import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.junit.client.GWTTestCase;
 import com.google.gwt.reflect.shared.GwtReflect;
 import com.google.gwt.user.client.Window;
+import org.parseplatform.client.beans.ChildBean;
+import org.parseplatform.client.beans.ParentBean;
+import org.parseplatform.client.beans.SimpleBean;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -117,6 +121,42 @@ public class TestGwtMarshaller extends GWTTestCase {
                 }
             }
         } while (i.hasNext());
+    }
+
+    public void testParentChildMarshaller() {
+        ChildBean first = new ChildBean();
+        first.setName("First");
+        first.setAge(10);
+        first.setACL(new ParseACL());
+        first.setBirthdate(new ParseDate("2017-06-23T02:59:59.255Z"));
+        //first.setFile(new ParseFile()); // TODO next
+        JSONObject geoPointRef = new JSONObject();
+        geoPointRef.put("longitude", new JSONNumber(100.10));
+        geoPointRef.put("latitude", new JSONNumber(200.10));
+        first.setGeoPoint(ParseGeoPoint.clone(geoPointRef));
+        ParseRelation relation = new ParseRelation(new ParseObject("TestObject"));
+        first.setRelation(relation);
+
+        ParseObject parseObjectRef = new ParseObject("ReferenceObject");
+        parseObjectRef.setObjectId("0");
+        first.setPointer(new ParsePointer(parseObjectRef));
+        ParseRole role = new ParseRole("parserole");
+        first.setRole(role);
+        first.setPointer(new ParsePointer());
+
+        ChildBean second = new ChildBean();
+        ChildBean third = new ChildBean();
+        ParentBean parentBean = new ParentBean();
+        parentBean.setAge(99);
+        parentBean.setFavorite(first);
+        parentBean.setChildren(Arrays.asList(first,second,third));
+
+        GwtReflect.magicClass(ChildBean.class);
+        GwtReflect.magicClass(ParentBean.class);
+
+        GwtMarshaller marshaller = GWT.create(GwtMarshaller.class);
+
+        ParseObject parseObject = marshaller.marshall(parentBean);
     }
 
     public static void log(String s) {
