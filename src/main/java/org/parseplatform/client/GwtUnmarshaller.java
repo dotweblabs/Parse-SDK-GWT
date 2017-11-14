@@ -10,7 +10,6 @@ import org.parseplatform.util.DateUtil;
 import java.lang.reflect.Field;
 import java.util.*;
 
-@Column
 public class GwtUnmarshaller implements Unmarshaller {
     @Override
     public <T> T unmarshall(Class<T> clazz, Object instance, ParseObject parseObject) {

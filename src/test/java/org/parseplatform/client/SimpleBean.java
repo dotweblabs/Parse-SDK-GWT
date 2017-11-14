@@ -1,10 +1,10 @@
 package org.parseplatform.client;
 
-import com.google.gwt.reflect.client.strategy.GwtRetention;
 import com.google.gwt.reflect.client.strategy.ReflectionStrategy;
-import com.google.gwt.reflect.test.annotations.ComplexAnnotation;
+import org.parseplatform.client.annotations.RuntimeRetention;
 
-
+@RuntimeRetention
+@ReflectionStrategy(keepEverything=true)
 public class SimpleBean {
 
     @Column
