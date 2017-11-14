@@ -1,5 +1,7 @@
 package org.parseplatform.client;
 
+import org.parseplatform.client.annotations.Column;
+
 public class SimpleBean {
 
     @Column
@@ -53,7 +55,6 @@ public class SimpleBean {
         this.age = age;
     }
 
-    @Column
     public String getName() {
         return name;
     }

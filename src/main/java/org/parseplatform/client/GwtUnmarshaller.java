@@ -1,17 +1,15 @@
 package org.parseplatform.client;
 
 import com.google.gwt.json.client.JSONBoolean;
-import com.google.gwt.json.client.JSONNull;
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.reflect.shared.GwtReflect;
-import elemental.client.Browser;
+import org.parseplatform.client.annotations.Column;
 
 import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.Set;
 
-@Column
 public class GwtUnmarshaller implements Unmarshaller {
     @Override
     public <T> T unmarshall(Class<T> clazz, Object instance, ParseObject parseObject) {
