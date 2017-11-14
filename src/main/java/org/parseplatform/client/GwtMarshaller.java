@@ -1,4 +1,5 @@
 package org.parseplatform.client;
+
 import com.google.gwt.core.client.GWT;
 
 import com.google.gwt.dev.javac.asm.CollectClassData;
@@ -14,6 +15,7 @@ import org.parseplatform.util.DateUtil;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.*;
 
 
@@ -56,7 +58,7 @@ public class GwtMarshaller implements Marshaller {
         }
 */
         //check if object in parameter is null
-        if(instance == null){
+        if (instance == null) {
             throw new RuntimeException("Object cannot be null");
         }
         Class<?> declaringClass = instance.getClass();
@@ -65,16 +67,16 @@ public class GwtMarshaller implements Marshaller {
         String objID = null;
         Field objectFIELD = null;
         try {
-             objectFIELD = declaringClass.getField("objectId");
-             objID = GwtReflect.fieldGet(declaringClass, "objectId", instance);
+            objectFIELD = declaringClass.getField("objectId");
+            objID = GwtReflect.fieldGet(declaringClass, "objectId", instance);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
 
         //check if model object has objectId field
-        if(objID != null ) {
-           // parseMODEL.putString("objectId", String.valueOf(objID));
+        if (objID != null) {
+            // parseMODEL.putString("objectId", String.valueOf(objID));
         }
 
         //get type information of object in parameter
@@ -82,120 +84,101 @@ public class GwtMarshaller implements Marshaller {
 
         //get fields in parameter object class
         Field[] fields = GwtReflect.getPublicFields(instance.getClass());
+
         parseMODEL.setObjectId(Integer.toString(fields.length));
         //get annotations but specifically those with column from parameter object skip for now
 
 
         //iterate for every annotated field since annotations will be done later change this to simple iterator
-        for(int c = 0; c <fields.length ; c++) {
+        for (int c = 0; c < fields.length; c++) {
 
 
             try {
                 //mutable class match to gettype class value
-                Class<?> classType = fields[c].getType();
+                Class<?> fieldTYPE = fields[c].getType();
 
                 //string type to string type
                 String fieldName = fields[c].getName();
 
-                //Annotation[] testannotation = fields[c].getAnnotations();
-                Browser.getWindow().getConsole().log("annotation");
-                Browser.getWindow().getConsole().log(fields[c].getAnnotations());
-                //object value to field object value
-                java.lang.Object value = fields[c].get(instance);
+                Annotation[] testannotation = fields[c].getAnnotations();
+                for (int n = 0; n < testannotation.length; n++){
+                    //ignore all non @column
+                    String annotationname = testannotation[n].annotationType().toString();
+                    if (annotationname.substring(annotationname.lastIndexOf('.')+1) == "Column") {
 
-                //field name, field type, value conform to model object
-               marshallValue(fieldName, classType, value, parseMODEL);
+                        java.lang.Object value = fields[c].get(instance);
+
+                        //field name, field type, value conform to model object
+                        marshallValue(fieldName, fieldTYPE, value, parseMODEL);
+                    }
+
+
+                }
+
+                //object value to field object value
 
             } catch (Exception e) {
-                Browser.getWindow().getConsole().log("Error marshalling field " + fields[c].getName() + ":" + e.getMessage());
+                Browser.getWindow().getConsole().warn("Error marshalling field " + fields[c].getName() + ":" + e.getMessage());
             }
         }
         return parseMODEL;
     }
 
-    private static void marshallValue(String fieldName, Class<?> classType, java.lang.Object value, JSONObject parseObject) {
+    private static void marshallValue(String fieldName, Class<?> fieldType, java.lang.Object value, JSONObject parseObject) {
         //check if value is null if null continue, else do nothing
-        if(value != null) {
+        if (value != null) {
             //fieldType get name
-            if(classType.getName() == String.class.getName()) {
 
+            if (fieldType.getName() == String.class.getName()) {
                 String stringValue = (String) value;
                 parseObject.put(fieldName, new JSONString(stringValue));
-            } else if(classType.getName() == Boolean.class.getName() || classType.getName() == boolean.class.getName()) {
-
+            } else if (fieldType.getName() == Boolean.class.getName() || fieldType.getName() == boolean.class.getName()) {
                 Boolean booleanValue = (Boolean) value;
-                if(booleanValue != null) {
+                if (booleanValue != null) {
                     parseObject.put(fieldName, JSONBoolean.getInstance(booleanValue));
                 } else {
                     parseObject.put(fieldName, null);
                 }
-            } else if(classType.getName() == Double.class.getName() || classType.getName() == Integer.class.getName() || classType.getName() == Long.class.getName()) {
-
-                if(value instanceof Double) {
-
+            } else if (fieldType.getName() == Double.class.getName() || fieldType.getName() == Integer.class.getName() || fieldType.getName() == Long.class.getName()) {
+                if (value instanceof Double) {
                     parseObject.put(fieldName, new JSONNumber((Double) value));
-
-                } else if(value instanceof Integer) {
-
+                } else if (value instanceof Integer) {
                     parseObject.put(fieldName, new JSONNumber((Integer) value));
-
-                } else if(value instanceof  Long) {
-
+                } else if (value instanceof Long) {
                     parseObject.put(fieldName, new JSONNumber((Long) value));
-
                 }
-            } else if(classType.getName() == float.class.getName() || classType.getName() == int.class.getName() || classType.getName() ==long.class.getName()) {
-
-
-                if(value.getClass().getName() == float.class.getName()) {
-
+            } else if (fieldType.getName() == float.class.getName() || fieldType.getName() == int.class.getName() || fieldType.getName() == long.class.getName()) {
+               Browser.getWindow().getConsole().log("float int long " + fieldName + value.getClass().getName());
+                if (value.getClass().getName() == float.class.getName()) {
                     parseObject.put(fieldName, new JSONNumber((float) value));
-
-                } else if(value.getClass().getTypeName() == int.class.getName()) {
-
+                } else if (value.getClass().getTypeName() == int.class.getName()) {
                     parseObject.put(fieldName, new JSONNumber((Integer) value));
-
-                } else if(value.getClass().getTypeName() == long.class.getName()) {
-
+                } else if (value.getClass().getTypeName() == long.class.getName()) {
                     parseObject.put(fieldName, new JSONNumber((Long) value));
-
-                }
-                else if(value.getClass().getTypeName() == Integer.class.getName()) {
-
-
+                } else if (value.getClass().getTypeName() == Integer.class.getName()) {
                     parseObject.put(fieldName, new JSONNumber((Integer) value));
-
-                }
-                else if(classType.getName() == int.class.getName()) {
-
+                } else if (fieldType.getName() == int.class.getName()) {
                     parseObject.put(fieldName, new JSONNumber((int) value));
-
-                }
-                else if(value.getClass().getName() == Double.class.getName()) {
-
-
+                } else if (value.getClass().getName() == Double.class.getName()) {
                     parseObject.put(fieldName, new JSONNumber((Double) value));
-
                 }
-
-            }
-            else if(classType.getName() ==Date.class.getName()) {
+                else if (value.getClass().getName() == Long.class.getName()) {
+                    parseObject.put(fieldName, new JSONNumber(Long.parseLong(value.toString())));
+                }
+            } else if (fieldType.getName() == Date.class.getName()) {
                 Browser.getWindow().getConsole().log("Date type found");
                 JSONObject jsonDate = new JSONObject();
                 Date date = (Date) value;
                 jsonDate.put("__type", new JSONString("Date"));
                 jsonDate.put("iso", new JSONString(DateUtil.getStringFormat(date)));
                 parseObject.put(fieldName, jsonDate);
-            }
-            else if(classType.getName() == Map.class.getName()) { // Object
+            } else if (fieldType.getName() == Map.class.getName()) { // Object
                 Browser.getWindow().getConsole().log("Map type found");
                 throw new RuntimeException("Map is not supported use com.parse.gwt.client.types.Object instead");
-            }
-            else if(classType.getName() == List.class.getName()) {
+            } else if (fieldType.getName() == List.class.getName()) {
                 Browser.getWindow().getConsole().log("List type found");
                 throw new RuntimeException("List is not supported use com.parse.gwt.client.types.Array instead");
-            }
-            else if(classType.getName() == File.class.getName()) {
+            } else if (fieldType.getName() == File.class.getName()) {
                 Browser.getWindow().getConsole().log("File type found");
                 JSONObject jsonFile = new JSONObject();
                 File file = (File) value;
@@ -203,16 +186,12 @@ public class GwtMarshaller implements Marshaller {
                 jsonFile.put("url", new JSONString(file.url));
                 jsonFile.put("name", new JSONString(file.name));
                 parseObject.put(fieldName, jsonFile);
-            }
-            else if(classType.getName() == GeoPoint.class.getName()) {
+            } else if (fieldType.getName() == GeoPoint.class.getName()) {
                 Browser.getWindow().getConsole().log("GeoPoint type found");
                 GeoPoint geoPoint = (GeoPoint) value;
                 ParseGeoPoint parseGeoPoint = new ParseGeoPoint(geoPoint.longitude, geoPoint.latitude);
                 parseObject.put(fieldName, parseGeoPoint);
-            }
-            //implement later
-
-             else if(classType.getName() == Pointer.class.getName() ) {
+            } else if (fieldType.getName() == Pointer.class.getName()) {
                 Browser.getWindow().getConsole().log("Pointer type found");
                 Pointer pointer = (Pointer) value;
                 JSONObject jsonPointer = new JSONObject();
@@ -220,41 +199,36 @@ public class GwtMarshaller implements Marshaller {
                 jsonPointer.put("className", new JSONString(pointer.className));
                 jsonPointer.put("objectId", new JSONString(pointer.objectId));
                 parseObject.put(fieldName, jsonPointer);
-            } else if(classType.getName() == Relation.class.getName()) {
+            } else if (fieldType.getName() == Relation.class.getName()) {
                 Browser.getWindow().getConsole().log("Relation type found");
                 Relation relation = (Relation) value;
                 JSONObject jsonRelation = new JSONObject();
                 jsonRelation.put("__type", new JSONString("Relation"));
                 jsonRelation.put("className", new JSONString(relation.className));
                 parseObject.put(fieldName, jsonRelation);
-            } else if(classType.getName() == Array.class.getName()) {
+            } else if (fieldType.getName() == Array.class.getName()) {
                 Browser.getWindow().getConsole().log("Array type found");
                 Array arrayVaulue = (Array) value;
                 parseObject.put(fieldName, (JSONArray) value);
-            } else if(classType.getName() == (Objek.class).getName()) {
+            } else if (fieldType.getName() == (Objek.class).getName()) {
                 Browser.getWindow().getConsole().log("Object type found");
                 parseObject.put(fieldName, (JSONObject) value);
-            }
-            else if(classType.getName() == byte.class.getName()) {
-                //prevent type erasure
-                //convert byte to integer
-                int byteconvert = (int) value;
-            }
-            else if(classType.getName() == short.class.getName()) {
-                //prevent type erasure
-            }
-            else if(classType.getName() == char.class.getName()) {
-                //prevent type erasure and JSON errors
+            } else if (fieldType.getName() == byte.class.getName()) {
+                Browser.getWindow().getConsole().warn("byte type found " + value.toString());
+                parseObject.put(fieldName, new JSONNumber(Integer.parseInt(value.toString()) ));
+            } else if (fieldType.getName() == short.class.getName()) {
+                parseObject.put(fieldName, new JSONNumber((short) value));
+            } else if (fieldType.getName() == char.class.getName()) {
+                //prevent JSON format errors
                 //convert char to integer
-                int charconvert = (int) value;
-            }
-            else if(classType.getName() == double.class.getName()) {
-                //prevent type erasure
-            }
-             else {
+                parseObject.put( fieldName, new JSONString(value.toString()));
+            } else if (fieldType.getName() == double.class.getName()) {
+                parseObject.put(fieldName, new JSONNumber(Double.parseDouble(value.toString())));
+            } else {
                 throw new RuntimeException("Unsupported type for field");
             }
         } else {
+            Browser.getWindow().getConsole().log("null value");
             parseObject.put(fieldName, JSONNull.getInstance());
         }
     }
@@ -263,20 +237,18 @@ public class GwtMarshaller implements Marshaller {
 
 
 /**
- *
  * Copyright (c) 2017 Dotweblabs Web Technologies and others. All rights reserved.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- * 	   http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 /*

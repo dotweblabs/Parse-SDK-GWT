@@ -1,18 +1,16 @@
 /**
- *
  * Copyright (c) 2017 Dotweblabs Web Technologies and others. All rights reserved.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- * 	   http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 package org.parseplatform.client;
 
@@ -23,17 +21,18 @@ import com.google.gwt.reflect.shared.GwtReflect;
 import com.google.gwt.user.client.Window;
 import elemental.client.Browser;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
- *
  * Unit tests of {@link Where}
  *
  * @author Kerby Martino
- * @since 0-SNAPSHOT
  * @version 0-SNAPSHOT
- *
+ * @since 0-SNAPSHOT
  */
 public class GwtReflectTest extends GWTTestCase {
 
@@ -45,39 +44,37 @@ public class GwtReflectTest extends GWTTestCase {
 
     public void testSimpleBean() {
         GwtReflect.magicClass(SimpleBean.class);
+
         SimpleBean simpleBean = new SimpleBean();
         try {
             //get all fields and methods
             List<String> fieldnames = new ArrayList<>();
             List<String> methodnames = new ArrayList<>();
             Class<?> declaringClass = simpleBean.getClass();
-            Object[]  fields = GwtReflect.getPublicFields(declaringClass);
-            Object[]  methods = GwtReflect.getPublicMethods(declaringClass);
-
-
-
+            Object[] fields = GwtReflect.getPublicFields(declaringClass);
+            Object[] methods = GwtReflect.getPublicMethods(declaringClass);
 
 
             // check fields
-            for (int c = 0; c < methods.length ; c ++) {
+            for (int c = 0; c < methods.length; c++) {
 
-                methodnames.add(methods[c].toString().substring(methods[c].toString().lastIndexOf('.')+1));
+                methodnames.add(methods[c].toString().substring(methods[c].toString().lastIndexOf('.') + 1));
             }
-            for (int c = 0; c < methodnames.size() ; c ++) {
+            for (int c = 0; c < methodnames.size(); c++) {
                 Window.alert("method name :" + methodnames.get(c));
 
             }
             //GwtReflect.fieldSet(SimpleBean.class, "age", simpleBean, 10);
             //GwtReflect.fieldSet(SimpleBean.class, "name", simpleBean, "Juan Dela Cruz");
-           // String reflection = "";
+            // String reflection = "";
 
             //reflection = Boolean.toString(fields.getClass().isArray());
 
 //            Browser.getWindow().getConsole().log(simpleBean.getName());
 //            Browser.getWindow().getConsole().log(simpleBean.getAge());
-           // Window.alert(fields[0].toString());
-           // Window.alert(simpleBean.getName());
-           // Window.alert(simpleBean.getAge() + "");
+            // Window.alert(fields[0].toString());
+            // Window.alert(simpleBean.getName());
+            // Window.alert(simpleBean.getAge() + "");
 //            Browser.getWindow().getConsole().log(simpleBean.getName());
 //            Browser.getWindow().getConsole().log(simpleBean.getAge());
             //Window.alert(simpleBean.getName());
@@ -91,7 +88,9 @@ public class GwtReflectTest extends GWTTestCase {
 
     public void testMarshall() {
         GwtReflect.magicClass(SimpleBean.class);
+
         GwtMarshaller marshaller = GWT.create(GwtMarshaller.class);
+
         SimpleBean simpleBean = new SimpleBean();
         simpleBean.setAge(50);
         simpleBean.setName("Old Guy");
@@ -99,18 +98,17 @@ public class GwtReflectTest extends GWTTestCase {
         try {
 
             GwtReflect.fieldSet(SimpleBean.class, "objectId", simpleBean, "123");
-            simpleBean.setI0(0);
-            simpleBean.setI1(1);
-            simpleBean.setI2(2);
-            simpleBean.setI3(3);
-            simpleBean.setI4(4);
-            simpleBean.setI5(5);
+            GwtReflect.fieldSet(SimpleBean.class, "i0", simpleBean, (int) 123);
+            GwtReflect.fieldSet(SimpleBean.class, "i1", simpleBean, (int) 456);
+            GwtReflect.fieldSet(SimpleBean.class, "i2", simpleBean, (int) 789);
+            GwtReflect.fieldSet(SimpleBean.class, "i4", simpleBean, (int) 0);
+            GwtReflect.fieldSet(SimpleBean.class, "testbyte", simpleBean, (byte) 32);
+            GwtReflect.fieldSet(SimpleBean.class, "longint", simpleBean, (long) 123456789);
+            simpleBean.setTestchar('c');
 
 
-
+        } catch (Exception e) {
         }
-
-        catch (Exception e){}
 
         //simple bean to parse objects using accessors and mutators
 
@@ -126,7 +124,9 @@ public class GwtReflectTest extends GWTTestCase {
 
     public void testUnmarshaller() {
         GwtReflect.magicClass(SimpleBean.class);
+
         GwtUnmarshaller unmarshaller = GWT.create(GwtUnmarshaller.class);
+
         double testDOUBLE = 10600.50;
         ParseObject parseObject = new ParseObject();
         parseObject.putString("objectId", "123");
@@ -137,20 +137,66 @@ public class GwtReflectTest extends GWTTestCase {
         parseObject.putNumber("i3", 3);
         parseObject.putNumber("i0", 0);
         parseObject.putNumber("balance", testDOUBLE);
+        parseObject.putNumber("testbyte", 123);
+
         Window.alert("<<<<<<<<" + parseObject.toString());
         SimpleBean simpleBean = new SimpleBean();
-
+        Class<?> archetype = simpleBean.getClass();
         //get non null values from model
 
         simpleBean = unmarshaller.unmarshall(SimpleBean.class, simpleBean, parseObject);
         //get field names, get method names
-        assertEquals(40, simpleBean.getAge());
-        assertEquals(("Old Man").toString(), simpleBean.getName());
+        //iterate field contents
+        Object testNAME = "Old Man";
+
+        Set<?> s = parseObject.keySet();
+        //iterate and persist keys from model
+        Window.alert("BEGIN TEST-----------------");
+        Iterator<?> i = s.iterator();
+        do {
+            String k = i.next().toString();
+            Field[] fields = GwtReflect.getPublicFields(archetype);
+            for (int c = 0; c < fields.length; c++) {
+
+
+                if (k == fields[c].getName()) {
+                    String message = null;
+                    try {
+                        message = k + " " + parseObject.get(k).toString() + " <->" + " " + fields[c].getName() + " " + fields[c].get(simpleBean);
+                        Object expectableparse = parseObject.get(k).toString();
+                        Object expectablefield = (String)fields[c].get(simpleBean);
+                        if (expectablefield == expectableparse) {
+                            message = "PASS: " + k + " " + parseObject.get(k).toString() + " <->" + " " + fields[c].getName() + " " + fields[c].get(simpleBean);
+
+                        }
+                        else {
+                            message = "FAIL: " + k + " " + parseObject.get(k).toString() + " <->" + " " + fields[c].getName() + " " + fields[c].get(simpleBean);
+
+                        }
+                        assertEquals(expectableparse, expectablefield);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    Window.alert(message);
+                }
+            }
+
+
+        } while (i.hasNext());
+
+
+        try {
+            assertEquals(testNAME, GwtReflect.fieldGet(SimpleBean.class, "name", simpleBean));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         assertEquals(10600.50, simpleBean.getBalance());
 
     }
 
-    public static void log(String s){
+    public static void log(String s) {
         System.out.println(s);
     }
 

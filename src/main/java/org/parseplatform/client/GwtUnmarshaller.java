@@ -1,28 +1,30 @@
 package org.parseplatform.client;
 
-import com.google.gwt.json.client.JSONBoolean;
-import com.google.gwt.json.client.JSONNull;
-import com.google.gwt.json.client.JSONNumber;
-import com.google.gwt.json.client.JSONString;
+import com.google.gwt.core.shared.GWT;
+import com.google.gwt.json.client.*;
 import com.google.gwt.reflect.shared.GwtReflect;
 import elemental.client.Browser;
+import org.parseplatform.types.*;
+import org.parseplatform.util.DateUtil;
 
 import java.lang.reflect.Field;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 @Column
 public class GwtUnmarshaller implements Unmarshaller {
     @Override
     public <T> T unmarshall(Class<T> clazz, Object instance, ParseObject parseObject) {
-        if(instance == null){
+
+        if (instance == null) {
             throw new RuntimeException("Object cannot be null");
         }
+
         Class<?> declaringClass = instance.getClass();
 
         //get objectID from model object
         String objID = null;
         Field objectFIELD = null;
+
         try {
             objectFIELD = declaringClass.getField("objectId");
             objID = GwtReflect.fieldGet(declaringClass, "objectId", instance);
@@ -31,158 +33,188 @@ public class GwtUnmarshaller implements Unmarshaller {
         }
 
 
-
         //check if model object has objectId field
-        if(objID != null ) {
+        if (objID != null) {
             //parseMODEL.putString("objectId", String.valueOf(objID));
         }
 
-        //get type information of object in parameter
-
-
-        //get fields in parameter object class
-
-        //parseObject.setObjectId(Integer.toString(fields.length));
         //get annotations but specifically those with column from parameter object skip for now
 
-
-       //match keys from parse model to mutant
-        Set<?> s =  parseObject.keySet();
-        //Browser.getWindow().getConsole().log("key size");
-        //Browser.getWindow().getConsole().log(s.size());
-        //Set<String> keyset = parseObject.keySet();
-        //iterate and persist keys from model
         // get fields from mutant
         Field[] fields = GwtReflect.getPublicFields(instance.getClass());
+        //match keys from parse model to mutant
+        Set<?> s = parseObject.keySet();
+        //iterate and persist keys from model
+
         Iterator<?> i = s.iterator();
         do {
             String k = i.next().toString();
             //iterate through mutant fields to match model
             for (int c = 0; c < fields.length; c++) {
+
+                JSONBoolean boolVal = null;
+                JSONString stringVal = null;
+                JSONNumber numVal = null;
+                JSONObject obVal = null;
+                Object value = null;
+
                 try {
-                    if (k == fields[c].getName()) {
+                    // JSON primitives
+                    value = parseObject.get(k);
+                    boolVal = parseObject.get(k).isBoolean();
+                    stringVal = parseObject.get(k).isString();
+                    numVal = parseObject.get(k).isNumber();
+                    obVal = parseObject.get(k).isObject();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    if (parseObject.get(k) != null && k == fields[c].getName()) {
                         //Browser.getWindow().getConsole().log("match");
-
-                        Class<?> classType = fields[c].getType();
+                        Class<?> fieldType = fields[c].getType();
+                        Browser.getWindow().getConsole().log(fieldType.getName());
                         String fieldName = fields[c].getName();
-                        Object value = null;
-                        JSONBoolean boolVal = null;
-                        JSONString stringVal = null;
-                        JSONNumber numVal = null;
-                        try {
-                            value = parseObject.get(k);
-                            boolVal = parseObject.get(k).isBoolean();
-                            stringVal = parseObject.get(k).isString();
-                            numVal = parseObject.get(k).isNumber();
-
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        Browser.getWindow().getConsole().log("unmarshall " + fieldName +  " " + fieldType.getName() + " " + parseObject.get(k));
+                        if (fieldType.getName() == String.class.getName()) {
+                            String converter =  parseObject.get(k).toString();
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
+                        }
+                        else if (fieldType.getName() == Boolean.class.getName()){
+                            Boolean converter = Boolean.parseBoolean( parseObject.get(k).toString());
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
+                        }
+                        else if (fieldType.getName() == boolean.class.getName()) {
+                            boolean converter = Boolean.parseBoolean( parseObject.get(k).toString());
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
+                        }
+                        else if (fieldType.getName() == Float.class.getName() ) {
+                            Float converter = Float.parseFloat( parseObject.get(k).toString());
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
+                        }
+                        else if (fieldType.getName() == Double.class.getName() ) {
+                            Double converter = Double.parseDouble( parseObject.get(k).toString());
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
+                        }
+                        else if (fieldType.getName() == Integer.class.getName() ) {
+                            Integer converter = Integer.parseInt( parseObject.get(k).toString());
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
+                        }
+                        else if (fieldType.getName() == Long.class.getName() ) {
+                            Long converter = Long.parseLong( parseObject.get(k).toString());
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
+                        }
+                        else if (fieldType.getName() == Short.class.getName()) {
+                            Short converter = Short.parseShort( parseObject.get(k).toString());
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
+                        }
+                        else if (fieldType.getName() == float.class.getName()) {
+                            float converter = Float.parseFloat( parseObject.get(k).toString());
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
+                        }
+                        else if (fieldType.getName() == double.class.getName()) {
+                            double converter = Double.parseDouble( parseObject.get(k).toString());
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
+                        }
+                        else if (fieldType.getName() == int.class.getName()) {
+                            int converter =  Integer.parseInt( parseObject.get(k).toString());
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
+                        }
+                        else if (fieldType.getName() == long.class.getName() ) {
+                            long converter = Long.parseLong( parseObject.get(k).toString());
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
+                        }
+                        else if (fieldType.getName() == short.class.getName() ) {
+                            short converter = Short.parseShort( parseObject.get(k).toString());
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
+                        }
+                        else if (fieldType.getName() == byte.class.getName()) {
+                            byte converter = Byte.parseByte( parseObject.get(k).toString());
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
+                        }
+                        else if (fieldType.getName() == char.class.getName()) {
+                            char converter =  parseObject.get(k).toString().charAt(0);
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
+                        }
+                        else {
+                            throw new RuntimeException("Unsupported type for field");
                         }
 
-                        if (value != null) {
-                            //fieldType get name
-                         if (boolVal != null) {
-                                //Browser.getWindow().getConsole().log("Boolean type found");
+                        if (fieldType.getName() == Date.class.getName()) {
+                            Browser.getWindow().getConsole().log("Date type found");
+                            JSONObject jsonDate = new JSONObject();
+                            Date date = (Date) value;
+                            jsonDate.put("__type", new JSONString("Date"));
+                            jsonDate.put("iso", new JSONString(DateUtil.getStringFormat(date)));
 
-                                Boolean booleanValue = (Boolean) value;
-                                GwtReflect.fieldSet(declaringClass, fieldName, instance, booleanValue);
-                                if (booleanValue != null) {
-                                    //parseObject.put(fieldName, JSONBoolean.getInstance(booleanValue));
-                                } else {
-                                    // parseObject.put(fieldName, null);
-                                }
-                            } else if (numVal != null) {
+                        }
+                        else if (fieldType.getName() == Map.class.getName()) { // Object
+                            Browser.getWindow().getConsole().log("Map type found");
+                            throw new RuntimeException("Map is not supported use com.parse.gwt.client.types.Object instead");
+                        }
+                        else if (fieldType.getName() == List.class.getName()) {
+                            Browser.getWindow().getConsole().log("List type found");
+                            throw new RuntimeException("List is not supported use com.parse.gwt.client.types.Array instead");
+                        }
+                        else if (fieldType.getName() == File.class.getName()) {
+                            Browser.getWindow().getConsole().log("File type found");
+                            JSONObject jsonFile = new JSONObject();
+                            File file = (File) value;
+                            jsonFile.put("__type", new JSONString("File"));
+                            jsonFile.put("url", new JSONString(file.url));
+                            jsonFile.put("name", new JSONString(file.name));
 
-                                try {
-                                    //Browser.getWindow().getConsole().log("test int");
-                                    int testINT =  Integer.parseInt(parseObject.get(k).toString());
-                                    GwtReflect.fieldSet(declaringClass, fieldName, instance, testINT);
-                                }
+                        }
+                        else if (fieldType.getName() == GeoPoint.class.getName()) {
+                            Browser.getWindow().getConsole().log("GeoPoint type found");
+                            GeoPoint geoPoint = (GeoPoint) value;
+                            ParseGeoPoint parseGeoPoint = new ParseGeoPoint(geoPoint.longitude, geoPoint.latitude);
 
-                                catch (Exception e) {
-                                    double testDOUBLE = Double.parseDouble(parseObject.get(k).toString());
-                                    GwtReflect.fieldSet(declaringClass, fieldName, instance, testDOUBLE);
+                        }
+                        else if (fieldType.getName() == Pointer.class.getName()) {
+                            Browser.getWindow().getConsole().log("Pointer type found");
+                            Pointer pointer = (Pointer) value;
+                            JSONObject jsonPointer = new JSONObject();
+                            jsonPointer.put("__type", new JSONString("Pointer"));
+                            jsonPointer.put("className", new JSONString(pointer.className));
+                            jsonPointer.put("objectId", new JSONString(pointer.objectId));
 
-                                }
+                        }
+                        else if (fieldType.getName() == Relation.class.getName()) {
+                            Browser.getWindow().getConsole().log("Relation type found");
+                            Relation relation = (Relation) value;
+                            JSONObject jsonRelation = new JSONObject();
+                            jsonRelation.put("__type", new JSONString("Relation"));
+                            jsonRelation.put("className", new JSONString(relation.className));
 
-                            } else if (stringVal != null) {
+                        }
+                        else if (fieldType.getName() == Array.class.getName()) {
+                            Browser.getWindow().getConsole().log("Array type found");
+                            Array arrayVaulue = (Array) value;
 
-                             //String stringValue = (String) value;
-                             String getstring = parseObject.getString(fieldName);
-                             //Browser.getWindow().getConsole().log("string");
-                             //Browser.getWindow().getConsole().log(stringValue);
-                             GwtReflect.fieldSet(declaringClass, fieldName, instance, getstring);
-                             //parseObject.put(fieldName, new JSONString(stringValue));
-                         }
+                        }
+                        else if (fieldType.getName() == (Objek.class).getName()) {
+                            Browser.getWindow().getConsole().log("Object type found");
+
+                        }
+                        else {
+                            throw new RuntimeException("Unsupported type for field");
                         }
                     }
-                } catch (Exception e) {}
+
+                } catch (Exception e) {
+                }
 
             }
-        }while(i.hasNext());
+        } while (i.hasNext());
 
 
+        //implement later
 
-        /*
 
-            //implement later
-
-            else if(classType.getName() ==Date.class.getName()) {
-                Browser.getWindow().getConsole().log("Date type found");
-                JSONObject jsonDate = new JSONObject();
-                Date date = (Date) value;
-                jsonDate.put("__type", new JSONString("Date"));
-                jsonDate.put("iso", new JSONString(DateUtil.getStringFormat(date)));
-                parseObject.put(fieldName, jsonDate);
-            } else if(classType.getName() == Map.class.getName()) { // Object
-                Browser.getWindow().getConsole().log("Map type found");
-                throw new RuntimeException("Map is not supported use com.parse.gwt.client.types.Object instead");
-            } else if(classType.getName() == List.class.getName()) {
-                Browser.getWindow().getConsole().log("List type found");
-                throw new RuntimeException("List is not supported use com.parse.gwt.client.types.Array instead");
-            } else if(classType.getName() == File.class.getName()) {
-                Browser.getWindow().getConsole().log("File type found");
-                JSONObject jsonFile = new JSONObject();
-                File file = (File) value;
-                jsonFile.put("__type", new JSONString("File"));
-                jsonFile.put("url", new JSONString(file.url));
-                jsonFile.put("name", new JSONString(file.name));
-                parseObject.put(fieldName, jsonFile);
-            } else if(classType.getName == GeoPoint.class.getName()) {
-                Browser.getWindow().getConsole().log("GeoPoint type found");
-                GeoPoint geoPoint = (GeoPoint) value;
-                ParseGeoPoint parseGeoPoint = new ParseGeoPoint(geoPoint.longitude, geoPoint.latitude);
-                parseObject.put(fieldName, parseGeoPoint);
-            } else if(classType.getName() == Pointer.class.getName() ) {
-                Browser.getWindow().getConsole().log("Pointer type found");
-                Pointer pointer = (Pointer) value;
-                JSONObject jsonPointer = new JSONObject();
-                jsonPointer.put("__type", new JSONString("Pointer"));
-                jsonPointer.put("className", new JSONString(pointer.className));
-                jsonPointer.put("objectId", new JSONString(pointer.objectId));
-                parseObject.put(fieldName, jsonPointer);
-            } else if(classType.getName() == Relation.class.getName()) {
-                Browser.getWindow().getConsole().log("Relation type found");
-                Relation relation = (Relation) value;
-                JSONObject jsonRelation = new JSONObject();
-                jsonRelation.put("__type", new JSONString("Relation"));
-                jsonRelation.put("className", new JSONString(relation.className));
-                parseObject.put(fieldName, jsonRelation);
-            } else if(classType.getName() == Array.class.getName()) {
-                Browser.getWindow().getConsole().log("Array type found");
-                Array arrayVaulue = (Array) value;
-                parseObject.put(fieldName, (JSONArray) value);
-            } else if(classType.equals(Objek.class)) {
-                Browser.getWindow().getConsole().log("Object type found");
-                parseObject.put(fieldName, (JSONObject) value);
-            }
-/          else {
-                throw new RuntimeException("Unsupported type for field");
-            }
-        } else {
-            parseObject.put(fieldName, JSONNull.getInstance());
-        }*/
         return (T) instance;
     }
+
+
+
 }

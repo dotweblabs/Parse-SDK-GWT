@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module rename-to="Parse">
+  <source path="com.google.gwt.reflect.test.annotations"/>
+  <source path="com.google.gwt.reflect.test.cases"/>
   <inherits name="com.google.gwt.core.Core" />
   <inherits name="com.google.gwt.user.User"/>
   <inherits name="com.google.gwt.i18n.I18N"/>
@@ -15,5 +17,7 @@
   <source path="client"/>
   <source path="types"/>
   <source path="util"/>
+  <source path="annotations"/>
+  <source path="annotations"/>
   <set-configuration-property name="gwt.reflect.never.fail" value="true" />
 </module>

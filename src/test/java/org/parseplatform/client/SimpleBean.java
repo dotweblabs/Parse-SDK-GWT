@@ -1,5 +1,10 @@
 package org.parseplatform.client;
 
+import com.google.gwt.reflect.client.strategy.GwtRetention;
+import com.google.gwt.reflect.client.strategy.ReflectionStrategy;
+import com.google.gwt.reflect.test.annotations.ComplexAnnotation;
+
+
 public class SimpleBean {
 
     @Column
@@ -12,38 +17,57 @@ public class SimpleBean {
     public String name;
     //public Double cash;
     public double balance;
+
+    @Column
     public int i0;
+
+    @Column
     public int i1;
+
+    @Column
     public int i2;
+
+    @Column
     public int i3;
+
+    @Column
     public int i4;
+
+    @Column
     public int i5;
 
-
-
+    @Column
     public int i6;
 
-
+    @Column
     public int i7;
 
-
+    @Column
     public int i8;
 
-
+    @Column
     public int i9;
 
+    @Column
     public long longint;
+
+    @Column
     public short testshort;
 
-
+    @Column
     public byte testbyte;
 
+    @Column
     public boolean testboolean;
 
+    @Column
     public float testfloat;
+
+    @Column
     public char testchar;
 
-
+    @Column
+    public String nullstr = null;
 
     public int getAge() {
         return age;
@@ -53,24 +77,15 @@ public class SimpleBean {
         this.age = age;
     }
 
-    @Column
+
     public String getName() {
         return name;
     }
 
+
     public void setName(String name) {
         this.name = name;
     }
-
-   // public Double getCash() {
-   //     return cash;
-   // }
-
-   // public void setCash(Double cash) {
-
-    //this.cash = cash;
-    //}
-
 
     public int getI0() {
         return i0;
@@ -152,14 +167,13 @@ public class SimpleBean {
         this.i1 = i1;
     }
 
-
     public double getBalance() {
-    return balance;
-    }
-    public void setBalance(double balance) {
-    this.balance = balance;
+        return balance;
     }
 
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
 
     public String getObjectId() {
         return objectId;
@@ -167,5 +181,21 @@ public class SimpleBean {
 
     public void setObjectId(String objectId) {
         this.objectId = objectId;
+    }
+
+    public char getTestchar() {
+        return testchar;
+    }
+
+    public void setTestchar(char testchar) {
+        this.testchar = testchar;
+    }
+
+    public byte getTestbyte() {
+        return testbyte;
+    }
+
+    public void setTestbyte(byte testbyte) {
+        this.testbyte = testbyte;
     }
 }
