@@ -1,3 +1,6 @@
+## 0-SNAPSHOT - 11/14/17
+- Added JSONObject parametarized constructor for ParseACL
+
 ## 0-SNAPSHOT - 11/09/17
 - Fixed Parse config not being loaded to JSON object
 
