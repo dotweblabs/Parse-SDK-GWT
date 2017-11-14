@@ -1,6 +1,7 @@
 package org.parseplatform.client;
 
 import com.google.gwt.reflect.client.strategy.ReflectionStrategy;
+import org.parseplatform.client.annotations.Column;
 import org.parseplatform.client.annotations.RuntimeRetention;
 
 @RuntimeRetention
@@ -11,45 +12,16 @@ public class SimpleBean {
     public String objectId;
 
     @Column
-    public int age;
+    public String nullstr = null;
 
     @Column
-    public String name;
-    //public Double cash;
-    public double balance;
+    public int testint;
 
     @Column
-    public int i0;
+    public double testdouble;
 
     @Column
-    public int i1;
-
-    @Column
-    public int i2;
-
-    @Column
-    public int i3;
-
-    @Column
-    public int i4;
-
-    @Column
-    public int i5;
-
-    @Column
-    public int i6;
-
-    @Column
-    public int i7;
-
-    @Column
-    public int i8;
-
-    @Column
-    public int i9;
-
-    @Column
-    public long longint;
+    public long testlong;
 
     @Column
     public short testshort;
@@ -67,113 +39,34 @@ public class SimpleBean {
     public char testchar;
 
     @Column
-    public String nullstr = null;
+    public Integer testInteger;
 
-    public int getAge() {
-        return age;
-    }
+    @Column
+    public Double testDouble;
 
-    public void setAge(int age) {
-        this.age = age;
-    }
+    @Column
+    public Long testLong;
 
+    @Column
+    public Short testShort;
 
-    public String getName() {
-        return name;
-    }
+    @Column
+    public Byte testByte;
 
+    @Column
+    public Boolean testBoolean;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    @Column
+    public Float testFloat;
 
-    public int getI0() {
-        return i0;
-    }
+    @Column
+    public Character testCharacter;
 
-    public void setI0(int i0) {
-        this.i0 = i0;
-    }
+    @Column
+    public byte[] testbytes;
 
-    public int getI9() {
-        return i9;
-    }
-
-    public void setI9(int i9) {
-        this.i9 = i9;
-    }
-
-    public int getI8() {
-        return i8;
-    }
-
-    public void setI8(int i8) {
-        this.i8 = i8;
-    }
-
-    public int getI7() {
-        return i7;
-    }
-
-    public void setI7(int i7) {
-        this.i7 = i7;
-    }
-
-    public int getI6() {
-        return i6;
-    }
-
-    public void setI6(int i6) {
-        this.i6 = i6;
-    }
-
-    public int getI5() {
-        return i5;
-    }
-
-    public void setI5(int i5) {
-        this.i5 = i5;
-    }
-
-    public int getI4() {
-        return i4;
-    }
-
-    public void setI4(int i4) {
-        this.i4 = i4;
-    }
-
-    public int getI3() {
-        return i3;
-    }
-
-    public void setI3(int i3) {
-        this.i3 = i3;
-    }
-
-    public int getI2() {
-        return i2;
-    }
-
-    public void setI2(int i2) {
-        this.i2 = i2;
-    }
-
-    public int getI1() {
-        return i1;
-    }
-
-    public void setI1(int i1) {
-        this.i1 = i1;
-    }
-
-    public double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
+    @Column
+    public Byte[] testBytes;
 
     public String getObjectId() {
         return objectId;
@@ -181,6 +74,70 @@ public class SimpleBean {
 
     public void setObjectId(String objectId) {
         this.objectId = objectId;
+    }
+
+    public String getNullstr() {
+        return nullstr;
+    }
+
+    public void setNullstr(String nullstr) {
+        this.nullstr = nullstr;
+    }
+
+    public int getTestint() {
+        return testint;
+    }
+
+    public void setTestint(int testint) {
+        this.testint = testint;
+    }
+
+    public double getTestdouble() {
+        return testdouble;
+    }
+
+    public void setTestdouble(double testdouble) {
+        this.testdouble = testdouble;
+    }
+
+    public long getTestlong() {
+        return testlong;
+    }
+
+    public void setTestlong(long testlong) {
+        this.testlong = testlong;
+    }
+
+    public short getTestshort() {
+        return testshort;
+    }
+
+    public void setTestshort(short testshort) {
+        this.testshort = testshort;
+    }
+
+    public byte getTestbyte() {
+        return testbyte;
+    }
+
+    public void setTestbyte(byte testbyte) {
+        this.testbyte = testbyte;
+    }
+
+    public boolean isTestboolean() {
+        return testboolean;
+    }
+
+    public void setTestboolean(boolean testboolean) {
+        this.testboolean = testboolean;
+    }
+
+    public float getTestfloat() {
+        return testfloat;
+    }
+
+    public void setTestfloat(float testfloat) {
+        this.testfloat = testfloat;
     }
 
     public char getTestchar() {
@@ -191,11 +148,83 @@ public class SimpleBean {
         this.testchar = testchar;
     }
 
-    public byte getTestbyte() {
-        return testbyte;
+    public Integer getTestInteger() {
+        return testInteger;
     }
 
-    public void setTestbyte(byte testbyte) {
-        this.testbyte = testbyte;
+    public void setTestInteger(Integer testInteger) {
+        this.testInteger = testInteger;
+    }
+
+    public Double getTestDouble() {
+        return testDouble;
+    }
+
+    public void setTestDouble(Double testDouble) {
+        this.testDouble = testDouble;
+    }
+
+    public Long getTestLong() {
+        return testLong;
+    }
+
+    public void setTestLong(Long testLong) {
+        this.testLong = testLong;
+    }
+
+    public Short getTestShort() {
+        return testShort;
+    }
+
+    public void setTestShort(Short testShort) {
+        this.testShort = testShort;
+    }
+
+    public Byte getTestByte() {
+        return testByte;
+    }
+
+    public void setTestByte(Byte testByte) {
+        this.testByte = testByte;
+    }
+
+    public Boolean getTestBoolean() {
+        return testBoolean;
+    }
+
+    public void setTestBoolean(Boolean testBoolean) {
+        this.testBoolean = testBoolean;
+    }
+
+    public Float getTestFloat() {
+        return testFloat;
+    }
+
+    public void setTestFloat(Float testFloat) {
+        this.testFloat = testFloat;
+    }
+
+    public Character getTestCharacter() {
+        return testCharacter;
+    }
+
+    public void setTestCharacter(Character testCharacter) {
+        this.testCharacter = testCharacter;
+    }
+
+    public byte[] getTestbytes() {
+        return testbytes;
+    }
+
+    public void setTestbytes(byte[] testbytes) {
+        this.testbytes = testbytes;
+    }
+
+    public Byte[] getTestBytes() {
+        return testBytes;
+    }
+
+    public void setTestBytes(Byte[] testBytes) {
+        this.testBytes = testBytes;
     }
 }

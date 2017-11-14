@@ -13,43 +13,33 @@ import java.util.*;
 public class GwtUnmarshaller implements Unmarshaller {
     @Override
     public <T> T unmarshall(Class<T> clazz, Object instance, ParseObject parseObject) {
-
         if (instance == null) {
             throw new RuntimeException("Object cannot be null");
         }
-
         Class<?> declaringClass = instance.getClass();
-
         //get objectID from model object
         String objID = null;
         Field objectFIELD = null;
-
-
         //check if model object has objectId field
         if (objID != null) {
             //parseMODEL.putString("objectId", String.valueOf(objID));
         }
-
         //get annotations but specifically those with column from parameter object skip for now
-
         // get fields from mutant
         Field[] fields = GwtReflect.getPublicFields(instance.getClass());
         //match keys from parse model to mutant
         Set<?> s = parseObject.keySet();
         //iterate and persist keys from model
-
         Iterator<?> i = s.iterator();
         do {
             String k = i.next().toString();
             //iterate through mutant fields to match model
             for (int c = 0; c < fields.length; c++) {
-
                 JSONBoolean boolVal = null;
                 JSONString stringVal = null;
                 JSONNumber numVal = null;
                 JSONObject obVal = null;
                 Object value = null;
-
                 try {
                     // JSON primitives
                     value = parseObject.get(k);
@@ -60,7 +50,6 @@ public class GwtUnmarshaller implements Unmarshaller {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
                 try {
                     if (parseObject.get(k) != null && k == fields[c].getName()) {
                         //Browser.getWindow().getConsole().log("match");
@@ -131,14 +120,12 @@ public class GwtUnmarshaller implements Unmarshaller {
                         else {
                             throw new RuntimeException("Unsupported type for field");
                         }
-
                         if (fieldType.getName() == Date.class.getName()) {
                             Browser.getWindow().getConsole().log("Date type found");
                             JSONObject jsonDate = new JSONObject();
                             Date date = (Date) value;
                             jsonDate.put("__type", new JSONString("Date"));
                             jsonDate.put("iso", new JSONString(DateUtil.getStringFormat(date)));
-
                         }
                         else if (fieldType.getName() == Map.class.getName()) { // Object
                             Browser.getWindow().getConsole().log("Map type found");
@@ -155,13 +142,11 @@ public class GwtUnmarshaller implements Unmarshaller {
                             jsonFile.put("__type", new JSONString("File"));
                             jsonFile.put("url", new JSONString(file.url));
                             jsonFile.put("name", new JSONString(file.name));
-
                         }
                         else if (fieldType.getName() == GeoPoint.class.getName()) {
                             Browser.getWindow().getConsole().log("GeoPoint type found");
                             GeoPoint geoPoint = (GeoPoint) value;
                             ParseGeoPoint parseGeoPoint = new ParseGeoPoint(geoPoint.longitude, geoPoint.latitude);
-
                         }
                         else if (fieldType.getName() == Pointer.class.getName()) {
                             Browser.getWindow().getConsole().log("Pointer type found");
@@ -170,7 +155,6 @@ public class GwtUnmarshaller implements Unmarshaller {
                             jsonPointer.put("__type", new JSONString("Pointer"));
                             jsonPointer.put("className", new JSONString(pointer.className));
                             jsonPointer.put("objectId", new JSONString(pointer.objectId));
-
                         }
                         else if (fieldType.getName() == Relation.class.getName()) {
                             Browser.getWindow().getConsole().log("Relation type found");
@@ -178,35 +162,24 @@ public class GwtUnmarshaller implements Unmarshaller {
                             JSONObject jsonRelation = new JSONObject();
                             jsonRelation.put("__type", new JSONString("Relation"));
                             jsonRelation.put("className", new JSONString(relation.className));
-
                         }
                         else if (fieldType.getName() == Array.class.getName()) {
                             //Browser.getWindow().getConsole().log("Array type found");
                             Array arrayVaulue = (Array) value;
-
                         }
                         else if (fieldType.getName() == (Objek.class).getName()) {
                             //Browser.getWindow().getConsole().log("Object type found");
-
                         }
                         else {
                             throw new RuntimeException("Unsupported type for field");
                         }
                     }
-
                 } catch (Exception e) {
-                }
 
+                }
             }
         } while (i.hasNext());
-
-
         //implement later
-
-
         return (T) instance;
     }
-
-
-
 }

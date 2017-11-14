@@ -1,22 +1,30 @@
+/**
+ * Copyright (c) 2017 Dotweblabs Web Technologies and others. All rights reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.parseplatform.client;
 
-import com.google.gwt.core.client.GWT;
-
-import com.google.gwt.dev.javac.asm.CollectClassData;
-import com.google.gwt.i18n.rebind.AnnotationUtil;
 import com.google.gwt.json.client.*;
 import com.google.gwt.reflect.shared.GwtReflect;
-import com.google.gwt.user.client.Window;
-
 import elemental.client.Browser;
 import org.parseplatform.types.*;
 import org.parseplatform.util.DateUtil;
 
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 
 public class GwtMarshaller implements Marshaller {
@@ -40,13 +48,11 @@ public class GwtMarshaller implements Marshaller {
             // parseMODEL.putString("objectId", String.valueOf(objID));
         }
         //get type information of object in parameter
-
         //get fields in parameter object class
         Field[] fields = GwtReflect.getPublicFields(instance.getClass());
 
         //iterate for every annotated field since annotations will be done later change this to simple iterator
         for (int c = 0; c < fields.length; c++) {
-
             try {
                 //mutable class match to gettype class value
                 Class<?> fieldTYPE = fields[c].getType();
@@ -57,6 +63,8 @@ public class GwtMarshaller implements Marshaller {
                 Annotation[] testannotation = fields[c].getAnnotations();
                 for (int n = 0; n < testannotation.length; n++){
                     //ignore all non @column
+                    //String annotationname = testannotation[n].annotationType().getName();
+                    //if (annotationname.equals("Column")) {
                     String annotationname = testannotation[n].annotationType().toString();
                     if (annotationname.substring(annotationname.lastIndexOf('.') + 1) == "Column") {
                         java.lang.Object value = fields[c].get(instance);
@@ -76,7 +84,6 @@ public class GwtMarshaller implements Marshaller {
         //check if value is null if null continue, else do nothing
         if (value != null) {
             //fieldType get name
-
             if (fieldType.getName() == String.class.getName()) {
                 String stringValue = value.toString();
                 parseObject.put(fieldName, new JSONString(stringValue));
@@ -176,121 +183,10 @@ public class GwtMarshaller implements Marshaller {
                 throw new RuntimeException("Unsupported type for field");
             }
         } else {
-
             parseObject.put(fieldName, JSONNull.getInstance());
         }
     }
-
 }
-
-
-/**
- * Copyright (c) 2017 Dotweblabs Web Technologies and others. All rights reserved.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-/*
-package com.parse.gwt.client;
-
-        import com.google.gwt.json.client.*;
-        import com.parse.gwt.client.annotations.Column;
-        import com.parse.gwt.client.annotations.Entity;
-        import com.parse.gwt.client.annotations.ObjectId;
-        import com.parse.gwt.client.types.*;
-        import com.parse.gwt.client.types.Objek;
-        import com.parse.gwt.client.util.AnnotationUtil;
-        import com.parse.gwt.client.util.DateUtil;
-        import com.promis.rtti.client.Rtti;
-        import com.promis.rtti.client.RttiClass;
-        import com.promis.rtti.client.RttiField;
-        import elemental.client.Browser;
-        import java.lang.annotation.Annotation;
-        import java.util.*;
-        import com.google.gwt.core.client.GWT;
-
-        import com.google.gwt.dev.javac.asm.CollectClassData;
-
-        import com.google.gwt.json.client.*;
-        import com.google.gwt.reflect.shared.GwtReflect;
-        import com.google.gwt.user.client.Window;
-
-        import elemental.client.Browser;
-
-        import java.lang.reflect.Field;
-        import java.util.*;
-
-/**
- *
- * GWT Object to ParseObject marshaller
- *
- * @author Kerby Martino
- * @since 0-SNAPSHOT
- * @version 0-SNAPSHOT
- */
-/*
-public class GwtMarshaller implements Marshaller {
-    @Override
-    public ParseObject marshall(java.lang.Object instance) {
-        //check if object in parameter is null
-        if(instance == null){
-            throw new RuntimeException("Object cannot be null");
-        }
-
-//create model object
-        ParseObject parseObject = new ParseObject();
-        //get objectID from model object
-        java.lang.Object objectId = objectIdField.getFieldValue();
-
-        //check if model object has objectId field
-        if(objectId != null && objectId.getClass().equals(String.class)) {
-            parseObject.putString("objectId", String.valueOf(objectId));
-        }
-
-        //get type information of object in parameter
-        Classinfo = GwtReflect.getTypeInfo(instance);
-
-        //get fields in parameter object
-        RttiField[] fields = info.getFields();
-
-        //get annotations but specifically those with column from parameter object
-        List<AnnotationUtil.AnnotatedField> annotatedFields
-                = AnnotationUtil.getFieldsWithAnnotation(Column.class, instance);
-
-        //iterate for every annotated field
-        for(AnnotationUtil.AnnotatedField annotatedField : annotatedFields) {
-            RttiField rttiField = annotatedField.getField();
-            if(objectIdField.getField().getName().equals(rttiField.getName())){
-                continue;
-            }
-            try {
-                //mutable class match to gettype class value
-                Class<?> classType = rttiField.getType();
-                //string type to string type
-                String fieldName = rttiField.getName();
-
-                System.out.println("ClassType: " + classType.getName());
-                //object value to field object value
-                java.lang.Object value = rttiField.get(instance);
-                //field name, field type, value conform to model object
-                marshallValue(fieldName, classType, value, parseObject);
-
-            } catch (Exception e) {
-                Browser.getWindow().getConsole().log("Error marshalling field " + rttiField.getName() + ":" + e.getMessage());
-            }
-        }
-        return parseObject;
-    }
-*/
 
 
 

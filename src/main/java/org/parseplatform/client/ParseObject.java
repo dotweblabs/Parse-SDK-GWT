@@ -36,16 +36,6 @@ import java.util.List;
 public class ParseObject extends JSONObject {
 
     private String className;
-    public int i0;
-    public int i1;
-    public int i2;
-    public int i3;
-    public int i4;
-    public int i5;
-    public int i6;
-    public int i7;
-    public int i8;
-    public int i9;
 
     public ParseObject() {
     }
@@ -509,7 +499,7 @@ public class ParseObject extends JSONObject {
     }
 
     public void getRelation(String referenceKey, ParseObject referencee,
-                                   final ParseAsyncCallback<ParseResponse> callback) {
+                            final ParseAsyncCallback<ParseResponse> callback) {
         ParseObject reference = this;
         ParseQuery query = new ParseQuery(referencee);
         JSONObject jsonObject = new JSONObject();
@@ -531,7 +521,7 @@ public class ParseObject extends JSONObject {
     }
 
     public void getRelation(String referenceKey, ParseObject referencee,
-                                   String filterField, String filterValue, final ParseAsyncCallback<ParseResponse> callback) {
+                            String filterField, String filterValue, final ParseAsyncCallback<ParseResponse> callback) {
         ParseObject reference = this;
         String regex = "(?i)(?:.*";
 
@@ -565,7 +555,7 @@ public class ParseObject extends JSONObject {
     }
 
     public void getRelationOrderAscending(String referenceKey, ParseObject referencee,
-                                                 final ParseAsyncCallback<ParseResponse> callback) {
+                                          final ParseAsyncCallback<ParseResponse> callback) {
         ParseObject reference = this;
         ParseQuery query = new ParseQuery(referencee);
         JSONObject jsonObject = new JSONObject();
@@ -589,7 +579,7 @@ public class ParseObject extends JSONObject {
 
 
     public void createRelation(String key, ParsePointer target,
-                                      final ParseAsyncCallback<ParseResponse> callback) {
+                               final ParseAsyncCallback<ParseResponse> callback) {
         ParseObject object = this;
         String objectId = object.getObjectId();
         final String className = object.getClassName();
@@ -627,7 +617,7 @@ public class ParseObject extends JSONObject {
     }
 
     public void createRelation(String key, ParsePointer[] targets,
-                                      final ParseAsyncCallback<ParseResponse> callback) {
+                               final ParseAsyncCallback<ParseResponse> callback) {
         final ParseObject object = this;
         String objectId = object.getObjectId();
         final String className = object.getClassName();
@@ -661,83 +651,4 @@ public class ParseObject extends JSONObject {
                 });
     }
 
-    public int getI0() {
-        return i0;
-    }
-
-    public void setI0(int i0) {
-        this.i0 = i0;
-    }
-
-    public int getI1() {
-        return i1;
-    }
-
-    public void setI1(int i1) {
-        this.i1 = i1;
-    }
-
-    public int getI2() {
-        return i2;
-    }
-
-    public void setI2(int i2) {
-        this.i2 = i2;
-    }
-
-    public int getI3() {
-        return i3;
-    }
-
-    public void setI3(int i3) {
-        this.i3 = i3;
-    }
-
-    public int getI4() {
-        return i4;
-    }
-
-    public void setI4(int i4) {
-        this.i4 = i4;
-    }
-
-    public int getI5() {
-        return i5;
-    }
-
-    public void setI5(int i5) {
-        this.i5 = i5;
-    }
-
-    public int getI6() {
-        return i6;
-    }
-
-    public void setI6(int i6) {
-        this.i6 = i6;
-    }
-
-    public int getI7() {
-        return i7;
-    }
-
-    public void setI7(int i7) {
-        this.i7 = i7;
-    }
-
-    public int getI8() {
-        return i8;
-    }
-
-    public void setI8(int i8) {
-        this.i8 = i8;
-    }
-
-    public int getI9() {
-        return i9;
-    }
-
-    public void setI9(int i9) {
-        this.i9 = i9;
-    }
 }
