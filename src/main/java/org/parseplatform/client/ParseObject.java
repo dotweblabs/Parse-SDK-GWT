@@ -139,7 +139,7 @@ public class ParseObject extends JSONObject {
     public ParseACL getACL() {
         if(get("ACL") != null && get("ACL").isObject() != null) {
             JSONObject acl = get("ACL").isObject();
-            ParseACL parseACL = (ParseACL) acl;
+            ParseACL parseACL = new ParseACL(acl);
             return parseACL;
         }
         return null;

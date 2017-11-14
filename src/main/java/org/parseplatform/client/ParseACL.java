@@ -31,7 +31,7 @@ import java.util.Iterator;
  */
 public class ParseACL extends JSONObject {
 
-    public void ParseACL(JSONObject jsonObject) {
+    public ParseACL(JSONObject jsonObject) {
         Iterator<String> it = jsonObject.keySet().iterator();
         while(it.hasNext()) {
             String key = it.next();
