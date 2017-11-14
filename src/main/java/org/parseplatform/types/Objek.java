@@ -4,37 +4,60 @@ import com.google.gwt.json.client.*;
 import org.parseplatform.util.DateUtil;
 
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
 
-/**
- * Created by Kerby on 2/24/2017.
- */
-public class Array extends JSONArray {
-    public Boolean getBoolean(int index) {
-        JSONValue value = get(index);
+public class Objek extends JSONObject {
+    public void putNull(String key) {
+        put(key, JSONNull.getInstance());
+    }
+    public void putBoolean(String key, Boolean value) {
+        if(value != null) {
+            put(key, JSONBoolean.getInstance(value));
+        }
+    }
+    public void putString(String key, String value) {
+        if(value != null) {
+            put(key, new JSONString(value));
+        }
+    }
+    public void putNumber(String key, Integer value) {
+        if(value != null) {
+            put(key, new JSONNumber(value));
+        }
+    }
+    public void putNumber(String key, Long value) {
+        if(value != null) {
+            put(key, new JSONNumber(value));
+        }
+    }
+    public void putNumber(String key, Double value) {
+        if(value != null) {
+            put(key, new JSONNumber(value));
+        }
+    }
+    public Boolean getBoolean(String key) {
+        JSONValue value = get(key);
         if(value.isBoolean() != null) {
             return new Boolean(value.isBoolean().booleanValue());
         }
         return null;
     }
-    public String getString(int index) {
-        JSONValue value = get(index);
+    public String getString(String key) {
+        JSONValue value = get(key);
         if(value.isString() != null && value.isString().stringValue() != null) {
             return value.isString().stringValue();
         }
         return null;
     }
-    public Double getNumber(int index) {
-        JSONValue value = get(index);
+    public Double getNumber(String key) {
+        JSONValue value = get(key);
         if(value.isNumber() != null) {
             double d = value.isNumber().doubleValue();
             return new Double(d);
         }
         return null;
     }
-    public Date getDate(int index) {
-        JSONValue value = get(index);
+    public Date getDate(String key) {
+        JSONValue value = get(key);
         if(value.isObject() != null) {
             if(value.isObject().get("__type") != null
                     && value.isObject().get("iso") != null
@@ -47,8 +70,8 @@ public class Array extends JSONArray {
         }
         return null;
     }
-    public File getFile(int index) {
-        JSONValue value = get(index);
+    public File getFile(String key) {
+        JSONValue value = get(key);
         File file = null;
         if(value != null) {
             if(value.isObject().get("__type") != null
@@ -68,8 +91,8 @@ public class Array extends JSONArray {
         }
         return file;
     }
-    public GeoPoint getGeoPoint(int index) {
-        JSONValue value = get(index);
+    public GeoPoint getGeoPoint(String key) {
+        JSONValue value = get(key);
         GeoPoint geoPoint = null;
         if(value != null) {
             if(value.isObject().get("__type") != null
@@ -88,8 +111,8 @@ public class Array extends JSONArray {
         }
         return geoPoint;
     }
-    public Pointer getPointer(int index) {
-        JSONValue value = get(index);
+    public Pointer getPointer(String key) {
+        JSONValue value = get(key);
         Pointer pointer = null;
         if(value != null) {
             if(value.isObject().get("__type") != null
@@ -108,8 +131,8 @@ public class Array extends JSONArray {
         }
         return pointer;
     }
-    public Relation getRelation(int index) {
-        JSONValue value = get(index);
+    public Relation getRelation(String key) {
+        JSONValue value = get(key);
         Relation relation = null;
         if(value != null) {
             if(value.isObject().get("__type") != null
@@ -125,86 +148,4 @@ public class Array extends JSONArray {
         }
         return relation;
     }
-    public void putNull(int index) {
-        set(index, JSONNull.getInstance());
-    }
-    public void putBoolean(int index, Boolean value) {
-        if(value != null) {
-            set(index, JSONBoolean.getInstance(value));
-        }
-    }
-    public void putString(int index, String value) {
-        if(value != null) {
-            set(index, new JSONString(value));
-        }
-    }
-    public void putNumber(int index, Integer value) {
-        if(value != null) {
-            set(index, new JSONNumber(value));
-        }
-    }
-    public void putNumber(int index, Long value) {
-        if(value != null) {
-            set(index, new JSONNumber(value));
-        }
-    }
-    public void putNumber(int index, Double value) {
-        if(value != null) {
-            set(index, new JSONNumber(value));
-        }
-    }
-    public void putArray(int index, JSONArray value) {
-        if(value != null) {
-            set(index, value);
-        }
-    }
-    public void putObject(int index, JSONObject value) {
-        if(value != null) {
-            set(index, value);
-        }
-    }
-    /*
-    public void set(int index, Boolean value) {
-
-    }
-    public void set(int index, boolean value) {
-
-    }
-    public void set(int index, String value) {
-
-    }
-    public void set(int index, Integer value) {
-
-    }
-    public void set(int index, Double value) {
-
-    }
-    public void set(int index, Long value) {
-
-    }
-    public void set(int index, int value) {
-
-    }
-    public void set(int index, double value) {
-
-    }
-    public void set(int index, long value) {
-
-    }
-    public void set(int index, Date value) {
-
-    }
-    public void set(int index, File value) {
-
-    }
-    public void set(int index, GeoPoint value) {
-
-    }
-    public void set(int index, Pointer value) {
-
-    }
-    public void set(int index, Relation value) {
-
-    }
-    */
 }

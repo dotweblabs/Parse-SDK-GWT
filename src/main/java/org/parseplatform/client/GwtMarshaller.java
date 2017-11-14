@@ -8,9 +8,11 @@ import com.google.gwt.reflect.shared.GwtReflect;
 import com.google.gwt.user.client.Window;
 
 import elemental.client.Browser;
+import org.parseplatform.types.*;
+import org.parseplatform.util.DateUtil;
 
 
-
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -95,12 +97,14 @@ public class GwtMarshaller implements Marshaller {
                 //string type to string type
                 String fieldName = fields[c].getName();
 
-
+                //Annotation[] testannotation = fields[c].getAnnotations();
+                Browser.getWindow().getConsole().log("annotation");
+                Browser.getWindow().getConsole().log(fields[c].getAnnotations());
                 //object value to field object value
                 java.lang.Object value = fields[c].get(instance);
 
                 //field name, field type, value conform to model object
-                marshallValue(fieldName, classType, value, parseMODEL);
+               marshallValue(fieldName, classType, value, parseMODEL);
 
             } catch (Exception e) {
                 Browser.getWindow().getConsole().log("Error marshalling field " + fields[c].getName() + ":" + e.getMessage());
@@ -175,8 +179,6 @@ public class GwtMarshaller implements Marshaller {
                 }
 
             }
-            //implement later
-            /*
             else if(classType.getName() ==Date.class.getName()) {
                 Browser.getWindow().getConsole().log("Date type found");
                 JSONObject jsonDate = new JSONObject();
@@ -184,13 +186,16 @@ public class GwtMarshaller implements Marshaller {
                 jsonDate.put("__type", new JSONString("Date"));
                 jsonDate.put("iso", new JSONString(DateUtil.getStringFormat(date)));
                 parseObject.put(fieldName, jsonDate);
-            } else if(classType.getName() == Map.class.getName()) { // Object
+            }
+            else if(classType.getName() == Map.class.getName()) { // Object
                 Browser.getWindow().getConsole().log("Map type found");
                 throw new RuntimeException("Map is not supported use com.parse.gwt.client.types.Object instead");
-            } else if(classType.getName() == List.class.getName()) {
+            }
+            else if(classType.getName() == List.class.getName()) {
                 Browser.getWindow().getConsole().log("List type found");
                 throw new RuntimeException("List is not supported use com.parse.gwt.client.types.Array instead");
-            } else if(classType.getName() == File.class.getName()) {
+            }
+            else if(classType.getName() == File.class.getName()) {
                 Browser.getWindow().getConsole().log("File type found");
                 JSONObject jsonFile = new JSONObject();
                 File file = (File) value;
@@ -198,12 +203,16 @@ public class GwtMarshaller implements Marshaller {
                 jsonFile.put("url", new JSONString(file.url));
                 jsonFile.put("name", new JSONString(file.name));
                 parseObject.put(fieldName, jsonFile);
-            } else if(classType.getName == GeoPoint.class.getName()) {
+            }
+            else if(classType.getName() == GeoPoint.class.getName()) {
                 Browser.getWindow().getConsole().log("GeoPoint type found");
                 GeoPoint geoPoint = (GeoPoint) value;
                 ParseGeoPoint parseGeoPoint = new ParseGeoPoint(geoPoint.longitude, geoPoint.latitude);
                 parseObject.put(fieldName, parseGeoPoint);
-            } else if(classType.getName() == Pointer.class.getName() ) {
+            }
+            //implement later
+
+             else if(classType.getName() == Pointer.class.getName() ) {
                 Browser.getWindow().getConsole().log("Pointer type found");
                 Pointer pointer = (Pointer) value;
                 JSONObject jsonPointer = new JSONObject();
@@ -222,11 +231,27 @@ public class GwtMarshaller implements Marshaller {
                 Browser.getWindow().getConsole().log("Array type found");
                 Array arrayVaulue = (Array) value;
                 parseObject.put(fieldName, (JSONArray) value);
-            } else if(classType.equals(Objek.class)) {
+            } else if(classType.getName() == (Objek.class).getName()) {
                 Browser.getWindow().getConsole().log("Object type found");
                 parseObject.put(fieldName, (JSONObject) value);
             }
-*/             else {
+            else if(classType.getName() == byte.class.getName()) {
+                //prevent type erasure
+                //convert byte to integer
+                int byteconvert = (int) value;
+            }
+            else if(classType.getName() == short.class.getName()) {
+                //prevent type erasure
+            }
+            else if(classType.getName() == char.class.getName()) {
+                //prevent type erasure and JSON errors
+                //convert char to integer
+                int charconvert = (int) value;
+            }
+            else if(classType.getName() == double.class.getName()) {
+                //prevent type erasure
+            }
+             else {
                 throw new RuntimeException("Unsupported type for field");
             }
         } else {

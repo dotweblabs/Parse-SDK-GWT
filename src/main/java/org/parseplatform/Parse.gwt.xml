@@ -13,5 +13,7 @@
   <inherits name="com.google.gwt.reflect.Reflect"/>
   <!-- Specify the paths for translatable code -->
   <source path="client"/>
+  <source path="types"/>
+  <source path="util"/>
   <set-configuration-property name="gwt.reflect.never.fail" value="true" />
 </module>

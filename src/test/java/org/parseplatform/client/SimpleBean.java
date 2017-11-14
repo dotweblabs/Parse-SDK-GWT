@@ -1,7 +1,7 @@
 package org.parseplatform.client;
 
 public class SimpleBean {
-    
+
     @Column
     public String objectId;
 
@@ -53,6 +53,7 @@ public class SimpleBean {
         this.age = age;
     }
 
+    @Column
     public String getName() {
         return name;
     }
