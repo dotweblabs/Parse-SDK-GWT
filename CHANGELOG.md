@@ -1,4 +1,5 @@
 ## 0-SNAPSHOT - 11/14/17
+- Added empty constructor for ParseACL
 - Fixed getACL() method for ParseObject
 - Added JSONObject parameterized ParseACL constructor
 
