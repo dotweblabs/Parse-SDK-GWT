@@ -60,10 +60,7 @@ public class GwtReflectTest extends GWTTestCase {
 
                 methodnames.add(methods[c].toString().substring(methods[c].toString().lastIndexOf('.') + 1));
             }
-            for (int c = 0; c < methodnames.size(); c++) {
-                Window.alert("method name :" + methodnames.get(c));
 
-            }
             //GwtReflect.fieldSet(SimpleBean.class, "age", simpleBean, 10);
             //GwtReflect.fieldSet(SimpleBean.class, "name", simpleBean, "Juan Dela Cruz");
             // String reflection = "";
@@ -92,12 +89,14 @@ public class GwtReflectTest extends GWTTestCase {
         GwtMarshaller marshaller = GWT.create(GwtMarshaller.class);
 
         SimpleBean simpleBean = new SimpleBean();
+        Class<?> archetype = simpleBean.getClass();
+
         simpleBean.setAge(50);
         simpleBean.setName("Old Guy");
         simpleBean.setBalance(999.00);
         try {
 
-            GwtReflect.fieldSet(SimpleBean.class, "objectId", simpleBean, "123");
+            GwtReflect.fieldSet(SimpleBean.class, "objectId", simpleBean, (String) "123");
             GwtReflect.fieldSet(SimpleBean.class, "i0", simpleBean, (int) 123);
             GwtReflect.fieldSet(SimpleBean.class, "i1", simpleBean, (int) 456);
             GwtReflect.fieldSet(SimpleBean.class, "i2", simpleBean, (int) 789);
@@ -110,16 +109,52 @@ public class GwtReflectTest extends GWTTestCase {
         } catch (Exception e) {
         }
 
+
         //simple bean to parse objects using accessors and mutators
 
         ParseObject parseObject = marshaller.marshall(simpleBean);
+
         Window.alert(">>>>>>>>" + parseObject.toString());
         //get non null values from model
         //populate expectation list
         //assert test expectation to mutant
+        Window.alert("BEGIN TEST-----------------MARSHALL");
+        Set<?> s = parseObject.keySet();
+        //iterate and persist keys from model
+        Iterator<?> i = s.iterator();
+        do {
+            String k = i.next().toString();
+            Field[] fields = GwtReflect.getPublicFields(archetype);
+            for (int c = 0; c < fields.length; c++) {
+                if (k == fields[c].getName()) {
+                    String message = null;
+                    try {
+                        Object expectableparse = null;
+                        try {
+                            expectableparse = parseObject.getString(k);
+                            message = k + " " + parseObject.getString(k) + " <->" + " " + fields[c].getName() + "  " + fields[c].get(simpleBean);
+                        } catch (Exception e) {
+                        }
+                        if (expectableparse == null) {
+                            expectableparse = parseObject.get(k).toString();
+                            message = k + " " + parseObject.get(k).toString() + " <->" + " " + fields[c].getName() + "  " + fields[c].get(simpleBean);
+                        }
+                        Object expectablefield = fields[c].get(simpleBean).toString();
+                        if (expectablefield == expectableparse) {
+                            message = "PASS: " + k + " " + expectableparse + " <-> " + " " + fields[c].getName() + "  " + fields[c].get(simpleBean);
+                        } else {
+                            message = "FAIL: " + k + " " + expectableparse + " <-> " + " " + fields[c].getName() + "  " + fields[c].get(simpleBean);
+                        }
+                        assertEquals(expectablefield, expectableparse);
+                    } catch (Exception e) {
+                        //Window.alert(e.toString());
+                    }
+                    Window.alert(message);
+                }
+            }
 
-        //assertEquals(50, parseObject.getLong("age").intValue());
-        assertEquals("Old Guy", parseObject.getString("name"));
+
+        } while (i.hasNext());
     }
 
     public void testUnmarshaller() {
@@ -147,36 +182,37 @@ public class GwtReflectTest extends GWTTestCase {
         simpleBean = unmarshaller.unmarshall(SimpleBean.class, simpleBean, parseObject);
         //get field names, get method names
         //iterate field contents
-        Object testNAME = "Old Man";
 
         Set<?> s = parseObject.keySet();
         //iterate and persist keys from model
-        Window.alert("BEGIN TEST-----------------");
+        Window.alert("BEGIN TEST-----------------UNMARSHALL");
         Iterator<?> i = s.iterator();
         do {
             String k = i.next().toString();
             Field[] fields = GwtReflect.getPublicFields(archetype);
             for (int c = 0; c < fields.length; c++) {
-
-
                 if (k == fields[c].getName()) {
                     String message = null;
                     try {
-                        message = k + " " + parseObject.get(k).toString() + " <->" + " " + fields[c].getName() + " " + fields[c].get(simpleBean);
-                        Object expectableparse = parseObject.get(k).toString();
-                        Object expectablefield = (String)fields[c].get(simpleBean);
+                        Object expectableparse = null;
+                        try {
+                            expectableparse = parseObject.getString(k);
+                            message = k + " " + parseObject.getString(k) + " <->" + " " + fields[c].getName() + " " + fields[c].get(simpleBean);
+                        } catch (Exception e) {
+                        }
+                        if (expectableparse == null) {
+                            expectableparse = parseObject.get(k).toString();
+                            message = k + " " + parseObject.get(k).toString() + " <->" + " " + fields[c].getName() + " " + fields[c].get(simpleBean);
+                        }
+                        Object expectablefield = fields[c].get(simpleBean).toString();
                         if (expectablefield == expectableparse) {
-                            message = "PASS: " + k + " " + parseObject.get(k).toString() + " <->" + " " + fields[c].getName() + " " + fields[c].get(simpleBean);
-
+                            message = "PASS: " + k + " " + expectableparse + " <-> " + " " + fields[c].getName() + " " + fields[c].get(simpleBean);
+                        } else {
+                            message = "FAIL: " + k + " " + expectableparse + " <-> " + " " + fields[c].getName() + " " + fields[c].get(simpleBean);
                         }
-                        else {
-                            message = "FAIL: " + k + " " + parseObject.get(k).toString() + " <->" + " " + fields[c].getName() + " " + fields[c].get(simpleBean);
-
-                        }
-                        assertEquals(expectableparse, expectablefield);
-
+                        assertEquals(expectablefield, expectableparse); //find workaround for string bug
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        //Window.alert(e.toString());
                     }
                     Window.alert(message);
                 }
@@ -184,16 +220,6 @@ public class GwtReflectTest extends GWTTestCase {
 
 
         } while (i.hasNext());
-
-
-        try {
-            assertEquals(testNAME, GwtReflect.fieldGet(SimpleBean.class, "name", simpleBean));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        assertEquals(10600.50, simpleBean.getBalance());
-
     }
 
     public static void log(String s) {

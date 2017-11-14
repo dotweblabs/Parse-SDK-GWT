@@ -25,13 +25,6 @@ public class GwtUnmarshaller implements Unmarshaller {
         String objID = null;
         Field objectFIELD = null;
 
-        try {
-            objectFIELD = declaringClass.getField("objectId");
-            objID = GwtReflect.fieldGet(declaringClass, "objectId", instance);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
 
         //check if model object has objectId field
         if (objID != null) {
@@ -75,9 +68,9 @@ public class GwtUnmarshaller implements Unmarshaller {
                         Class<?> fieldType = fields[c].getType();
                         Browser.getWindow().getConsole().log(fieldType.getName());
                         String fieldName = fields[c].getName();
-                        Browser.getWindow().getConsole().log("unmarshall " + fieldName +  " " + fieldType.getName() + " " + parseObject.get(k));
+                        //Browser.getWindow().getConsole().log("unmarshall " + fieldName +  " " + fieldType.getName() + " " + parseObject.get(k));
                         if (fieldType.getName() == String.class.getName()) {
-                            String converter =  parseObject.get(k).toString();
+                            String converter =  parseObject.getString(k);
                             GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
                         }
                         else if (fieldType.getName() == Boolean.class.getName()){
@@ -189,12 +182,12 @@ public class GwtUnmarshaller implements Unmarshaller {
 
                         }
                         else if (fieldType.getName() == Array.class.getName()) {
-                            Browser.getWindow().getConsole().log("Array type found");
+                            //Browser.getWindow().getConsole().log("Array type found");
                             Array arrayVaulue = (Array) value;
 
                         }
                         else if (fieldType.getName() == (Objek.class).getName()) {
-                            Browser.getWindow().getConsole().log("Object type found");
+                            //Browser.getWindow().getConsole().log("Object type found");
 
                         }
                         else {

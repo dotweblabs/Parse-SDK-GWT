@@ -15,7 +15,7 @@ import org.parseplatform.util.DateUtil;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+
 import java.util.*;
 
 
@@ -25,38 +25,6 @@ public class GwtMarshaller implements Marshaller {
 
     @Override
     public ParseObject marshall(java.lang.Object instance) {
-/* reference code
-        String typename = "";
-        if(instance == null){
-            throw new RuntimeException("Object cannot be null");
-        }
-
-        ParseObject parseObject = new ParseObject();
-        //Annotation annotation = AnnotationUtil.getClassAnnotation(Entity.class, instance);
-
-        Class<?> declaringClass = instance.getClass();
-        Field testfield = GwtReflect.getPublicField(declaringClass, "objectId");
-
-
-        if( testfield.getType().getName() == String.class.getName() ) {
-            try {
-                GwtReflect.fieldSet(declaringClass, "objectId", instance, "1111");
-                parseMODEL.setObjectId(testfield.getType().getName());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }
-        else
-        {
-            try {
-                GwtReflect.fieldSet(declaringClass, "objectId", instance, "1");
-                parseMODEL.setObjectId(int.class.getName().toString());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-*/
         //check if object in parameter is null
         if (instance == null) {
             throw new RuntimeException("Object cannot be null");
@@ -66,32 +34,18 @@ public class GwtMarshaller implements Marshaller {
         //get objectID from model object
         String objID = null;
         Field objectFIELD = null;
-        try {
-            objectFIELD = declaringClass.getField("objectId");
-            objID = GwtReflect.fieldGet(declaringClass, "objectId", instance);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
 
         //check if model object has objectId field
         if (objID != null) {
             // parseMODEL.putString("objectId", String.valueOf(objID));
         }
-
         //get type information of object in parameter
-
 
         //get fields in parameter object class
         Field[] fields = GwtReflect.getPublicFields(instance.getClass());
 
-        parseMODEL.setObjectId(Integer.toString(fields.length));
-        //get annotations but specifically those with column from parameter object skip for now
-
-
         //iterate for every annotated field since annotations will be done later change this to simple iterator
         for (int c = 0; c < fields.length; c++) {
-
 
             try {
                 //mutable class match to gettype class value
@@ -104,19 +58,13 @@ public class GwtMarshaller implements Marshaller {
                 for (int n = 0; n < testannotation.length; n++){
                     //ignore all non @column
                     String annotationname = testannotation[n].annotationType().toString();
-                    if (annotationname.substring(annotationname.lastIndexOf('.')+1) == "Column") {
-
+                    if (annotationname.substring(annotationname.lastIndexOf('.') + 1) == "Column") {
                         java.lang.Object value = fields[c].get(instance);
-
                         //field name, field type, value conform to model object
                         marshallValue(fieldName, fieldTYPE, value, parseMODEL);
                     }
-
-
                 }
-
                 //object value to field object value
-
             } catch (Exception e) {
                 Browser.getWindow().getConsole().warn("Error marshalling field " + fields[c].getName() + ":" + e.getMessage());
             }
@@ -130,7 +78,7 @@ public class GwtMarshaller implements Marshaller {
             //fieldType get name
 
             if (fieldType.getName() == String.class.getName()) {
-                String stringValue = (String) value;
+                String stringValue = value.toString();
                 parseObject.put(fieldName, new JSONString(stringValue));
             } else if (fieldType.getName() == Boolean.class.getName() || fieldType.getName() == boolean.class.getName()) {
                 Boolean booleanValue = (Boolean) value;
@@ -148,7 +96,7 @@ public class GwtMarshaller implements Marshaller {
                     parseObject.put(fieldName, new JSONNumber((Long) value));
                 }
             } else if (fieldType.getName() == float.class.getName() || fieldType.getName() == int.class.getName() || fieldType.getName() == long.class.getName()) {
-               Browser.getWindow().getConsole().log("float int long " + fieldName + value.getClass().getName());
+               //Browser.getWindow().getConsole().log("float int long " + fieldName + value.getClass().getName());
                 if (value.getClass().getName() == float.class.getName()) {
                     parseObject.put(fieldName, new JSONNumber((float) value));
                 } else if (value.getClass().getTypeName() == int.class.getName()) {
@@ -228,7 +176,7 @@ public class GwtMarshaller implements Marshaller {
                 throw new RuntimeException("Unsupported type for field");
             }
         } else {
-            Browser.getWindow().getConsole().log("null value");
+
             parseObject.put(fieldName, JSONNull.getInstance());
         }
     }
