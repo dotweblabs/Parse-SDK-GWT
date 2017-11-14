@@ -1,3 +1,6 @@
+## 0-SNAPSHOT - 11/14/17
+- Added JSONObject parameterized ParseACL constructor
+
 ## 0-SNAPSHOT - 11/02/17
 - Added ParseDate
 

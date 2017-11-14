@@ -19,6 +19,8 @@ package org.parseplatform.client;
 import com.google.gwt.json.client.JSONBoolean;
 import com.google.gwt.json.client.JSONObject;
 
+import java.util.Iterator;
+
 /**
  *
  * Parse ACL object
@@ -28,6 +30,14 @@ import com.google.gwt.json.client.JSONObject;
  * @version 0-SNAPSHOT
  */
 public class ParseACL extends JSONObject {
+
+    public void ParseACL(JSONObject jsonObject) {
+        Iterator<String> it = jsonObject.keySet().iterator();
+        while(it.hasNext()) {
+            String key = it.next();
+            put(key, jsonObject.get(key));
+        }
+    }
 
     public void setPublicReadAccess(boolean isAccess) {
         JSONObject asterisk = get("*") != null ? get("*").isObject() : null;
