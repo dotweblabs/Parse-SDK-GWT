@@ -56,47 +56,28 @@ public class GwtUnmarshaller implements Unmarshaller {
                         if (fieldType.getName() == String.class.getName()) {
                             String converter =  parseObject.getString(k);
                             GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
-                        } else if (fieldType.getName() == Boolean.class.getName()){
-                            Boolean converter = Boolean.parseBoolean( parseObject.get(k).toString());
-                            GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
-                        } else if (fieldType.getName() == boolean.class.getName()) {
-                            boolean converter = Boolean.parseBoolean( parseObject.get(k).toString());
-                            GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
-                        } else if (fieldType.getName() == Float.class.getName() ) {
-                            Float converter = Float.parseFloat( parseObject.get(k).toString());
-                            GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
-                        } else if (fieldType.getName() == Double.class.getName() ) {
-                            Double converter = Double.parseDouble( parseObject.get(k).toString());
-                            GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
-                        } else if (fieldType.getName() == Integer.class.getName() ) {
-                            Integer converter = Integer.parseInt( parseObject.get(k).toString());
-                            GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
-                        } else if (fieldType.getName() == Long.class.getName() ) {
-                            Long converter = Long.parseLong( parseObject.get(k).toString());
-                            GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
-                        } else if (fieldType.getName() == Short.class.getName()) {
-                            Short converter = Short.parseShort( parseObject.get(k).toString());
-                            GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
-                        } else if (fieldType.getName() == float.class.getName()) {
-                            float converter = Float.parseFloat( parseObject.get(k).toString());
-                            GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
-                        } else if (fieldType.getName() == double.class.getName()) {
-                            double converter = Double.parseDouble( parseObject.get(k).toString());
-                            GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
-                        } else if (fieldType.getName() == int.class.getName()) {
-                            int converter =  Integer.parseInt( parseObject.get(k).toString());
-                            GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
-                        } else if (fieldType.getName() == long.class.getName() ) {
-                            long converter = Long.parseLong( parseObject.get(k).toString());
-                            GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
-                        } else if (fieldType.getName() == short.class.getName() ) {
-                            short converter = Short.parseShort( parseObject.get(k).toString());
-                            GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
-                        } else if (fieldType.getName() == byte.class.getName()) {
-                            byte converter = Byte.parseByte( parseObject.get(k).toString());
-                            GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
-                        } else if (fieldType.getName() == char.class.getName()) {
-                            char converter =  parseObject.get(k).toString().charAt(0);
+                        } else if (fieldType.getName() == Boolean.class.getName() || fieldType.getName() == boolean.class.getName()){
+                            Boolean b = parseObject.getBoolean(k);
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, b);
+                        } else if (fieldType.getName() == Float.class.getName() || fieldType.getName() == float.class.getName()) {
+                            Float floatValue = parseObject.getDouble(k) != null ? parseObject.getDouble(k).floatValue() : null;
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, floatValue);
+                        } else if (fieldType.getName() == Double.class.getName() || fieldType.getName() == double.class.getName()) {
+                            Double doubleValue = parseObject.getDouble(k);
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, doubleValue);
+                        } else if (fieldType.getName() == Integer.class.getName() || fieldType.getName() == int.class.getName()) {
+                            Integer intValue = parseObject.getDouble(k) != null ? parseObject.getDouble(k).intValue() : null;
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, intValue);
+                        } else if (fieldType.getName() == Long.class.getName() || fieldType.getName() == long.class.getName()) {
+                            Long longValue = parseObject.getLong(k);
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, longValue);
+                        } else if (fieldType.getName() == Short.class.getName() || fieldType.getName() == short.class.getName()) {
+                            Short shortValue = parseObject.getDouble(k).shortValue();
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, shortValue);
+                        }  else if (fieldType.getName() == byte.class.getName()) {
+                            // TODO
+                        } else if (fieldType.getName() == char.class.getName() || fieldType.getName() == Character.class.getName()) {
+                            char converter =  parseObject.getString(k).charAt(0);
                             GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
                         } else if (fieldType.getName() == Date.class.getName()) {
                             Browser.getWindow().getConsole().log("Date type found");

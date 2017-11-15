@@ -227,7 +227,7 @@ public class ParseObject extends JSONObject {
     }
 
     public Long getLong(String key) {
-        if(this.get(key) != null && this.get(key).isString() != null) {
+        if(this.get(key) != null && this.get(key).isNumber() != null) {
             Double db = this.get(key).isNumber().doubleValue();
             return Long.valueOf(db + "");
         }
@@ -237,6 +237,22 @@ public class ParseObject extends JSONObject {
     public Double getDouble(String key) {
         if(this.get(key) != null && this.get(key).isNumber() != null) {
             Double db = this.get(key).isNumber().doubleValue();
+            return db;
+        }
+        return null;
+    }
+
+    public Short getShort(String key) {
+        if(this.get(key) != null && this.get(key).isNumber() != null) {
+            Short db = new Double(this.get(key).isNumber().doubleValue()).shortValue();
+            return db;
+        }
+        return null;
+    }
+
+    public Float getFloat(String key) {
+        if(this.get(key) != null && this.get(key).isNumber() != null) {
+            Float db = new Double(this.get(key).isNumber().doubleValue()).floatValue();
             return db;
         }
         return null;

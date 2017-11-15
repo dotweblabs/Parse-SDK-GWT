@@ -122,64 +122,64 @@ public class TestGwtUnmarshaller extends GWTTestCase {
         } while (i.hasNext());
     }
 
-    public void testParentChildUnmarshaller() {
-
-        ParseObject firstChildObject = new ParseObject();
-        ParseObject secondChildObject = new ParseObject();
-        ParseObject thirdChildObject = new ParseObject();
-
-        firstChildObject.putString("name", "First Child");
-        firstChildObject.putNumber("age", 10);
-        firstChildObject.put("birthdate", new ParseDate("2017-06-23T02:59:59.255Z"));
-        firstChildObject.put("ACL", new ParseACL());
-        ParseRole role = new ParseRole("parserole");
-        firstChildObject.put("role", role);
-        ParseRelation relation = new ParseRelation(new ParseObject("TestObject"));
-        firstChildObject.put("relation", relation);
-        firstChildObject.put("geoPoint", new ParseGeoPoint(100.10, 200.10));
-
-        ParseFile file = new ParseFile();
-        firstChildObject.put("file", file);
-
-        ParseObject parseObjectRef = new ParseObject("ReferenceObject");
-        parseObjectRef.setObjectId("0");
-        firstChildObject.put("pointer", new ParsePointer(parseObjectRef));
-
-        firstChildObject.putString("name", "Second Child");
-        firstChildObject.putNumber("age", 20);
-
-        firstChildObject.putString("name", "Third Child");
-        firstChildObject.putNumber("age", 30);
-
-        ParseObject parentObject = new ParseObject();
-        parentObject.putString("name", "The Parent");
-        parentObject.putNumber("age", 80);
-        parentObject.put("favorite", firstChildObject);
-
-        JSONArray children = new JSONArray();
-        children.set(0, firstChildObject);
-        children.set(1, secondChildObject);
-        children.set(3, thirdChildObject);
-
-        parentObject.put("children", children);
-
-        //Window.alert(">>>>>>>>  " + parentObject.toString());
-
-        GwtReflect.magicClass(ChildBean.class);
-        GwtReflect.magicClass(ParentBean.class);
-
-        ParentBean parentBean = parentObject.unmarshall(ParentBean.class);
-
-        Window.alert("Parent Name   " + parentBean.getName());
-        Window.alert("Parent Age    " + parentBean.getAge());
-
-        assertNotNull(parentBean);
-        assertEquals("The Parent", parentBean.getName());
-        assertEquals(80, parentBean.getAge().intValue());
-        assertNotNull(parentBean.getFavorite());
-        assertNotNull(parentBean.getChildren());
-
-    }
+//    public void testParentChildUnmarshaller() {
+//
+//        ParseObject firstChildObject = new ParseObject();
+//        ParseObject secondChildObject = new ParseObject();
+//        ParseObject thirdChildObject = new ParseObject();
+//
+//        firstChildObject.putString("name", "First Child");
+//        firstChildObject.putNumber("age", 10);
+//        firstChildObject.put("birthdate", new ParseDate("2017-06-23T02:59:59.255Z"));
+//        firstChildObject.put("ACL", new ParseACL());
+//        ParseRole role = new ParseRole("parserole");
+//        firstChildObject.put("role", role);
+//        ParseRelation relation = new ParseRelation(new ParseObject("TestObject"));
+//        firstChildObject.put("relation", relation);
+//        firstChildObject.put("geoPoint", new ParseGeoPoint(100.10, 200.10));
+//
+//        ParseFile file = new ParseFile();
+//        firstChildObject.put("file", file);
+//
+//        ParseObject parseObjectRef = new ParseObject("ReferenceObject");
+//        parseObjectRef.setObjectId("0");
+//        firstChildObject.put("pointer", new ParsePointer(parseObjectRef));
+//
+//        firstChildObject.putString("name", "Second Child");
+//        firstChildObject.putNumber("age", 20);
+//
+//        firstChildObject.putString("name", "Third Child");
+//        firstChildObject.putNumber("age", 30);
+//
+//        ParseObject parentObject = new ParseObject();
+//        parentObject.putString("name", "The Parent");
+//        parentObject.putNumber("age", 80);
+//        parentObject.put("favorite", firstChildObject);
+//
+//        JSONArray children = new JSONArray();
+//        children.set(0, firstChildObject);
+//        children.set(1, secondChildObject);
+//        children.set(3, thirdChildObject);
+//
+//        parentObject.put("children", children);
+//
+//        //Window.alert(">>>>>>>>  " + parentObject.toString());
+//
+//        GwtReflect.magicClass(ChildBean.class);
+//        GwtReflect.magicClass(ParentBean.class);
+//
+//        ParentBean parentBean = parentObject.unmarshall(ParentBean.class);
+//
+//        Window.alert("Parent Name   " + parentBean.getName());
+//        Window.alert("Parent Age    " + parentBean.getAge());
+//
+//        assertNotNull(parentBean);
+//        assertEquals("The Parent", parentBean.getName());
+//        assertEquals(80, parentBean.getAge().intValue());
+//        assertNotNull(parentBean.getFavorite());
+//        assertNotNull(parentBean.getChildren());
+//
+//    }
 
     public static void log(String s) {
         System.out.println(s);
