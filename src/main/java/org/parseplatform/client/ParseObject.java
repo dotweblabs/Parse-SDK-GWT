@@ -20,7 +20,7 @@ import com.dotweblabs.shape.client.Shape;
 import com.google.common.base.Joiner;
 import com.google.gwt.json.client.*;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import org.parseplatform.client.util.JSON;
+//import org.parseplatform.client.util.JSON;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -311,11 +311,11 @@ public class ParseObject extends JSONObject {
      * @param <T>
      * @return a new new {@ParseObject}
      */
-    public static <T> ParseObject from(String className, T object) {
-        String json = JSON.stringify(object);
-        ParseObject parseObject = ParseObject.parse(className, json);
-        return parseObject;
-    }
+//    public static <T> ParseObject from(String className, T object) {
+//        String json = JSON.stringify(object);
+//        ParseObject parseObject = ParseObject.parse(className, json);
+//        return parseObject;
+//    }
 
     /**
      * Marshall this {@ParseObject} into a target object.
@@ -324,10 +324,10 @@ public class ParseObject extends JSONObject {
      * @param <T> Target object type
      * @return Target object
      */
-    public <T> T as(Class<T> clazz) {
-        T as = JSON.parse(this.toString());
-        return as;
-    }
+//    public <T> T as(Class<T> clazz) {
+//        T as = JSON.parse(this.toString());
+//        return as;
+//    }
 
     /**
      * Check if this object is an error.
