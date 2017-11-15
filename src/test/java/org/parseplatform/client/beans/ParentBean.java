@@ -49,4 +49,5 @@ public class ParentBean {
     public void setChildren(List<ChildBean> children) {
         this.children = children;
     }
+
 }

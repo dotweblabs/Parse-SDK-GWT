@@ -171,7 +171,15 @@ public class GwtUnmarshaller implements Unmarshaller {
                             //Browser.getWindow().getConsole().log("Object type found");
                         }
                         else {
-                            throw new RuntimeException("Unsupported type for field");
+                            // TODO: POJO field
+                            ParseObject pojoObject = new ParseObject();
+                            Class<?> pojoClass = fieldType.getClass();
+                            Browser.getWindow().getConsole().log("POJO type found   " + pojoClass.getName());
+
+                            Object pojo = pojoClass.newInstance();
+                            pojo = unmarshall(pojoClass, pojo,pojoObject);
+                            assert pojo != null;
+                            GwtReflect.fieldSet(pojoClass, fieldName, instance, pojo);
                         }
                     }
                 } catch (Exception e) {
@@ -182,4 +190,14 @@ public class GwtUnmarshaller implements Unmarshaller {
         //implement later
         return (T) instance;
     }
+
+    private void unmarshallList(List list, JSONObject jsonObject) {
+
+    }
+
+
+    private void unmarshallMap(Map map, JSONObject jsonObject) {
+
+    }
+
 }
