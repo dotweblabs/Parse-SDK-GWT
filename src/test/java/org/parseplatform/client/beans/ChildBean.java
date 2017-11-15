@@ -98,4 +98,12 @@ public class ChildBean {
     public void setRelation(ParseRelation relation) {
         this.relation = relation;
     }
+
+    @Override
+    public String toString() {
+        String s = "";
+        s = s + "name=" + name ;
+        s = s + ",age=" + age;
+        return s;
+    }
 }

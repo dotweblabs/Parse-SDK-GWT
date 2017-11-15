@@ -18,8 +18,11 @@ package org.parseplatform.client;
 
 import com.dotweblabs.shape.client.Shape;
 import com.google.common.base.Joiner;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.json.client.*;
+import com.google.gwt.reflect.shared.GwtReflect;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import elemental.client.Browser;
 //import org.parseplatform.client.util.JSON;
 
 import java.util.Arrays;
@@ -318,16 +321,34 @@ public class ParseObject extends JSONObject {
 //    }
 
     /**
-     * Marshall this {@ParseObject} into a target object.
+     * Unmarshall this {@ParseObject} into a target object.
      *
      * @param clazz Target object class
      * @param <T> Target object type
      * @return Target object
      */
-//    public <T> T as(Class<T> clazz) {
-//        T as = JSON.parse(this.toString());
-//        return as;
-//    }
+    public <T> T unmarshall(Class<T> clazz) {
+        T as = null;
+        GwtUnmarshaller unmarshaller = GWT.create(GwtUnmarshaller.class);
+        try {
+            T instance = clazz.newInstance();
+            as = unmarshaller.unmarshall(clazz, instance, this);
+        } catch (Exception e) {
+            Browser.getWindow().getConsole().log(e.getMessage());
+        }
+        return as;
+    }
+
+    public static <T> ParseObject marshall(Class<T> clazz, Object instance) {
+        if(instance != null) {
+            GwtMarshaller marshaller = GWT.create(GwtMarshaller.class);
+            ParseObject parseObject = marshaller.marshall(instance);
+            return parseObject;
+        }
+        return null;
+    }
+
+
 
     /**
      * Check if this object is an error.

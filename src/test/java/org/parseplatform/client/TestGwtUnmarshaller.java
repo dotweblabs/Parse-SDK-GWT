@@ -22,6 +22,7 @@ import com.google.gwt.json.client.JSONString;
 import com.google.gwt.junit.client.GWTTestCase;
 import com.google.gwt.reflect.shared.GwtReflect;
 import com.google.gwt.user.client.Window;
+import elemental.client.Browser;
 import org.parseplatform.client.beans.ChildBean;
 import org.parseplatform.client.beans.ParentBean;
 import org.parseplatform.client.beans.SimpleBean;
@@ -45,81 +46,81 @@ public class TestGwtUnmarshaller extends GWTTestCase {
         return "org.parseplatform.Parse";
     }
 
-//    public void testUnmarshaller() {
-//        GwtReflect.magicClass(SimpleBean.class);
-//
-//        GwtUnmarshaller unmarshaller = GWT.create(GwtUnmarshaller.class);
-//
-//        ParseObject parseObject = new ParseObject();
-//        parseObject.putString("objectId", "test-object-id");
-//        parseObject.putString("nullstr", null);
-//        parseObject.putNumber("testint", 1);
-//        parseObject.putNumber("testdouble", 2.0);
-//        parseObject.putNumber("testlong", 3L);
-//        parseObject.putNumber("testshort", 4);
-//        parseObject.put("testbyte", null); // TODO
-//        parseObject.putBoolean("testboolean", true);
-//        parseObject.putNumber("testfloat", 5.0);
-//        parseObject.putString("testchar", "a");
-//
-//        parseObject.putNumber("testInteger", 6);
-//        parseObject.putNumber("testDouble", 7);
-//        parseObject.putNumber("testLong", 8L);
-//        parseObject.putNumber("testShort", 9);
-//        parseObject.put("testByte", null);
-//        parseObject.putBoolean("testBoolean", false);
-//        parseObject.putNumber("testFloat", 10);
-//        parseObject.putString("testCharacter", "a");
-//        parseObject.put("testbytes", null); // TODO
-//        parseObject.putString("testBytes", null); // TODO
-//
-//        Window.alert("<<<<<<<<" + parseObject.toString());
-//        SimpleBean simpleBean = new SimpleBean();
-//        Class<?> archetype = simpleBean.getClass();
-//        //get non null values from model
-//
-//        simpleBean = unmarshaller.unmarshall(SimpleBean.class, simpleBean, parseObject);
-//        //get field names, get method names
-//        //iterate field contents
-//
-//        Set<?> s = parseObject.keySet();
-//        //iterate and persist keys from model
-//        Window.alert("BEGIN TEST-----------------UNMARSHALL");
-//        Iterator<?> i = s.iterator();
-//        do {
-//            String k = i.next().toString();
-//            Field[] fields = GwtReflect.getPublicFields(archetype);
-//            for (int c = 0; c < fields.length; c++) {
-//                if (k == fields[c].getName()) {
-//                    String message = null;
-//                    try {
-//                        Object expectableparse = null;
-//                        try {
-//                            expectableparse = parseObject.getString(k);
-//                            message = k + " " + parseObject.getString(k) + " <->" + " " + fields[c].getName() + " " + fields[c].get(simpleBean);
-//                        } catch (Exception e) {
-//                        }
-//                        if (expectableparse == null) {
-//                            expectableparse = parseObject.get(k).toString();
-//                            message = k + " " + parseObject.get(k).toString() + " <->" + " " + fields[c].getName() + " " + fields[c].get(simpleBean);
-//                        }
-//                        Object expectablefield = fields[c].get(simpleBean).toString();
-//                        if (expectablefield == expectableparse) {
-//                            message = "PASS: " + k + " " + expectableparse + " <-> " + " " + fields[c].getName() + " " + fields[c].get(simpleBean);
-//                        } else {
-//                            message = "FAIL: " + k + " " + expectableparse + " <-> " + " " + fields[c].getName() + " " + fields[c].get(simpleBean);
-//                        }
-//                        assertEquals(expectablefield, expectableparse); //find workaround for string bug
-//                    } catch (Exception e) {
-//                        //Window.alert(e.toString());
-//                    }
-//                    Window.alert(message);
-//                }
-//            }
-//
-//
-//        } while (i.hasNext());
-//    }
+    public void testUnmarshaller() {
+        GwtReflect.magicClass(SimpleBean.class);
+
+        GwtUnmarshaller unmarshaller = GWT.create(GwtUnmarshaller.class);
+
+        ParseObject parseObject = new ParseObject();
+        parseObject.putString("objectId", "test-object-id");
+        parseObject.putString("nullstr", null);
+        parseObject.putNumber("testint", 1);
+        parseObject.putNumber("testdouble", 2.0);
+        parseObject.putNumber("testlong", 3L);
+        parseObject.putNumber("testshort", 4);
+        parseObject.put("testbyte", null); // TODO
+        parseObject.putBoolean("testboolean", true);
+        parseObject.putNumber("testfloat", 5.0);
+        parseObject.putString("testchar", "a");
+
+        parseObject.putNumber("testInteger", 6);
+        parseObject.putNumber("testDouble", 7);
+        parseObject.putNumber("testLong", 8L);
+        parseObject.putNumber("testShort", 9);
+        parseObject.put("testByte", null);
+        parseObject.putBoolean("testBoolean", false);
+        parseObject.putNumber("testFloat", 10);
+        parseObject.putString("testCharacter", "a");
+        parseObject.put("testbytes", null); // TODO
+        parseObject.putString("testBytes", null); // TODO
+
+        Window.alert("<<<<<<<<" + parseObject.toString());
+        SimpleBean simpleBean = new SimpleBean();
+        Class<?> archetype = simpleBean.getClass();
+        //get non null values from model
+
+        simpleBean = unmarshaller.unmarshall(SimpleBean.class, simpleBean, parseObject);
+        //get field names, get method names
+        //iterate field contents
+
+        Set<?> s = parseObject.keySet();
+        //iterate and persist keys from model
+        Window.alert("BEGIN TEST-----------------UNMARSHALL");
+        Iterator<?> i = s.iterator();
+        do {
+            String k = i.next().toString();
+            Field[] fields = GwtReflect.getPublicFields(archetype);
+            for (int c = 0; c < fields.length; c++) {
+                if (k == fields[c].getName()) {
+                    String message = null;
+                    try {
+                        Object expectableparse = null;
+                        try {
+                            expectableparse = parseObject.getString(k);
+                            message = k + " " + parseObject.getString(k) + " <->" + " " + fields[c].getName() + " " + fields[c].get(simpleBean);
+                        } catch (Exception e) {
+                        }
+                        if (expectableparse == null) {
+                            expectableparse = parseObject.get(k).toString();
+                            message = k + " " + parseObject.get(k).toString() + " <->" + " " + fields[c].getName() + " " + fields[c].get(simpleBean);
+                        }
+                        Object expectablefield = fields[c].get(simpleBean).toString();
+                        if (expectablefield == expectableparse) {
+                            message = "PASS: " + k + " " + expectableparse + " <-> " + " " + fields[c].getName() + " " + fields[c].get(simpleBean);
+                        } else {
+                            message = "FAIL: " + k + " " + expectableparse + " <-> " + " " + fields[c].getName() + " " + fields[c].get(simpleBean);
+                        }
+                        assertEquals(expectablefield, expectableparse); //find workaround for string bug
+                    } catch (Exception e) {
+                        //Window.alert(e.toString());
+                    }
+                    Window.alert(message);
+                }
+            }
+
+
+        } while (i.hasNext());
+    }
 
     public void testParentChildUnmarshaller() {
 
@@ -167,18 +168,16 @@ public class TestGwtUnmarshaller extends GWTTestCase {
         GwtReflect.magicClass(ChildBean.class);
         GwtReflect.magicClass(ParentBean.class);
 
-        GwtUnmarshaller unmarshaller = GWT.create(GwtUnmarshaller.class);
+        ParentBean parentBean = parentObject.unmarshall(ParentBean.class);
 
-        ParentBean parentBean = new ParentBean();
-        unmarshaller.unmarshall(ParentBean.class, parentBean, parentObject);
+        Window.alert("Parent Name   " + parentBean.getName());
+        Window.alert("Parent Age    " + parentBean.getAge());
 
-        GwtMarshaller marshaller = GWT.create(GwtMarshaller.class);
-        ParseObject marshalled = marshaller.marshall(parentBean);
-        Window.alert(marshalled.toString());
-
+        assertNotNull(parentBean);
+        assertEquals("The Parent", parentBean.getName());
+        assertEquals(80, parentBean.getAge().intValue());
         assertNotNull(parentBean.getFavorite());
         assertNotNull(parentBean.getChildren());
-
 
     }
 
