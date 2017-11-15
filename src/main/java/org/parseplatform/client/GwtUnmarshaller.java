@@ -56,6 +56,9 @@ public class GwtUnmarshaller implements Unmarshaller {
                         Class<?> fieldType = fields[c].getType();
                         Browser.getWindow().getConsole().log(fieldType.getName());
                         String fieldName = fields[c].getName();
+                        Browser.getWindow().getConsole().log("Field Type   " + fields[c].getType());
+                        Browser.getWindow().getConsole().log("Field Type Name   " + fields[c].getType().getName());
+
                         //Browser.getWindow().getConsole().log("unmarshall " + fieldName +  " " + fieldType.getName() + " " + parseObject.get(k));
                         if (fieldType.getName() == String.class.getName()) {
                             String converter =  parseObject.getString(k);
@@ -116,11 +119,7 @@ public class GwtUnmarshaller implements Unmarshaller {
                         else if (fieldType.getName() == char.class.getName()) {
                             char converter =  parseObject.get(k).toString().charAt(0);
                             GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
-                        }
-                        else {
-                            throw new RuntimeException("Unsupported type for field");
-                        }
-                        if (fieldType.getName() == Date.class.getName()) {
+                        } else if (fieldType.getName() == Date.class.getName()) {
                             Browser.getWindow().getConsole().log("Date type found");
                             JSONObject jsonDate = new JSONObject();
                             Date date = (Date) value;
@@ -129,11 +128,11 @@ public class GwtUnmarshaller implements Unmarshaller {
                         }
                         else if (fieldType.getName() == Map.class.getName()) { // Object
                             Browser.getWindow().getConsole().log("Map type found");
-                            throw new RuntimeException("Map is not supported use com.parse.gwt.client.types.Object instead");
+                            //throw new RuntimeException("Map is not supported use com.parse.gwt.client.types.Object instead");
                         }
                         else if (fieldType.getName() == List.class.getName()) {
                             Browser.getWindow().getConsole().log("List type found");
-                            throw new RuntimeException("List is not supported use com.parse.gwt.client.types.Array instead");
+                            //throw new RuntimeException("List is not supported use com.parse.gwt.client.types.Array instead");
                         }
                         else if (fieldType.getName() == File.class.getName()) {
                             Browser.getWindow().getConsole().log("File type found");
@@ -173,9 +172,8 @@ public class GwtUnmarshaller implements Unmarshaller {
                         else {
                             // TODO: POJO field
                             ParseObject pojoObject = new ParseObject();
-                            Class<?> pojoClass = fieldType.getClass();
+                            Class<?> pojoClass = fieldType;
                             Browser.getWindow().getConsole().log("POJO type found   " + pojoClass.getName());
-
                             Object pojo = pojoClass.newInstance();
                             pojo = unmarshall(pojoClass, pojo,pojoObject);
                             assert pojo != null;
