@@ -1,6 +1,7 @@
 package org.parseplatform.client.beans;
 
 import com.google.gwt.reflect.client.strategy.ReflectionStrategy;
+import org.parseplatform.client.*;
 import org.parseplatform.client.annotations.Column;
 import org.parseplatform.client.annotations.RuntimeRetention;
 
@@ -17,6 +18,24 @@ public class ParentBean {
     public ChildBean favorite;
     @Column
     public List<ChildBean> children;
+    @Column
+    public ParseACL acl;
+    @Column
+    public ParseRole role;
+    @Column
+    public ParseGeoPoint point;
+    @Column
+    public ParseFile file;
+    @Column
+    public ParseRelation relation;
+    @Column
+    public ParseResponse response;
+    @Column
+    public ParseQuery query;
+    @Column
+    public ParseDate date;
+    @Column
+    public ParseCloud cloud;
 
     public String getName() {
         return name;

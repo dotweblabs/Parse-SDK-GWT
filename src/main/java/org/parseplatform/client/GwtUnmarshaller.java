@@ -57,9 +57,14 @@ public class GwtUnmarshaller implements Unmarshaller {
                         Browser.getWindow().getConsole().log(fieldType.getName());
                         String fieldName = fields[c].getName();
                         //Browser.getWindow().getConsole().log("unmarshall " + fieldName +  " " + fieldType.getName() + " " + parseObject.get(k));
+
                         if (fieldType.getName() == String.class.getName()) {
+
                             String converter =  parseObject.getString(k);
-                            GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
+                            JSONValue jsonValue = parseObject.get(k);
+                            jsonValue.isNumber();
+                            //String s1 = (String) jsonValue;
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, castObject(fieldType, converter));
                         }
                         else if (fieldType.getName() == Boolean.class.getName()){
                             Boolean converter = Boolean.parseBoolean( parseObject.get(k).toString());
@@ -181,5 +186,8 @@ public class GwtUnmarshaller implements Unmarshaller {
         } while (i.hasNext());
         //implement later
         return (T) instance;
+    }
+    private <T> T castObject(Class<T> clazz, Object object) {
+        return (T) object;
     }
 }
