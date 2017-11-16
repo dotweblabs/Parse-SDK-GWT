@@ -20,7 +20,7 @@ import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
-import org.parseplatform.client.util.JSON;
+//import org.parseplatform.client.util.JSON;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -152,10 +152,10 @@ public class ParseResponse extends JSONObject {
      * @param <T> Target object type
      * @return Target object
      */
-    public <T> T as(Class<T> clazz) {
-        T as = JSON.parse(this.toString());
-        return as;
-    }
+//    public <T> T as(Class<T> clazz) {
+//        T as = JSON.parse(this.toString());
+//        return as;
+//    }
 
     public ParseObject asParseObject(String className) {
         return new ParseObject(className, this);

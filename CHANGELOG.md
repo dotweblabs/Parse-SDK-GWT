@@ -1,3 +1,6 @@
+## 0-SNAPSHOT - 11/14/17
+- Added JSONObject parametarized constructor for ParseACL
+
 ## 0-SNAPSHOT - 11/11/17
 - Initial working GwtReflection test 'GwtReflectTest'
 - Use XAPI (gwt-sandbox) to use reflection on GWT

@@ -15,6 +15,8 @@ public class ParentBean {
     @Column
     public Integer age;
     @Column
+    public ChildBean[] childBeans;
+    @Column
     public ChildBean favorite;
     @Column
     public List<ChildBean> children;
@@ -67,5 +69,13 @@ public class ParentBean {
 
     public void setChildren(List<ChildBean> children) {
         this.children = children;
+    }
+
+    public ChildBean[] getChildBeans() {
+        return childBeans;
+    }
+
+    public void setChildBeans(ChildBean[] childBeans) {
+        this.childBeans = childBeans;
     }
 }
