@@ -3,10 +3,12 @@ package org.parseplatform.client;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.json.client.*;
 import com.google.gwt.reflect.shared.GwtReflect;
-import elemental.client.Browser;
+import org.parseplatform.client.annotations.Column;
 import org.parseplatform.types.*;
 import org.parseplatform.util.DateUtil;
 
+import java.lang.annotation.Annotation;
+import com.google.gwt.user.client.Window;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -49,9 +51,9 @@ public class GwtUnmarshaller implements Unmarshaller {
                         //Browser.getWindow().getConsole().log("match");
                         Class<?> fieldType = fields[c].getType();
                         String fieldName = fields[c].getName();
-                        Browser.getWindow().getConsole().log("Field Type        " + fields[c].getType());
-                        Browser.getWindow().getConsole().log("Field Type Name   " + fields[c].getType().getName());
-                        Browser.getWindow().getConsole().log("Field Name        " + fieldName);
+                        Window.alert("Field Type        " + fields[c].getType());
+                        Window.alert("Field Type Name   " + fields[c].getType().getName());
+                        Window.alert("Field Name        " + fieldName);
                         //Browser.getWindow().getConsole().log("unmarshall " + fieldName +  " " + fieldType.getName() + " " + parseObject.get(k));
                         if (fieldType.getName() == String.class.getName()) {
                             String converter =  parseObject.getString(k);
@@ -80,31 +82,45 @@ public class GwtUnmarshaller implements Unmarshaller {
                             char converter =  parseObject.getString(k).charAt(0);
                             GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
                         } else if (fieldType.getName() == Date.class.getName()) {
-                            Browser.getWindow().getConsole().log("Date type found");
+                            Window.alert("Date type found");
                             JSONObject jsonDate = new JSONObject();
 //                            Date date = (Date) value;
 //                            jsonDate.put("__type", new JSONString("Date"));
 //                            jsonDate.put("iso", new JSONString(DateUtil.getStringFormat(date)));
                         } else if(fieldType.isArray()) {
-                            Browser.getWindow().getConsole().log("Array type found");
+                            Window.alert("Array type found");
                         } else if (fieldType.getName() == Map.class.getName()) { // Object
-                            Browser.getWindow().getConsole().log("Map type found");
+                            Window.alert("Map type found");
                             //throw new RuntimeException("Map is not supported use com.parse.gwt.client.types.Object instead");
-                        } else if (fieldType.getName() == List.class.getName()) {
+                        } else if (fieldType.getName() == LinkedList.class.getName()) {
 
-                            ParameterizedType genericType = (ParameterizedType) fields[c].getGenericType();
-                            Browser.getWindow().getConsole().log("List type found   ");
-                            Browser.getWindow().getConsole().log("List Generic Type " + genericType);
+                            Annotation[] testannotation = fields[c].getAnnotations();
+                            Column column = fields[c].getAnnotation(Column.class);
+                            Window.alert("from annotation " + column.type().toString());
+
+                            for (int n = 0; n < testannotation.length; n++) {
+                                Window.alert( "type "  + testannotation[0].annotationType());
+                            }
+                            Window.alert("List type found   " );
+                            Window.alert("List Generic Type ");
                             if(value.isArray() != null) {
-                                Browser.getWindow().getConsole().log("Value array size  " + value.isArray().size());
-                                List<Object> objectList = new LinkedList<>();
-                                JSONArray jsonArray = value.isArray();
+                                Window.alert("Value array size  " + value.isArray().size());
+
+                                LinkedList<Object> objectList = new LinkedList<>();
+                                Object testValue = fields[c].get(instance);
+                                List testLIST = (List) testValue;
+
+
+
+                                JSONArray jsonArray = parseObject.getJSONArray(fieldName);
                                 for(int a=0;a<jsonArray.size();a++) {
                                     JSONValue aValue = jsonArray.get(a);
                                     if(aValue != null && aValue.isObject() != null) {
                                         // TODO Marshall into type?
+                                        Window.alert("array iteration");
                                         JSONObject jsonObject = aValue.isObject();
                                         objectList.add(jsonObject);
+
                                     } else if(aValue != null && aValue.isArray() != null) {
 
                                     } else if(aValue != null && aValue.isNumber() != null) {
@@ -117,30 +133,31 @@ public class GwtUnmarshaller implements Unmarshaller {
 
                                     }
                                 }
+                                Window.alert("array iteration done");
                                 GwtReflect.fieldSet(declaringClass, fieldName, instance, objectList);
                             } else {
                                 throw new RuntimeException("Cannot assign non-JSONArray to " + fieldType.getName());
                             }
                         } else if (fieldType.getName() == File.class.getName()) {
-                            Browser.getWindow().getConsole().log("File type found");
+                            Window.alert("File type found");
                             JSONObject jsonFile = new JSONObject();
 //                            File file = (File) value;
 //                            jsonFile.put("__type", new JSONString("File"));
 //                            jsonFile.put("url", new JSONString(file.url));
 //                            jsonFile.put("name", new JSONString(file.name));
                         } else if (fieldType.getName() == GeoPoint.class.getName()) {
-                            Browser.getWindow().getConsole().log("GeoPoint type found");
+                            Window.alert("GeoPoint type found");
 //                            GeoPoint geoPoint = (GeoPoint) value;
 //                            ParseGeoPoint parseGeoPoint = new ParseGeoPoint(geoPoint.longitude, geoPoint.latitude);
                         } else if (fieldType.getName() == Pointer.class.getName()) {
-                            Browser.getWindow().getConsole().log("Pointer type found");
+                            Window.alert("Pointer type found");
 //                            Pointer pointer = (Pointer) value;
 //                            JSONObject jsonPointer = new JSONObject();
 //                            jsonPointer.put("__type", new JSONString("Pointer"));
 //                            jsonPointer.put("className", new JSONString(pointer.className));
 //                            jsonPointer.put("objectId", new JSONString(pointer.objectId));
                         } else if (fieldType.getName() == Relation.class.getName()) {
-                            Browser.getWindow().getConsole().log("Relation type found");
+                            Window.alert("Relation type found");
 //                            Relation relation = (Relation) value;
 //                            JSONObject jsonRelation = new JSONObject();
 //                            jsonRelation.put("__type", new JSONString("Relation"));
@@ -150,22 +167,22 @@ public class GwtUnmarshaller implements Unmarshaller {
                             Array arrayVaulue = (Array) value;
                         } else if (fieldType.getName() == (Objek.class).getName()) {
                             //Browser.getWindow().getConsole().log("Object type found");
-                        } else {
+                        } else  {
                             // TODO: POJO field
                             JSONObject jsonObject = parseObject.getJSONObject(k);
                             ParseObject pojoObject = new ParseObject(jsonObject);
                             Class<?> pojoClass = fieldType;
                             Object pojo = pojoClass.newInstance();
                             pojo = unmarshall(pojoClass, pojo,pojoObject);
-                            Browser.getWindow().getConsole().log("POJO type found   " + pojoClass.getName());
-                            Browser.getWindow().getConsole().log("Parse Object      " + pojoObject.toString());
-                            Browser.getWindow().getConsole().log("POJO Object       " + pojo.toString());
+                            Window.alert("POJO type found   " + pojoClass.getName());
+                            Window.alert("Parse Object      " + pojoObject.toString());
+                            Window.alert("POJO Object       " + pojo.toString());
                             assert pojo != null;
                             GwtReflect.fieldSet(declaringClass, fieldName, instance, pojo);
                         }
                     }
                 } catch (Exception e) {
-                    Browser.getWindow().getConsole().log(e.getMessage());
+                    Window.alert(e.getMessage());
                 }
             }
         } while (i.hasNext());

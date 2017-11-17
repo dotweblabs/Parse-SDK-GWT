@@ -16,6 +16,7 @@ package org.parseplatform.client;
  * limitations under the License.
  *
  */
+import com.google.gwt.user.client.Window;
 public interface Marshaller {
     public abstract ParseObject marshall(java.lang.Object instance);
 }

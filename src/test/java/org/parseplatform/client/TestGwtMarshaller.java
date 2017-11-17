@@ -23,8 +23,10 @@ import com.google.gwt.user.client.Window;
 import org.parseplatform.client.beans.ChildBean;
 import org.parseplatform.client.beans.ParentBean;
 import org.parseplatform.client.beans.SimpleBean;
+import org.parseplatform.types.Array;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Set;
@@ -135,7 +137,19 @@ public class TestGwtMarshaller extends GWTTestCase {
         ParentBean parentBean = new ParentBean();
 
         parentBean.setAge(99);
+        parentBean.array = new Array();
+        parentBean.array.putString(0,"a");
+        parentBean.array.putString(1,"b");
+        parentBean.array.putString(2,"c");
+        Product product = new Product();
+        product.setId("123");
+        parentBean.listproduct = new ArrayList<>();
+        parentBean.listproduct.add(product);
+        parentBean.listproduct.add(product);
+        parentBean.listproduct.add(product);
 
+
+        Window.alert(parentBean.array.toString());
         ChildBean first = new ChildBean();
 
         first.setName("First");
@@ -170,6 +184,7 @@ public class TestGwtMarshaller extends GWTTestCase {
         GwtMarshaller marshaller = GWT.create(GwtMarshaller.class);
 
         ParseObject parseObject = marshaller.marshall(parentBean);
+        Window.alert(">>>>>>>>" + parseObject.toString());
 
         Window.alert("BEGIN TEST-----------------MARSHALL2");
 

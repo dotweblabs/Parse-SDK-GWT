@@ -163,6 +163,12 @@ public class ParseObject extends JSONObject {
             put(key, new JSONNumber(value));
         }
     }
+    public void putArray(String key, Double value) {
+        if(value != null) {
+
+            put(key, new JSONNumber(value));
+        }
+    }
 
     public void setObjectId(String objectId) {
         if(objectId != null) {
