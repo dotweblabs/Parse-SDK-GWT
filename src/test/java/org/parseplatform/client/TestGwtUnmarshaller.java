@@ -151,11 +151,11 @@ public class TestGwtUnmarshaller extends GWTTestCase {
         parseObjectRef.setObjectId("0");
         firstChildObject.put("pointer", new ParsePointer(parseObjectRef));
 
-        firstChildObject.putString("name", "Second Child");
-        firstChildObject.putNumber("age", 20);
+        secondChildObject.putString("name", "Second Child");
+        secondChildObject.putNumber("age", 20);
 
-        firstChildObject.putString("name", "Third Child");
-        firstChildObject.putNumber("age", 30);
+        thirdChildObject.putString("name", "Third Child");
+        thirdChildObject.putNumber("age", 30);
 
         ParseObject parentObject = new ParseObject();
         parentObject.putString("name", "The Parent");

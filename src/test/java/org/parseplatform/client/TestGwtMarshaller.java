@@ -141,13 +141,6 @@ public class TestGwtMarshaller extends GWTTestCase {
         parentBean.array.putString(0,"a");
         parentBean.array.putString(1,"b");
         parentBean.array.putString(2,"c");
-        Product product = new Product();
-        product.setId("123");
-        parentBean.listproduct = new ArrayList<>();
-        parentBean.listproduct.add(product);
-        parentBean.listproduct.add(product);
-        parentBean.listproduct.add(product);
-
 
         Window.alert(parentBean.array.toString());
         ChildBean first = new ChildBean();

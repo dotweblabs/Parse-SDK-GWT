@@ -32,13 +32,7 @@ public class ParentBean {
     @Column
     public ParseRelation relation;
     @Column
-    public ParseResponse response;
-    @Column
-    public ParseQuery query;
-    @Column
     public ParseDate date;
-    @Column
-    public ParseCloud cloud;
     @Column
     public Array array;
 

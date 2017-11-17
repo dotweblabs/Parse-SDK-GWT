@@ -105,32 +105,35 @@ public class GwtUnmarshaller implements Unmarshaller {
                             Window.alert("List Generic Type ");
                             if(value.isArray() != null) {
                                 Window.alert("Value array size  " + value.isArray().size());
-
                                 List<Object> objectList = new LinkedList<>();
-                                Object testValue = fields[c].get(instance);
-                                List testLIST = (List) testValue;
-
-
-
                                 JSONArray jsonArray = parseObject.getJSONArray(fieldName);
                                 for(int a=0;a<jsonArray.size();a++) {
-                                    JSONValue aValue = jsonArray.get(a);
-                                    if(aValue != null && aValue.isObject() != null) {
-                                        // TODO Marshall into type?
-                                        Window.alert("array iteration");
-                                        JSONObject jsonObject = aValue.isObject();
-                                        objectList.add(jsonObject);
+                                    try {
+                                        JSONValue aValue = jsonArray.get(a);
+                                        if(aValue != null && aValue.isObject() != null) {
+                                            Window.alert("Before adding object to List");
+                                            JSONObject jsonObject = aValue.isObject();
+                                            ParseObject newParseObject = new ParseObject(jsonObject);
+                                            Class<?> componentClass = column.type();
+                                            Object newComponent = componentClass.newInstance();
+                                            Object newObject = unmarshall(componentClass, newComponent, newParseObject);
+                                            assert newObject != null;
+                                            objectList.add(newObject);
+                                            Window.alert("After adding object to List " + newObject.getClass().getName());
+                                            Window.alert("Object " + newObject.toString());
+                                        } else if(aValue != null && aValue.isArray() != null) {
 
-                                    } else if(aValue != null && aValue.isArray() != null) {
+                                        } else if(aValue != null && aValue.isNumber() != null) {
 
-                                    } else if(aValue != null && aValue.isNumber() != null) {
+                                        } else if(aValue != null && aValue.isBoolean() != null) {
 
-                                    } else if(aValue != null && aValue.isBoolean() != null) {
+                                        } else if(aValue != null && aValue.isString() != null) {
 
-                                    } else if(aValue != null && aValue.isString() != null) {
+                                        } else if(aValue != null && aValue.isNull() != null) {
 
-                                    } else if(aValue != null && aValue.isNull() != null) {
-
+                                        }
+                                    } catch (Exception e) {
+                                        Window.alert("Error " + e.getMessage());
                                     }
                                 }
                                 Window.alert("array iteration done");
@@ -167,6 +170,18 @@ public class GwtUnmarshaller implements Unmarshaller {
                             Array arrayVaulue = (Array) value;
                         } else if (fieldType.getName() == (Objek.class).getName()) {
                             //Browser.getWindow().getConsole().log("Object type found");
+                        } else if(fieldType.getName() == ParseACL.class.getName()) {
+
+                        } else if(fieldType.getName() == ParseRole.class.getName()) {
+
+                        } else if(fieldType.getName() == ParseGeoPoint.class.getName()) {
+
+                        } else if(fieldType.getName() == ParseFile.class.getName()) {
+
+                        } else if(fieldType.getName() == ParseRelation.class.getName()) {
+
+                        } else if(fieldType.getName() == ParseDate.class.getName()) {
+
                         } else  {
                             // TODO: POJO field
                             JSONObject jsonObject = parseObject.getJSONObject(k);
