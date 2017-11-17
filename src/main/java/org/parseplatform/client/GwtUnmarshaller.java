@@ -105,156 +105,39 @@ public class GwtUnmarshaller implements Unmarshaller {
                             Window.alert("List Generic Type ");
                             if(value.isArray() != null) {
                                 Window.alert("Value array size  " + value.isArray().size());
-                                Object testValue = fields[c].get(instance);
-
-                                Object testINSTANCE =  fields[c].getType().newInstance();
-
-                                List testLIST = new List() {
-                                    @Override
-                                    public int size() {
-                                        return 0;
-                                    }
-
-                                    @Override
-                                    public boolean isEmpty() {
-                                        return false;
-                                    }
-
-                                    @Override
-                                    public boolean contains(Object o) {
-                                        return false;
-                                    }
-
-                                    @Override
-                                    public Iterator iterator() {
-                                        return null;
-                                    }
-
-                                    @Override
-                                    public Object[] toArray() {
-                                        return new Object[0];
-                                    }
-
-                                    @Override
-                                    public Object[] toArray(Object[] a) {
-                                        return new Object[0];
-                                    }
-
-                                    @Override
-                                    public boolean add(Object o) {
-                                        return false;
-                                    }
-
-                                    @Override
-                                    public boolean remove(Object o) {
-                                        return false;
-                                    }
-
-                                    @Override
-                                    public boolean containsAll(Collection c) {
-                                        return false;
-                                    }
-
-                                    @Override
-                                    public boolean addAll(Collection c) {
-                                        return false;
-                                    }
-
-                                    @Override
-                                    public boolean addAll(int index, Collection c) {
-                                        return false;
-                                    }
-
-                                    @Override
-                                    public boolean removeAll(Collection c) {
-                                        return false;
-                                    }
-
-                                    @Override
-                                    public boolean retainAll(Collection c) {
-                                        return false;
-                                    }
-
-                                    @Override
-                                    public void clear() {
-
-                                    }
-
-                                    @Override
-                                    public Object get(int index) {
-                                        return null;
-                                    }
-
-                                    @Override
-                                    public Object set(int index, Object element) {
-                                        return null;
-                                    }
-
-                                    @Override
-                                    public void add(int index, Object element) {
-
-                                    }
-
-                                    @Override
-                                    public Object remove(int index) {
-                                        return null;
-                                    }
-
-                                    @Override
-                                    public int indexOf(Object o) {
-                                        return 0;
-                                    }
-
-                                    @Override
-                                    public int lastIndexOf(Object o) {
-                                        return 0;
-                                    }
-
-                                    @Override
-                                    public ListIterator listIterator() {
-                                        return null;
-                                    }
-
-                                    @Override
-                                    public ListIterator listIterator(int index) {
-                                        return null;
-                                    }
-
-                                    @Override
-                                    public List subList(int fromIndex, int toIndex) {
-                                        return null;
-                                    }
-                                };
-                                Object o = new Object();
-
-
-
-
+                                List<Object> objectList = new LinkedList<>();
                                 JSONArray jsonArray = parseObject.getJSONArray(fieldName);
-
                                 for(int a=0;a<jsonArray.size();a++) {
-                                    JSONValue aValue = jsonArray.get(a);
-                                    if(aValue != null && aValue.isObject() != null) {
-                                        // TODO Marshall into type?
-                                        Window.alert("array iteration");
-                                        JSONObject jsonObject = aValue.isObject();
-                                        testLIST.add(jsonObject);
-                                    } else if(aValue != null && aValue.isArray() != null) {
+                                    try {
+                                        JSONValue aValue = jsonArray.get(a);
+                                        if(aValue != null && aValue.isObject() != null) {
+                                            Window.alert("Before adding object to List");
+                                            JSONObject jsonObject = aValue.isObject();
+                                            ParseObject newParseObject = new ParseObject(jsonObject);
+                                            Class<?> componentClass = column.type();
+                                            Object newComponent = componentClass.newInstance();
+                                            Object newObject = unmarshall(componentClass, newComponent, newParseObject);
+                                            assert newObject != null;
+                                            objectList.add(newObject);
+                                            Window.alert("After adding object to List " + newObject.getClass().getName());
+                                            Window.alert("Object " + newObject.toString());
+                                        } else if(aValue != null && aValue.isArray() != null) {
 
-                                    } else if(aValue != null && aValue.isNumber() != null) {
+                                        } else if(aValue != null && aValue.isNumber() != null) {
 
-                                    } else if(aValue != null && aValue.isBoolean() != null) {
+                                        } else if(aValue != null && aValue.isBoolean() != null) {
 
-                                    } else if(aValue != null && aValue.isString() != null) {
+                                        } else if(aValue != null && aValue.isString() != null) {
 
-                                    } else if(aValue != null && aValue.isNull() != null) {
+                                        } else if(aValue != null && aValue.isNull() != null) {
 
+                                        }
+                                    } catch (Exception e) {
+                                        Window.alert("Error " + e.getMessage());
                                     }
                                 }
-                                Window.alert("list class " + testLIST.get(0).getClass());
                                 Window.alert("array iteration done");
-
-                                GwtReflect.fieldSet(declaringClass, fieldName, instance, testLIST);
+                                GwtReflect.fieldSet(declaringClass, fieldName, instance, objectList);
                             } else {
                                 throw new RuntimeException("Cannot assign non-JSONArray to " + fieldType.getName());
                             }
@@ -287,6 +170,18 @@ public class GwtUnmarshaller implements Unmarshaller {
                             Array arrayVaulue = (Array) value;
                         } else if (fieldType.getName() == (Objek.class).getName()) {
                             //Browser.getWindow().getConsole().log("Object type found");
+                        } else if(fieldType.getName() == ParseACL.class.getName()) {
+
+                        } else if(fieldType.getName() == ParseRole.class.getName()) {
+
+                        } else if(fieldType.getName() == ParseGeoPoint.class.getName()) {
+
+                        } else if(fieldType.getName() == ParseFile.class.getName()) {
+
+                        } else if(fieldType.getName() == ParseRelation.class.getName()) {
+
+                        } else if(fieldType.getName() == ParseDate.class.getName()) {
+
                         } else  {
                             // TODO: POJO field
                             JSONObject jsonObject = parseObject.getJSONObject(k);

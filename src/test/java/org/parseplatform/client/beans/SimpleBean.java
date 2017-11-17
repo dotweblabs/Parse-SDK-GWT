@@ -1,11 +1,9 @@
 package org.parseplatform.client.beans;
 
 import com.google.gwt.reflect.client.strategy.ReflectionStrategy;
-import org.parseplatform.client.Product;
 import org.parseplatform.client.annotations.Column;
 import org.parseplatform.client.annotations.RuntimeRetention;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -72,9 +70,6 @@ public class SimpleBean {
 
     @Column
     public Byte[] testBytes;
-
-    @Column(type = Product.class)
-    public List<Product> testList = new ArrayList<>();
 
     public String getObjectId() {
         return objectId;
