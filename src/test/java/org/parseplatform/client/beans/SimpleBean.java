@@ -5,6 +5,7 @@ import org.parseplatform.client.Product;
 import org.parseplatform.client.annotations.Column;
 import org.parseplatform.client.annotations.RuntimeRetention;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -73,7 +74,7 @@ public class SimpleBean {
     public Byte[] testBytes;
 
     @Column(type = Product.class)
-    public LinkedList<Product> testList;
+    public List<Product> testList = new ArrayList<>();
 
     public String getObjectId() {
         return objectId;

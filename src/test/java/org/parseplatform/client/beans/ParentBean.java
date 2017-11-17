@@ -20,8 +20,10 @@ public class ParentBean {
     public ChildBean[] childBeans;
     @Column
     public ChildBean favorite;
-    @Column
+
+    @Column(type = ChildBean.class)
     public List<ChildBean> children;
+
     @Column
     public ParseACL acl;
     @Column

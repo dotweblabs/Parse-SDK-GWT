@@ -92,7 +92,7 @@ public class GwtUnmarshaller implements Unmarshaller {
                         } else if (fieldType.getName() == Map.class.getName()) { // Object
                             Window.alert("Map type found");
                             //throw new RuntimeException("Map is not supported use com.parse.gwt.client.types.Object instead");
-                        } else if (fieldType.getName() == LinkedList.class.getName()) {
+                        } else if (fieldType.getName() == List.class.getName()) {
 
                             Annotation[] testannotation = fields[c].getAnnotations();
                             Column column = fields[c].getAnnotation(Column.class);
@@ -105,22 +105,140 @@ public class GwtUnmarshaller implements Unmarshaller {
                             Window.alert("List Generic Type ");
                             if(value.isArray() != null) {
                                 Window.alert("Value array size  " + value.isArray().size());
-
-                                LinkedList<Object> objectList = new LinkedList<>();
                                 Object testValue = fields[c].get(instance);
-                                List testLIST = (List) testValue;
+
+                                Object testINSTANCE =  fields[c].getType().newInstance();
+
+                                List testLIST = new List() {
+                                    @Override
+                                    public int size() {
+                                        return 0;
+                                    }
+
+                                    @Override
+                                    public boolean isEmpty() {
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean contains(Object o) {
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public Iterator iterator() {
+                                        return null;
+                                    }
+
+                                    @Override
+                                    public Object[] toArray() {
+                                        return new Object[0];
+                                    }
+
+                                    @Override
+                                    public Object[] toArray(Object[] a) {
+                                        return new Object[0];
+                                    }
+
+                                    @Override
+                                    public boolean add(Object o) {
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean remove(Object o) {
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean containsAll(Collection c) {
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean addAll(Collection c) {
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean addAll(int index, Collection c) {
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean removeAll(Collection c) {
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean retainAll(Collection c) {
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public void clear() {
+
+                                    }
+
+                                    @Override
+                                    public Object get(int index) {
+                                        return null;
+                                    }
+
+                                    @Override
+                                    public Object set(int index, Object element) {
+                                        return null;
+                                    }
+
+                                    @Override
+                                    public void add(int index, Object element) {
+
+                                    }
+
+                                    @Override
+                                    public Object remove(int index) {
+                                        return null;
+                                    }
+
+                                    @Override
+                                    public int indexOf(Object o) {
+                                        return 0;
+                                    }
+
+                                    @Override
+                                    public int lastIndexOf(Object o) {
+                                        return 0;
+                                    }
+
+                                    @Override
+                                    public ListIterator listIterator() {
+                                        return null;
+                                    }
+
+                                    @Override
+                                    public ListIterator listIterator(int index) {
+                                        return null;
+                                    }
+
+                                    @Override
+                                    public List subList(int fromIndex, int toIndex) {
+                                        return null;
+                                    }
+                                };
+                                Object o = new Object();
+
 
 
 
                                 JSONArray jsonArray = parseObject.getJSONArray(fieldName);
+
                                 for(int a=0;a<jsonArray.size();a++) {
                                     JSONValue aValue = jsonArray.get(a);
                                     if(aValue != null && aValue.isObject() != null) {
                                         // TODO Marshall into type?
                                         Window.alert("array iteration");
                                         JSONObject jsonObject = aValue.isObject();
-                                        objectList.add(jsonObject);
-
+                                        testLIST.add(jsonObject);
                                     } else if(aValue != null && aValue.isArray() != null) {
 
                                     } else if(aValue != null && aValue.isNumber() != null) {
@@ -133,8 +251,10 @@ public class GwtUnmarshaller implements Unmarshaller {
 
                                     }
                                 }
+                                Window.alert("list class " + testLIST.get(0).getClass());
                                 Window.alert("array iteration done");
-                                GwtReflect.fieldSet(declaringClass, fieldName, instance, objectList);
+
+                                GwtReflect.fieldSet(declaringClass, fieldName, instance, testLIST);
                             } else {
                                 throw new RuntimeException("Cannot assign non-JSONArray to " + fieldType.getName());
                             }
