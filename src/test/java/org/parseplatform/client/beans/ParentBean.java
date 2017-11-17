@@ -6,6 +6,7 @@ import org.parseplatform.client.annotations.Column;
 import org.parseplatform.client.annotations.RuntimeRetention;
 import org.parseplatform.types.Array;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @RuntimeRetention
@@ -20,7 +21,7 @@ public class ParentBean {
     @Column
     public ChildBean favorite;
     @Column(type = ChildBean.class)
-    public List<ChildBean> children;
+    public LinkedList<ChildBean> children;
     @Column
     public ParseACL acl;
     @Column
@@ -60,11 +61,11 @@ public class ParentBean {
         this.favorite = favorite;
     }
 
-    public List<ChildBean> getChildren() {
+    public LinkedList<ChildBean> getChildren() {
         return children;
     }
 
-    public void setChildren(List<ChildBean> children) {
+    public void setChildren(LinkedList<ChildBean> children) {
         this.children = children;
     }
 

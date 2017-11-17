@@ -92,7 +92,7 @@ public class GwtUnmarshaller implements Unmarshaller {
                         } else if (fieldType.getName() == Map.class.getName()) { // Object
                             Window.alert("Map type found");
                             //throw new RuntimeException("Map is not supported use com.parse.gwt.client.types.Object instead");
-                        } else if (fieldType.getName() == List.class.getName()) {
+                        } else if (fieldType.getName() == LinkedList.class.getName()) {
 
                             Annotation[] testannotation = fields[c].getAnnotations();
                             Column column = fields[c].getAnnotation(Column.class);
