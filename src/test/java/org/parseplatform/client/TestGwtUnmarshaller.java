@@ -146,7 +146,7 @@ public class TestGwtUnmarshaller extends GWTTestCase {
         firstChildObject.put("relation", relation);
         firstChildObject.put("geoPoint", new ParseGeoPoint(100.10, 200.10));
 
-        ParseFile file = new ParseFile();
+        ParseFile file = new ParseFile("sample.txt", "http://localhost/sample.txt");
         firstChildObject.put("file", file);
 
         ParseObject parseObjectRef = new ParseObject("ReferenceObject");

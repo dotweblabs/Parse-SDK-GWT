@@ -117,11 +117,17 @@ public class GwtUnmarshaller implements Unmarshaller {
                         } else if (fieldType.getName() == Relation.class.getName()) {
                             GwtReflect.fieldSet(declaringClass, fieldName, instance, isAssignable(value, Relation.class));
                         } else if(fieldType.getName() == ParseACL.class.getName()) {
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, isAssignable(value, ParseACL.class));
                         } else if(fieldType.getName() == ParseRole.class.getName()) {
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, isAssignable(value, ParseRole.class));
                         } else if(fieldType.getName() == ParseGeoPoint.class.getName()) {
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, isAssignable(value, ParseGeoPoint.class));
                         } else if(fieldType.getName() == ParseFile.class.getName()) {
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, isAssignable(value, ParseFile.class));
                         } else if(fieldType.getName() == ParseRelation.class.getName()) {
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, isAssignable(value, ParseRelation.class));
                         } else if(fieldType.getName() == ParseDate.class.getName()) {
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, isAssignable(value, ParseDate.class));
                         } else  {
                             JSONObject jsonObject = parseObject.getJSONObject(k);
                             ParseObject pojoObject = new ParseObject(jsonObject);
@@ -211,17 +217,57 @@ public class GwtUnmarshaller implements Unmarshaller {
                 }
             }
         } else if(clazz.getName() == ParseACL.class.getName()) {
-            // TODO
+            if(value != null && value.isObject() != null) {
+                return new ParseACL(value.isObject());
+            }
         } else if(clazz.getName() == ParseDate.class.getName()) {
-            // TODO
+            if(value != null && value.isObject() != null) {
+                String iso = value.isObject().get("iso") != null && value.isObject().get("iso").isString() != null
+                        ? value.isObject().get("iso").isString().stringValue() : null;
+                return new ParseDate(iso);
+            }
         } else if(clazz.getName() == ParseFile.class.getName()) {
-            // TODO
+            if(value != null && value.isObject() != null) {
+                JSONObject fileObject = value.isObject();
+                if(fileObject.get("__type").isString() != null && fileObject.get("__type").isString().stringValue().equals("File")) {
+                    String url = fileObject.get("url").isString() != null && fileObject.get("url").isString().stringValue() != null
+                            ? fileObject.get("url").isString().stringValue() : null;
+                    String name = fileObject.get("name").isString() != null && fileObject.get("name").isString().stringValue() != null
+                            ? fileObject.get("name").isString().stringValue() : null;
+                    return new ParseFile(url, name);
+                }
+            }
         } else if(clazz.getName() == ParseGeoPoint.class.getName()) {
-            // TODO
+            if(value != null && value.isObject() != null) {
+                JSONObject fileObject = value.isObject();
+                if(fileObject.get("__type").isString() != null && fileObject.get("__type").isString().stringValue().equals("GeoPoint")) {
+                    String longitude = fileObject.get("longitude").isString() != null && fileObject.get("longitude").isString().stringValue() != null
+                            ? fileObject.get("longitude").isString().stringValue() : null;
+                    String latitude = fileObject.get("latitude").isString() != null && fileObject.get("latitude").isString().stringValue() != null
+                            ? fileObject.get("latitude").isString().stringValue() : null;
+                    return new ParseGeoPoint(Double.valueOf(longitude), Double.valueOf(latitude));
+                }
+            }
         } else if(clazz.getName() == ParsePointer.class.getName()) {
-            // TODO
+            if(value != null && value.isObject() != null) {
+                JSONObject pointerObject = value.isObject();
+                if(pointerObject.get("__type").isString() != null && pointerObject.get("__type").isString().stringValue().equals("Pointer")) {
+                    String className = pointerObject.get("className").isString() != null && pointerObject.get("className").isString().stringValue() != null
+                            ? pointerObject.get("className").isString().stringValue() : null;
+                    String objectId = pointerObject.get("objectId").isString() != null && pointerObject.get("objectId").isString().stringValue() != null
+                            ? pointerObject.get("objectId").isString().stringValue() : null;
+                    return new ParsePointer(className, objectId);
+                }
+            }
         } else if(clazz.getName() == ParseRelation.class.getName()) {
-            // TODO
+            if(value != null && value.isObject() != null) {
+                JSONObject relationObject = value.isObject();
+                if(relationObject.get("__type").isString() != null && relationObject.get("__type").isString().stringValue().equals("Relation")) {
+                    String className = relationObject.get("className").isString() != null && relationObject.get("className").isString().stringValue() != null
+                            ? relationObject.get("className").isString().stringValue() : null;
+                    return new ParseRelation(className);
+                }
+            }
         } else if(clazz.getName() == File.class.getName()) {
             if(value != null && value.isObject() != null) {
                 JSONObject fileObject = value.isObject();

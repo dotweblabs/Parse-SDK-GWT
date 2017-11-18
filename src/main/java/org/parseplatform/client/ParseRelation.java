@@ -28,7 +28,9 @@ import com.google.gwt.json.client.JSONString;
  * @version 0-SNAPSHOT
  */
 public class ParseRelation extends JSONObject {
+
     public ParseRelation() {}
+
     public ParseRelation(String className) {
         put("__type", new JSONString("Relation"));
         put("className", new JSONString(className));
