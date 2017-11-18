@@ -111,11 +111,9 @@ public class GwtUnmarshaller implements Unmarshaller {
                         } else if (fieldType.getName() == File.class.getName()) {
                             GwtReflect.fieldSet(declaringClass, fieldName, instance, isAssignable(value, File.class));
                         } else if (fieldType.getName() == GeoPoint.class.getName()) {
-                            log("GeoPoint type found");
-//                            GeoPoint geoPoint = (GeoPoint) value;
-//                            ParseGeoPoint parseGeoPoint = new ParseGeoPoint(geoPoint.longitude, geoPoint.latitude);
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, isAssignable(value, GeoPoint.class));
                         } else if (fieldType.getName() == Pointer.class.getName()) {
-                            log("Pointer type found");
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, isAssignable(value, Pointer.class));
                         } else if (fieldType.getName() == Relation.class.getName()) {
                             log("Relation type found");
                         } else if (fieldType.getName() == Array.class.getName()) {
@@ -228,15 +226,43 @@ public class GwtUnmarshaller implements Unmarshaller {
         } else if(clazz.getName() == File.class.getName()) {
             if(value != null && value.isObject() != null) {
                 JSONObject fileObject = value.isObject();
-                if(fileObject.get("__type").isString() != null) {
+                if(fileObject.get("__type").isString() != null && fileObject.get("__type").isString().stringValue().equals("File")) {
                     String url = fileObject.get("url").isString() != null && fileObject.get("url").isString().stringValue() != null
                             ? fileObject.get("url").isString().stringValue() : null;
-                    String name = fileObject.get("url").isString() != null && fileObject.get("url").isString().stringValue() != null
-                            ? fileObject.get("url").isString().stringValue() : null;
+                    String name = fileObject.get("name").isString() != null && fileObject.get("name").isString().stringValue() != null
+                            ? fileObject.get("name").isString().stringValue() : null;
                     File file = new File();
                     file.setName(name);
                     file.setUrl(url);
                     return file;
+                }
+            }
+        } else if(clazz.getName() == GeoPoint.class.getName()) {
+            if(value != null && value.isObject() != null) {
+                JSONObject geoPointObject = value.isObject();
+                if(geoPointObject.get("__type").isString() != null && geoPointObject.get("__type").isString().stringValue().equals("GeoPoint")) {
+                    String latitude = geoPointObject.get("latitude").isString() != null && geoPointObject.get("latitude").isString().stringValue() != null
+                            ? geoPointObject.get("latitude").isString().stringValue() : null;
+                    String longitude = geoPointObject.get("longitude").isString() != null && geoPointObject.get("longitude").isString().stringValue() != null
+                            ? geoPointObject.get("longitude").isString().stringValue() : null;
+                    GeoPoint geoPoint = new GeoPoint();
+                    geoPoint.setLatitude(Double.valueOf(latitude));
+                    geoPoint.setLongitude(Double.valueOf(longitude));
+                    return geoPoint;
+                }
+            }
+        } else if(clazz.getName() == Pointer.class.getName()) {
+            if(value != null && value.isObject() != null) {
+                JSONObject pointerObject = value.isObject();
+                if(pointerObject.get("__type").isString() != null && pointerObject.get("__type").isString().stringValue().equals("Pointer")) {
+                    String className = pointerObject.get("className").isString() != null && pointerObject.get("className").isString().stringValue() != null
+                            ? pointerObject.get("className").isString().stringValue() : null;
+                    String objectId = pointerObject.get("objectId").isString() != null && pointerObject.get("objectId").isString().stringValue() != null
+                            ? pointerObject.get("objectId").isString().stringValue() : null;
+                    Pointer pointer = new Pointer();
+                    pointer.setClassName(className);
+                    pointer.setObjectId(objectId);
+                    return pointer;
                 }
             }
         }
