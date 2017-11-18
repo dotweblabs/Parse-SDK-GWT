@@ -7,9 +7,6 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by Kerby on 2/24/2017.
- */
 public class Array extends JSONArray {
     public Boolean getBoolean(int index) {
         JSONValue value = get(index);

@@ -164,9 +164,6 @@ public class GwtMarshaller implements Marshaller {
                 Browser.getWindow().getConsole().log("Array type found");
                 Array arrayValue = (Array) value;
                 parseObject.put(fieldName, (JSONArray) value);
-            } else if (fieldType.getName() == (Objek.class).getName()) {
-                Browser.getWindow().getConsole().log("Object type found");
-                parseObject.put(fieldName, (JSONObject) value);
             } else if (fieldType.getName() == byte.class.getName()) {
                 Browser.getWindow().getConsole().warn("byte type found " + value.toString());
                 parseObject.put(fieldName, new JSONNumber(Integer.parseInt(value.toString())));

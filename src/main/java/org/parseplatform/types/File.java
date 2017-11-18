@@ -1,9 +1,22 @@
 package org.parseplatform.types;
 
-/**
- * Created by Kerby on 2/23/2017.
- */
 public class File {
     public String name;
     public String url;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 }

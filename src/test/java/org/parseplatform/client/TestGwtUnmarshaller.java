@@ -153,6 +153,37 @@ public class TestGwtUnmarshaller extends GWTTestCase {
         parseObjectRef.setObjectId("0");
         firstChildObject.put("pointer", new ParsePointer(parseObjectRef));
 
+        JSONArray shows = new JSONArray();
+        shows.set(0, new JSONString("Movie 1"));
+        shows.set(1, new JSONString("Movie 2"));
+        shows.set(2, new JSONString("Movie 3"));
+
+        JSONArray yess = new JSONArray();
+        yess.set(0, JSONBoolean.getInstance(true));
+        yess.set(1, JSONBoolean.getInstance(false));
+        yess.set(2, JSONBoolean.getInstance(true));
+
+        JSONArray doubles = new JSONArray();
+        doubles.set(0, new JSONNumber(1.11));
+        doubles.set(1, new JSONNumber(2.22));
+        doubles.set(2, new JSONNumber(3.33));
+
+        JSONArray floats = new JSONArray();
+        floats.set(0, new JSONNumber(2.22));
+        floats.set(1, new JSONNumber(3.33));
+        floats.set(2, new JSONNumber(4.44));
+
+        JSONArray shorts = new JSONArray();
+        shorts.set(0, new JSONNumber(7.77));
+        shorts.set(1, new JSONNumber(8.88));
+        shorts.set(2, new JSONNumber(9.00));
+
+        firstChildObject.put("shows", shows);
+        firstChildObject.put("yess", yess);
+        firstChildObject.put("doubles", doubles);
+        firstChildObject.put("floats", floats);
+        firstChildObject.put("shorts", shorts);
+
         secondChildObject.putString("name", "Second Child");
         secondChildObject.putNumber("age", 20);
 
@@ -190,8 +221,16 @@ public class TestGwtUnmarshaller extends GWTTestCase {
 
         ChildBean favorite = parentBean.getFavorite();
         assertNotNull(favorite.getDob());
+        assertEquals("First Child", favorite.getName());
+        assertEquals(10, favorite.getAge());
         assertEquals("2017-06-23T02:59:59.255", DateUtil.getStringFormat(favorite.getDob())); // TODO: Z is missing
-        
+
+//        assertNotNull(favorite.getShows());
+//        assertNotNull(favorite.getYess());
+//        assertNotNull(favorite.getDoubles());
+//        assertNotNull(favorite.getFloats());
+//        assertNotNull(favorite.getShorts());
+
     }
 
     public static void log(String s) {

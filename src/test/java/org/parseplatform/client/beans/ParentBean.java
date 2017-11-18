@@ -3,6 +3,7 @@ package org.parseplatform.client.beans;
 import com.google.gwt.reflect.client.strategy.ReflectionStrategy;
 import org.parseplatform.client.*;
 import org.parseplatform.client.annotations.Column;
+import org.parseplatform.client.annotations.ComponentType;
 import org.parseplatform.client.annotations.RuntimeRetention;
 import org.parseplatform.types.Array;
 
@@ -20,7 +21,8 @@ public class ParentBean {
     public ChildBean[] childBeans;
     @Column
     public ChildBean favorite;
-    @Column(type = ChildBean.class)
+    @Column
+    @ComponentType(type = ChildBean.class)
     public LinkedList<ChildBean> children;
     @Column
     public ParseACL acl;
