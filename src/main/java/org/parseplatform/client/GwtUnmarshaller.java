@@ -6,6 +6,7 @@ import com.google.gwt.reflect.shared.GwtReflect;
 import elemental.client.Browser;
 import org.parseplatform.client.annotations.Column;
 import org.parseplatform.client.annotations.ComponentType;
+import org.parseplatform.client.util.LogUtil;
 import org.parseplatform.types.*;
 import org.parseplatform.util.DateUtil;
 
@@ -16,6 +17,8 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
 
+import static org.parseplatform.client.util.LogUtil.log;
+
 public class GwtUnmarshaller implements Unmarshaller {
     @Override
     public <T> T unmarshall(Class<T> clazz, Object instance, ParseObject parseObject) {
@@ -23,13 +26,7 @@ public class GwtUnmarshaller implements Unmarshaller {
             throw new RuntimeException("Object cannot be null");
         }
         Class<?> declaringClass = instance.getClass();
-        //get objectID from model object
-        String objID = null;
-        //check if model object has objectId field
-        if (objID != null) {
-            //parseMODEL.putString("objectId", String.valueOf(objID));
-        }
-        //get annotations but specifically those with column from parameter object skip for now
+        // get annotations but specifically those with column from parameter object skip for now
         // get fields from mutant
         Field[] fields = GwtReflect.getPublicFields(instance.getClass());
         //match keys from parse model to mutant
@@ -49,13 +46,11 @@ public class GwtUnmarshaller implements Unmarshaller {
                 }
                 try {
                     if (parseObject.get(k) != null && k == fields[c].getName()) {
-                        //Browser.getWindow().getConsole().log("match");
                         Class<?> fieldType = fields[c].getType();
                         String fieldName = fields[c].getName();
-                        Window.alert("Field Type        " + fields[c].getType());
-                        Window.alert("Field Type Name   " + fields[c].getType().getName());
-                        Window.alert("Field Name        " + fieldName);
-                        //Browser.getWindow().getConsole().log("unmarshall " + fieldName +  " " + fieldType.getName() + " " + parseObject.get(k));
+                        log("Field Type        " + fields[c].getType());
+                        log("Field Type Name   " + fields[c].getType().getName());
+                        log("Field Name        " + fieldName);
                         if (fieldType.getName() == String.class.getName()) {
                             String converter =  parseObject.getString(k);
                             GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
@@ -83,7 +78,7 @@ public class GwtUnmarshaller implements Unmarshaller {
                             char converter =  parseObject.getString(k).charAt(0);
                             GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
                         } else if (fieldType.getName() == Date.class.getName()) {
-                            Window.alert("Date type found");
+                            log("Date type found");
                             if(value != null && value.isObject() != null) {
                                 if(value != null && value.isObject() != null
                                         && value.isObject().get("__type") != null
@@ -95,55 +90,34 @@ public class GwtUnmarshaller implements Unmarshaller {
                                 }
                             }
                         } else if(fieldType.isArray()) {
-                            Window.alert("Array type found");
+                            log("Array type found");
                         } else if (fieldType.getName() == Map.class.getName()) { // Object
-                            Window.alert("Map type found");
+                            log("Map type found");
                             //throw new RuntimeException("Map is not supported use com.parse.gwt.client.types.Object instead");
                         } else if (fieldType.getName() == LinkedList.class.getName()) {
-
-                            Annotation[] testannotation = fields[c].getAnnotations();
                             ComponentType componentType = fields[c].getAnnotation(ComponentType.class);
-                            Window.alert("from annotation " + componentType.type().toString());
-
-                            for (int n = 0; n < testannotation.length; n++) {
-                                Window.alert( "type "  + testannotation[0].annotationType());
-                            }
-                            Window.alert("List type found   " );
-                            Window.alert("List Generic Type ");
                             if(value.isArray() != null) {
                                 List<Object> objectList = new LinkedList<>();
                                 JSONArray jsonArray = parseObject.getJSONArray(fieldName);
                                 Class<?> componentClass = componentType.type();
-                                Window.alert("Component Class Name = " + componentClass.getName());
-                                //Object newComponent = componentClass.newInstance();
-                                Window.alert("Value array size  " + value.isArray().size());
-                                Window.alert("Component Class  " + componentClass.getName());
-
                                 for(int j=0;j<jsonArray.size();j++) {
                                     JSONValue jsonValue = jsonArray.get(j);
                                     objectList.add(isAssignable(jsonValue, componentClass));
                                 }
-
-                                Window.alert("array iteration done");
                                 GwtReflect.fieldSet(declaringClass, fieldName, instance, objectList);
                             } else {
                                 throw new RuntimeException("Cannot assign non-JSONArray to " + fieldType.getName());
                             }
                         } else if (fieldType.getName() == File.class.getName()) {
-                            Window.alert("File type found");
-                            JSONObject jsonFile = new JSONObject();
-//                            File file = (File) value;
-//                            jsonFile.put("__type", new JSONString("File"));
-//                            jsonFile.put("url", new JSONString(file.url));
-//                            jsonFile.put("name", new JSONString(file.name));
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, isAssignable(value, File.class));
                         } else if (fieldType.getName() == GeoPoint.class.getName()) {
-                            Window.alert("GeoPoint type found");
+                            log("GeoPoint type found");
 //                            GeoPoint geoPoint = (GeoPoint) value;
 //                            ParseGeoPoint parseGeoPoint = new ParseGeoPoint(geoPoint.longitude, geoPoint.latitude);
                         } else if (fieldType.getName() == Pointer.class.getName()) {
-                            Window.alert("Pointer type found");
+                            log("Pointer type found");
                         } else if (fieldType.getName() == Relation.class.getName()) {
-                            Window.alert("Relation type found");
+                            log("Relation type found");
                         } else if (fieldType.getName() == Array.class.getName()) {
                         } else if(fieldType.getName() == ParseACL.class.getName()) {
                         } else if(fieldType.getName() == ParseRole.class.getName()) {
@@ -157,15 +131,15 @@ public class GwtUnmarshaller implements Unmarshaller {
                             Class<?> pojoClass = fieldType;
                             Object pojo = pojoClass.newInstance();
                             pojo = unmarshall(pojoClass, pojo,pojoObject);
-                            Window.alert("POJO type found   " + pojoClass.getName());
-                            Window.alert("Parse Object      " + pojoObject.toString());
-                            Window.alert("POJO Object       " + pojo.toString());
+                            log("POJO type found   " + pojoClass.getName());
+                            log("Parse Object      " + pojoObject.toString());
+                            log("POJO Object       " + pojo.toString());
                             assert pojo != null;
                             GwtReflect.fieldSet(declaringClass, fieldName, instance, pojo);
                         }
                     }
                 } catch (Exception e) {
-                    Window.alert(e.getMessage());
+                    log(e.getMessage());
                 }
             }
         } while (i.hasNext());
@@ -176,7 +150,7 @@ public class GwtUnmarshaller implements Unmarshaller {
     private void unmarshallList(List list, JSONObject jsonObject) {
 
     }
-    
+
     private void unmarshallMap(Map map, JSONObject jsonObject) {
 
     }
@@ -251,6 +225,20 @@ public class GwtUnmarshaller implements Unmarshaller {
             // TODO
         } else if(clazz.getName() == ParseRelation.class.getName()) {
             // TODO
+        } else if(clazz.getName() == File.class.getName()) {
+            if(value != null && value.isObject() != null) {
+                JSONObject fileObject = value.isObject();
+                if(fileObject.get("__type").isString() != null) {
+                    String url = fileObject.get("url").isString() != null && fileObject.get("url").isString().stringValue() != null
+                            ? fileObject.get("url").isString().stringValue() : null;
+                    String name = fileObject.get("url").isString() != null && fileObject.get("url").isString().stringValue() != null
+                            ? fileObject.get("url").isString().stringValue() : null;
+                    File file = new File();
+                    file.setName(name);
+                    file.setUrl(url);
+                    return file;
+                }
+            }
         }
         return null;
     }
