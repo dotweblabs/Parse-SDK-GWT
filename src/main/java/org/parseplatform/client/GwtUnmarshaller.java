@@ -115,8 +115,7 @@ public class GwtUnmarshaller implements Unmarshaller {
                         } else if (fieldType.getName() == Pointer.class.getName()) {
                             GwtReflect.fieldSet(declaringClass, fieldName, instance, isAssignable(value, Pointer.class));
                         } else if (fieldType.getName() == Relation.class.getName()) {
-                            log("Relation type found");
-                        } else if (fieldType.getName() == Array.class.getName()) {
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, isAssignable(value, Relation.class));
                         } else if(fieldType.getName() == ParseACL.class.getName()) {
                         } else if(fieldType.getName() == ParseRole.class.getName()) {
                         } else if(fieldType.getName() == ParseGeoPoint.class.getName()) {
@@ -263,6 +262,17 @@ public class GwtUnmarshaller implements Unmarshaller {
                     pointer.setClassName(className);
                     pointer.setObjectId(objectId);
                     return pointer;
+                }
+            }
+        } else if(clazz.getName() == Relation.class.getName()) {
+            if(value != null && value.isObject() != null) {
+                JSONObject relationObject = value.isObject();
+                if(relationObject.get("__type").isString() != null && relationObject.get("__type").isString().stringValue().equals("Relation")) {
+                    String className = relationObject.get("className").isString() != null && relationObject.get("className").isString().stringValue() != null
+                            ? relationObject.get("className").isString().stringValue() : null;
+                    Relation relation = new Relation();
+                    relation.setClassName(className);
+                    return relation;
                 }
             }
         }
