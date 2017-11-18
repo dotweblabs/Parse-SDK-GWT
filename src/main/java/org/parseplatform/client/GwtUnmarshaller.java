@@ -114,60 +114,16 @@ public class GwtUnmarshaller implements Unmarshaller {
                                 List<Object> objectList = new LinkedList<>();
                                 JSONArray jsonArray = parseObject.getJSONArray(fieldName);
                                 Class<?> componentClass = componentType.type();
-                                Object newComponent = componentClass.newInstance();
+                                Window.alert("Component Class Name = " + componentClass.getName());
+                                //Object newComponent = componentClass.newInstance();
                                 Window.alert("Value array size  " + value.isArray().size());
                                 Window.alert("Component Class  " + componentClass.getName());
-                                for(int a=0;a<jsonArray.size();a++) {
-                                    try {
-                                        JSONValue aValue = jsonArray.get(a);
-                                        if(aValue != null && aValue.isObject() != null) {
-                                            Window.alert("Before adding object to List");
-                                            JSONObject jsonObject = aValue.isObject();
-                                            ParseObject newParseObject = new ParseObject(jsonObject);
-                                            Object newObject = unmarshall(componentClass, newComponent, newParseObject);
-                                            assert newObject != null;
-                                            objectList.add(newObject);
-                                            Window.alert("After adding object to List " + newObject.getClass().getName());
-                                            Window.alert("Object " + newObject.toString());
-                                        } else if(aValue != null && aValue.isArray() != null) {
-                                            Browser.getWindow().getConsole().log("Array component type is not supported");
-                                        } else if(aValue != null && aValue.isNumber() != null) {
-                                            Window.alert("Component is a JSON number");
-                                            if (componentClass.getName() == Float.class.getName() || componentClass.getName() == float.class.getName()) {
-                                                Double doubleValue = aValue.isNumber().doubleValue();
-                                                Float floatValue =  doubleValue != null ? doubleValue.floatValue() : null;
-                                                objectList.add(floatValue);
-                                            } else if (componentClass.getName() == Double.class.getName() || componentClass.getName() == double.class.getName()) {
-                                                Double doubleValue = aValue.isNumber().doubleValue();
-                                                objectList.add(doubleValue);
-                                            } else if (componentClass.getName() == Integer.class.getName() || componentClass.getName() == int.class.getName()) {
-                                                Double doubleValue = aValue.isNumber().doubleValue();
-                                                Integer intValue = doubleValue != null ? doubleValue.intValue() : null;
-                                                objectList.add(intValue);
-                                            } else if (componentClass.getName() == Long.class.getName() || componentClass.getName() == long.class.getName()) {
-                                                Double doubleValue = aValue.isNumber().doubleValue();
-                                                objectList.add(doubleValue.longValue());
-                                            } else if (componentClass.getName() == Short.class.getName() || componentClass.getName() == short.class.getName()) {
-                                                Double doubleValue = aValue.isNumber().doubleValue();
-                                                objectList.add(doubleValue.shortValue());
-                                            }
-                                        } else if(aValue != null && aValue.isBoolean() != null) {
-                                            if (componentClass.getName() == Boolean.class.getName() || componentClass.getName() == boolean.class.getName()){
-                                                Boolean b = aValue.isBoolean().booleanValue();
-                                                objectList.add(b);
-                                            }
-                                        } else if(aValue != null && aValue.isString() != null) {
-                                            if (componentClass.getName() == String.class.getName()) {
-                                                String converter =  aValue.isString().stringValue();
-                                                objectList.add(converter);
-                                            }
-                                        } else if(aValue != null && aValue.isNull() != null) {
-                                            objectList.add(null);
-                                        }
-                                    } catch (Exception e) {
-                                        Window.alert("Error " + e.getMessage());
-                                    }
+
+                                for(int j=0;j<jsonArray.size();j++) {
+                                    JSONValue jsonValue = jsonArray.get(j);
+                                    objectList.add(isAssignable(jsonValue, componentClass));
                                 }
+
                                 Window.alert("array iteration done");
                                 GwtReflect.fieldSet(declaringClass, fieldName, instance, objectList);
                             } else {
@@ -220,14 +176,83 @@ public class GwtUnmarshaller implements Unmarshaller {
     private void unmarshallList(List list, JSONObject jsonObject) {
 
     }
-
-
+    
     private void unmarshallMap(Map map, JSONObject jsonObject) {
 
     }
 
     static <T> Class getArrayClass(T... param){
         return param.getClass();
+    }
+
+    static Object isAssignable(JSONValue value, Class<?> clazz) {
+        if(clazz.getName() == String.class.getName()) {
+            if(value != null && value.isString() != null) {
+                return value.isString().stringValue();
+            }
+        } else if(clazz.getName() == Boolean.class.getName()
+                || clazz.getName() == boolean.class.getName()) {
+            if(value != null && value.isBoolean() != null) {
+                return value.isBoolean().booleanValue();
+            }
+        } else if(clazz.getName() == Integer.class.getName()
+                || clazz.getName() == int.class.getName()) {
+            if(value != null && value.isNumber() != null) {
+                Double doubleValue =  value.isNumber().doubleValue();
+                return doubleValue.intValue();
+            }
+        } else if(clazz.getName() == Long.class.getName()
+                || clazz.getName() == long.class.getName()) {
+            if(value != null && value.isNumber() != null) {
+                Double doubleValue =  value.isNumber().doubleValue();
+                return doubleValue.longValue();
+            }
+        } else if(clazz.getName() == Double.class.getName()
+                || clazz.getName() == double.class.getName()) {
+            if(value != null && value.isNumber() != null) {
+                Double doubleValue =  value.isNumber().doubleValue();
+                return doubleValue;
+            }
+        } else if(clazz.getName() == Float.class.getName()
+                || clazz.getName() == float.class.getName()) {
+            if(value != null && value.isNumber() != null) {
+                Double doubleValue =  value.isNumber().doubleValue();
+                return doubleValue.floatValue();
+            }
+        } else if(clazz.getName() == Short.class.getName()
+                || clazz.getName() == short.class.getName()) {
+            if(value != null && value.isNumber() != null) {
+                Double doubleValue =  value.isNumber().doubleValue();
+                return doubleValue.shortValue();
+            }
+        } else if(clazz.getName() == Character.class.getName()
+                || clazz.getName() == char.class.getName()) {
+            // TODO
+        } else if(clazz.getName() == Date.class.getName()) {
+            if(value != null && value.isObject() != null) {
+                JSONObject dateObject = value.isObject();
+                if(dateObject.get("__type").isString() != null
+                        && dateObject.get("__type").isString().stringValue().equals("Date")
+                        && dateObject.get("iso") != null
+                        && dateObject.get("iso").isString() != null) {
+                    Date date = DateUtil.iso8601String(dateObject.get("iso").isString().stringValue());
+                    return date;
+                }
+            }
+        } else if(clazz.getName() == ParseACL.class.getName()) {
+            // TODO
+        } else if(clazz.getName() == ParseDate.class.getName()) {
+            // TODO
+        } else if(clazz.getName() == ParseFile.class.getName()) {
+            // TODO
+        } else if(clazz.getName() == ParseGeoPoint.class.getName()) {
+            // TODO
+        } else if(clazz.getName() == ParsePointer.class.getName()) {
+            // TODO
+        } else if(clazz.getName() == ParseRelation.class.getName()) {
+            // TODO
+        }
+        return null;
     }
 
 }

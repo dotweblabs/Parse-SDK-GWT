@@ -225,11 +225,21 @@ public class TestGwtUnmarshaller extends GWTTestCase {
         assertEquals(10, favorite.getAge());
         assertEquals("2017-06-23T02:59:59.255", DateUtil.getStringFormat(favorite.getDob())); // TODO: Z is missing
 
-//        assertNotNull(favorite.getShows());
-//        assertNotNull(favorite.getYess());
-//        assertNotNull(favorite.getDoubles());
-//        assertNotNull(favorite.getFloats());
-//        assertNotNull(favorite.getShorts());
+        assertNotNull(favorite.getShows());
+        assertNotNull(favorite.getYess());
+        assertNotNull(favorite.getDoubles());
+        assertNotNull(favorite.getFloats());
+        assertNotNull(favorite.getShorts());
+
+        assertEquals(3, favorite.getShows().size());
+        assertEquals(3, favorite.getYess().size());
+        assertEquals(3, favorite.getDoubles().size());
+        assertEquals(3, favorite.getFloats().size());
+        assertEquals(3, favorite.getShorts().size());
+
+        assertEquals("Movie 1", favorite.getShows().get(0));
+        assertEquals("Movie 2", favorite.getShows().get(1));
+        assertEquals("Movie 3", favorite.getShows().get(2));
 
     }
 
