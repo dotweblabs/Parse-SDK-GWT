@@ -5,6 +5,8 @@ import org.parseplatform.client.*;
 import org.parseplatform.client.annotations.Column;
 import org.parseplatform.client.annotations.RuntimeRetention;
 
+import java.util.Date;
+
 @RuntimeRetention
 @ReflectionStrategy(keepEverything=true)
 public class ChildBean {
@@ -12,6 +14,8 @@ public class ChildBean {
     public String name;
     @Column
     public int age;
+    @Column
+    public Date dob;
     @Column
     public ParseDate birthdate;
     @Column
@@ -105,5 +109,13 @@ public class ChildBean {
         s = s + "name=" + name ;
         s = s + ",age=" + age;
         return s;
+    }
+
+    public Date getDob() {
+        return dob;
+    }
+
+    public void setDob(Date dob) {
+        this.dob = dob;
     }
 }

@@ -83,10 +83,16 @@ public class GwtUnmarshaller implements Unmarshaller {
                             GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
                         } else if (fieldType.getName() == Date.class.getName()) {
                             Window.alert("Date type found");
-                            JSONObject jsonDate = new JSONObject();
-//                            Date date = (Date) value;
-//                            jsonDate.put("__type", new JSONString("Date"));
-//                            jsonDate.put("iso", new JSONString(DateUtil.getStringFormat(date)));
+                            if(value != null && value.isObject() != null) {
+                                if(value != null && value.isObject() != null
+                                        && value.isObject().get("__type") != null
+                                        && value.isObject().get("__type").isString() != null
+                                        && value.isObject().get("__type").isString().stringValue().equals("Date")) {
+                                    String dateString = value.isObject().get("iso").isString() != null ? value.isObject().get("iso").isString().stringValue() : null;
+                                    Date date = DateUtil.iso8601String(dateString);
+                                    GwtReflect.fieldSet(declaringClass, fieldName, instance, date);
+                                }
+                            }
                         } else if(fieldType.isArray()) {
                             Window.alert("Array type found");
                         } else if (fieldType.getName() == Map.class.getName()) { // Object

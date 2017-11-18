@@ -23,6 +23,7 @@ import elemental.client.Browser;
 import org.parseplatform.client.beans.ChildBean;
 import org.parseplatform.client.beans.ParentBean;
 import org.parseplatform.client.beans.SimpleBean;
+import org.parseplatform.client.util.DateUtil;
 
 import java.lang.reflect.Field;
 import java.util.Iterator;
@@ -136,6 +137,7 @@ public class TestGwtUnmarshaller extends GWTTestCase {
 
         firstChildObject.putString("name", "First Child");
         firstChildObject.putNumber("age", 10);
+        firstChildObject.put("dob", new ParseDate("2017-06-23T02:59:59.255Z"));
         firstChildObject.put("birthdate", new ParseDate("2017-06-23T02:59:59.255Z"));
         firstChildObject.put("ACL", new ParseACL());
         ParseRole role = new ParseRole("parserole");
@@ -182,9 +184,14 @@ public class TestGwtUnmarshaller extends GWTTestCase {
         assertNotNull(parentBean);
         assertEquals("The Parent", parentBean.getName());
         assertEquals(80, parentBean.getAge().intValue());
+
         assertNotNull(parentBean.getFavorite());
         assertNotNull(parentBean.getChildren());
 
+        ChildBean favorite = parentBean.getFavorite();
+        assertNotNull(favorite.getDob());
+        assertEquals("2017-06-23T02:59:59.255", DateUtil.getStringFormat(favorite.getDob())); // TODO: Z is missing
+        
     }
 
     public static void log(String s) {
