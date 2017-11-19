@@ -54,6 +54,7 @@ public class ChildBean {
     public ParseGeoPoint geoPoint;
     @Column
     public ParseFile file;
+
     @Column
     public GeoPoint geo;
 
