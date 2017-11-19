@@ -15,8 +15,7 @@
 package org.parseplatform.client;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.json.client.JSONNumber;
-import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.*;
 import com.google.gwt.junit.client.GWTTestCase;
 import com.google.gwt.reflect.shared.GwtReflect;
 import com.google.gwt.user.client.Window;
@@ -26,10 +25,7 @@ import org.parseplatform.client.beans.SimpleBean;
 import org.parseplatform.types.Array;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Unit tests of {@link Where}
@@ -126,97 +122,128 @@ public class TestGwtMarshaller extends GWTTestCase {
         } while (i.hasNext());
     }
 
-//    public void testParentChildMarshaller() {
-//        Window.alert("WRAPPING CLASSES");
-//        //GwtReflect.magicClass(ChildBean.class);
-//        GwtReflect.magicClass(ParentBean.class);
-//
-//
-//
-//        Window.alert("SETTING VALUES");
-//        ParentBean parentBean = new ParentBean();
-//
-//        parentBean.setAge(99);
-//        parentBean.array = new Array();
-//        parentBean.array.putString(0,"a");
-//        parentBean.array.putString(1,"b");
-//        parentBean.array.putString(2,"c");
-//
-//        Window.alert(parentBean.array.toString());
-//        ChildBean first = new ChildBean();
-//
-//        first.setName("First");
-//        first.setAge(10);
-//        first.setACL(new ParseACL());
-//        first.setBirthdate(new ParseDate("2017-06-23T02:59:59.255Z"));
-//        first.setFile(new ParseFile()); // TODO next
-//        JSONObject geoPointRef = new JSONObject();
-//        geoPointRef.put("longitude", new JSONNumber(100.10));
-//        geoPointRef.put("latitude", new JSONNumber(200.10));
-//        //first.setGeoPoint(ParseGeoPoint.clone(geoPointRef));
-//
-//        Window.alert("SETTING PARSEOBJECT");
-//        ParseRelation relation = new ParseRelation(new ParseObject("TestObject"));
-//        first.setRelation(relation);
-//
-//        ParseObject parseObjectRef = new ParseObject("ReferenceObject");
-//        parseObjectRef.setObjectId("0");
-//        first.setPointer(new ParsePointer(parseObjectRef));
-//        ParseRole role = new ParseRole("parserole");
-//        first.setRole(role);
-//        first.setPointer(new ParsePointer());
-//
-//        ChildBean second = new ChildBean();
-//        ChildBean third = new ChildBean();
-//
-//        parentBean.setFavorite(first);
-//        parentBean.setChildren(Arrays.asList(first,second,third));
-//
-//
-//        Window.alert("BEGIN MARSHALL-----------------MARSHALL2");
-//        GwtMarshaller marshaller = GWT.create(GwtMarshaller.class);
-//
-//        ParseObject parseObject = marshaller.marshall(parentBean);
-//        Window.alert(">>>>>>>>" + parseObject.toString());
-//
-//        Window.alert("BEGIN TEST-----------------MARSHALL2");
-//
-//        Class<?> archetype = parentBean.getClass();
-//        Set<?> s = parseObject.keySet();
-//        //iterate and persist keys from model
-//        Iterator<?> i = s.iterator();
-//        do {
-//            String k = i.next().toString();
-//            Field[] fields = GwtReflect.getDeclaredFields(archetype);
-//            for (int c = 0; c < fields.length; c++) {
-//                if (k == fields[c].getName()) {
-//                    String message = null;
-//                    try {
-//                        Object expectableparse = null;
-//                        try {
-//                            expectableparse = parseObject.getString(k);
-//                            message = k + " " + parseObject.getString(k) + " <->" + " " + fields[c].getName() + "  " + fields[c].get(parentBean);
-//                        } catch (Exception e) {
-//                        }
-//                        if (expectableparse == null) {
-//                            expectableparse = parseObject.get(k).toString();
-//                            message = k + " " + parseObject.get(k).toString() + " <->" + " " + fields[c].getName() + "  " + fields[c].get(parentBean);
-//                        }
-//                        Object expectablefield = fields[c].get(parentBean).toString();
-//                        if (expectablefield == expectableparse) {
-//                            message = "PASS: " + k + " " + expectableparse + " <-> " + " " + fields[c].getName() + "  " + fields[c].get(parentBean);
-//                        } else {
-//                            message = "FAIL: " + k + " " + expectableparse + " <-> " + " " + fields[c].getName() + "  " + fields[c].get(parentBean);
-//                        }
-//                        //assertEquals(expectablefield, expectableparse);
-//                    } catch (Exception e) {
-//                        //Window.alert(e.toString());
-//                    }
-//                    Window.alert(message);
-//                }
-//            }
-//        } while (i.hasNext());
-//    }
+    public void testParentChildMarshaller() {
+        Window.alert("WRAPPING CLASSES");
+        //GwtReflect.magicClass(ChildBean.class);
+        GwtReflect.magicClass(ParentBean.class);
+        GwtReflect.magicClass(ChildBean.class);
+
+
+
+        Window.alert("SETTING VALUES");
+        ParentBean parentBean = new ParentBean();
+
+        parentBean.setAge(99);
+        parentBean.array = new Array();
+        parentBean.array.putString(0,"a");
+        parentBean.array.putString(1,"b");
+        parentBean.array.putString(2,"c");
+
+        Window.alert(parentBean.array.toString());
+        ChildBean first = new ChildBean();
+
+        JSONArray shows = new JSONArray();
+        shows.set(0, new JSONString("Movie 1"));
+        shows.set(1, new JSONString("Movie 2"));
+        shows.set(2, new JSONString("Movie 3"));
+
+        JSONArray yess = new JSONArray();
+        yess.set(0, JSONBoolean.getInstance(true));
+        yess.set(1, JSONBoolean.getInstance(false));
+        yess.set(2, JSONBoolean.getInstance(true));
+
+        JSONArray doubles = new JSONArray();
+        doubles.set(0, new JSONNumber(1.11));
+        doubles.set(1, new JSONNumber(2.22));
+        doubles.set(2, new JSONNumber(3.33));
+
+        JSONArray floats = new JSONArray();
+        floats.set(0, new JSONNumber(2.22));
+        floats.set(1, new JSONNumber(3.33));
+        floats.set(2, new JSONNumber(4.44));
+
+        JSONArray shorts = new JSONArray();
+        shorts.set(0, new JSONNumber(7.77));
+        shorts.set(1, new JSONNumber(8.88));
+        shorts.set(2, new JSONNumber(9.00));
+
+        first.setName("First");
+        first.setAge(10);
+        first.setACL(new ParseACL());
+        first.setBirthdate(new ParseDate("2017-06-23T02:59:59.255Z"));
+        //first.setFile(new ParseFile()); // TODO next
+        JSONObject geoPointRef = new JSONObject();
+        geoPointRef.put("longitude", new JSONNumber(100.10));
+        geoPointRef.put("latitude", new JSONNumber(200.10));
+        //first.setGeoPoint(ParseGeoPoint.clone(geoPointRef));
+
+        Window.alert("SETTING PARSEOBJECT");
+        ParseRelation relation = new ParseRelation(new ParseObject("TestObject"));
+        first.setRelation(relation);
+
+        ParseObject parseObjectRef = new ParseObject("ReferenceObject");
+        parseObjectRef.setObjectId("0");
+        first.setPointer(new ParsePointer(parseObjectRef));
+        ParseRole role = new ParseRole("parserole");
+        first.setRole(role);
+        first.setPointer(new ParsePointer());
+        ChildBean second = new ChildBean();
+        ChildBean third = new ChildBean();
+
+        parentBean.setFavorite(first);
+        parentBean.children = new LinkedList<>();
+
+        parentBean.children.add(first);
+        parentBean.children.add(second);
+        parentBean.children.add(third);
+
+        //parentBean.setChildren(Arrays.asList(first,second,third));
+
+
+        Window.alert("BEGIN MARSHALL-----------------MARSHALL2");
+        GwtMarshaller marshaller = GWT.create(GwtMarshaller.class);
+
+        ParseObject parseObject = marshaller.marshall(parentBean);
+        Window.alert(">>>>>>>>" + parseObject.toString());
+
+        Window.alert("BEGIN TEST-----------------MARSHALL2");
+
+        Class<?> archetype = parentBean.getClass();
+        Set<?> s = parseObject.keySet();
+        //iterate and persist keys from model
+        Iterator<?> i = s.iterator();
+        do {
+            String k = i.next().toString();
+            Field[] fields = GwtReflect.getDeclaredFields(archetype);
+            for (int c = 0; c < fields.length; c++) {
+                if (k == fields[c].getName()) {
+                    String message = null;
+                    try {
+                        Object expectableparse = null;
+                        try {
+                            expectableparse = parseObject.getString(k);
+                            message = k + " " + parseObject.getString(k) + " <->" + " " + fields[c].getName() + "  " + fields[c].get(parentBean);
+                        } catch (Exception e) {
+                        }
+                        if (expectableparse == null) {
+                            expectableparse = parseObject.get(k).toString();
+                            message = k + " " + parseObject.get(k).toString() + " <->" + " " + fields[c].getName() + "  " + fields[c].get(parentBean);
+                        }
+                        Object expectablefield = fields[c].get(parentBean).toString();
+                        if (expectablefield == expectableparse) {
+                            message = "PASS: " + k + " " + expectableparse + " <-> " + " " + fields[c].getName() + "  " + fields[c].get(parentBean);
+                        } else {
+                            message = "FAIL: " + k + " " + expectableparse + " <-> " + " " + fields[c].getName() + "  " + fields[c].get(parentBean);
+                        }
+                        //assertEquals(expectablefield, expectableparse);
+                    } catch (Exception e) {
+                        //Window.alert(e.toString());
+                    }
+                    Window.alert(message);
+                }
+            }
+        } while (i.hasNext());
+    }
 
     public static void log(String s) {
         System.out.println(s);
