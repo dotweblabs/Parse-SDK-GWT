@@ -143,7 +143,7 @@ public class TestGwtUnmarshaller extends GWTTestCase {
         firstChildObject.putNumber("age", 10);
         firstChildObject.put("dob", new ParseDate("2017-06-23T02:59:59.255Z"));
         firstChildObject.put("birthdate", new ParseDate("2017-06-23T02:59:59.255Z"));
-        firstChildObject.put("ACL", new ParseACL());
+//        firstChildObject.put("ACL", new ParseACL());
         ParseRole role = new ParseRole("parserole");
         firstChildObject.put("role", role);
         ParseRelation relation = new ParseRelation(new ParseObject("TestObject"));
@@ -152,6 +152,9 @@ public class TestGwtUnmarshaller extends GWTTestCase {
 
         ParseFile file = new ParseFile("sample.txt", "http://localhost/sample.txt");
         firstChildObject.put("file", file);
+
+        ParseACL ACL = new ParseACL();
+        ACL.setPublicReadAccess(true);
 
         ParseGeoPoint geoPoint = new ParseGeoPoint(100.1,200.1);
         firstChildObject.put("geoPoint", geoPoint);
@@ -272,6 +275,13 @@ public class TestGwtUnmarshaller extends GWTTestCase {
         //Test ParseRelation
         assertNotNull(favorite.getRelation());
         assertEquals("TestObject",favorite.getRelation().getClassName());
+//        //Test ParseACL
+//        assertNotNull(favorite.getACL());
+//        assertEquals("true",favorite.getACL() != null);
+        //Test ParseDate
+        assertNotNull(favorite.getBirthdate());
+        assertEquals("2017-06-23T02:59:59.255Z",favorite.getBirthdate().getIsoDate());
+
     }
 
     public static void log(String s) {
