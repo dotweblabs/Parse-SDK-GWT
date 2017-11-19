@@ -23,6 +23,7 @@ import elemental.client.Browser;
 import org.parseplatform.client.beans.ChildBean;
 import org.parseplatform.client.beans.ParentBean;
 import org.parseplatform.client.beans.SimpleBean;
+import org.parseplatform.client.util.DateUtil;
 
 import java.lang.reflect.Field;
 import java.util.Iterator;
@@ -43,7 +44,7 @@ public class TestGwtUnmarshaller extends GWTTestCase {
         return "org.parseplatform.Parse";
     }
 
-    /*
+
     public void testUnmarshaller() {
         GwtReflect.magicClass(SimpleBean.class);
 
@@ -126,8 +127,12 @@ public class TestGwtUnmarshaller extends GWTTestCase {
 
 
         } while (i.hasNext());
+
+        assertNotNull(simpleBean);
+        assertEquals("test-object-id", simpleBean.getObjectId());
+
     }
-*/
+
     public void testParentChildUnmarshaller() {
 
         ParseObject firstChildObject = new ParseObject();
@@ -136,6 +141,7 @@ public class TestGwtUnmarshaller extends GWTTestCase {
 
         firstChildObject.putString("name", "First Child");
         firstChildObject.putNumber("age", 10);
+        firstChildObject.put("dob", new ParseDate("2017-06-23T02:59:59.255Z"));
         firstChildObject.put("birthdate", new ParseDate("2017-06-23T02:59:59.255Z"));
         firstChildObject.put("ACL", new ParseACL());
         ParseRole role = new ParseRole("parserole");
@@ -144,12 +150,45 @@ public class TestGwtUnmarshaller extends GWTTestCase {
         firstChildObject.put("relation", relation);
         firstChildObject.put("geoPoint", new ParseGeoPoint(100.10, 200.10));
 
-        ParseFile file = new ParseFile();
+        ParseFile file = new ParseFile("sample.txt", "http://localhost/sample.txt");
         firstChildObject.put("file", file);
 
         ParseObject parseObjectRef = new ParseObject("ReferenceObject");
         parseObjectRef.setObjectId("0");
-        firstChildObject.put("pointer", new ParsePointer(parseObjectRef));
+        firstChildObject.put("pointer", new ParsePointer("TestObject", "test-object-id"));
+
+        JSONArray shows = new JSONArray();
+        shows.set(0, new JSONString("Movie 1"));
+        shows.set(1, new JSONString("Movie 2"));
+        shows.set(2, new JSONString("Movie 3"));
+
+        JSONArray yess = new JSONArray();
+        yess.set(0, JSONBoolean.getInstance(true));
+        yess.set(1, JSONBoolean.getInstance(false));
+        yess.set(2, JSONBoolean.getInstance(true));
+
+        JSONArray doubles = new JSONArray();
+        doubles.set(0, new JSONNumber(1.11));
+        doubles.set(1, new JSONNumber(2.22));
+        doubles.set(2, new JSONNumber(3.33));
+
+        JSONArray floats = new JSONArray();
+        floats.set(0, new JSONNumber(2.22));
+        floats.set(1, new JSONNumber(3.33));
+        floats.set(2, new JSONNumber(4.44));
+
+        JSONArray shorts = new JSONArray();
+        shorts.set(0, new JSONNumber(7.77));
+        shorts.set(1, new JSONNumber(8.88));
+        shorts.set(2, new JSONNumber(9.00));
+
+        firstChildObject.put("shows", shows);
+        firstChildObject.put("yess", yess);
+        firstChildObject.put("doubles", doubles);
+        firstChildObject.put("floats", floats);
+        firstChildObject.put("shorts", shorts);
+
+        firstChildObject.put("file", new ParseFile("sample.txt", "http://localhost:8080/sample.txt"));
 
         secondChildObject.putString("name", "Second Child");
         secondChildObject.putNumber("age", 20);
@@ -182,8 +221,40 @@ public class TestGwtUnmarshaller extends GWTTestCase {
         assertNotNull(parentBean);
         assertEquals("The Parent", parentBean.getName());
         assertEquals(80, parentBean.getAge().intValue());
+
         assertNotNull(parentBean.getFavorite());
         assertNotNull(parentBean.getChildren());
+
+        ChildBean favorite = parentBean.getFavorite();
+        assertNotNull(favorite.getDob());
+        assertEquals("First Child", favorite.getName());
+        assertEquals(10, favorite.getAge());
+        assertEquals("2017-06-23T02:59:59.255", DateUtil.getStringFormat(favorite.getDob())); // TODO: Z is missing
+
+        assertNotNull(favorite.getShows());
+        assertNotNull(favorite.getYess());
+        assertNotNull(favorite.getDoubles());
+        assertNotNull(favorite.getFloats());
+        assertNotNull(favorite.getShorts());
+
+        assertEquals(3, favorite.getShows().size());
+        assertEquals(3, favorite.getYess().size());
+        assertEquals(3, favorite.getDoubles().size());
+        assertEquals(3, favorite.getFloats().size());
+        assertEquals(3, favorite.getShorts().size());
+
+        assertEquals("Movie 1", favorite.getShows().get(0));
+        assertEquals("Movie 2", favorite.getShows().get(1));
+        assertEquals("Movie 3", favorite.getShows().get(2));
+
+        assertNotNull(favorite.getPointer());
+        assertEquals("test-object-id", favorite.getPointer().getObjectId());
+
+        // Test ParseFile
+        assertNotNull(favorite.getFile());
+        assertEquals("sample.txt", favorite.getFile().getName());
+        assertEquals("http://localhost:8080/sample.txt", favorite.getFile().getUrl());
+
 
     }
 

@@ -230,13 +230,15 @@ public class GwtUnmarshaller implements Unmarshaller {
             }
         } else if(clazz.getName() == ParseFile.class.getName()) {
             if(value != null && value.isObject() != null) {
+                Window.alert("ParseFile value = " + value.toString());
                 JSONObject fileObject = value.isObject();
-                if(fileObject.get("__type").isString() != null && fileObject.get("__type").isString().stringValue().equals("File")) {
+                Window.alert(fileObject.toString());
+                if(fileObject.get("__type") != null && fileObject.get("__type").isString() != null && fileObject.get("__type").isString().stringValue().equals("File")) {
                     String url = fileObject.get("url").isString() != null && fileObject.get("url").isString().stringValue() != null
                             ? fileObject.get("url").isString().stringValue() : null;
                     String name = fileObject.get("name").isString() != null && fileObject.get("name").isString().stringValue() != null
                             ? fileObject.get("name").isString().stringValue() : null;
-                    return new ParseFile(url, name);
+                    return new ParseFile(name, url);
                 }
             }
         } else if(clazz.getName() == ParseGeoPoint.class.getName()) {

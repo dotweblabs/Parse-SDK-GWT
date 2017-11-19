@@ -17,6 +17,7 @@ public class ParseFile extends JSONObject {
     public ParseFile(String name, String url) {
         put("name", new JSONString(name));
         put("url", new JSONString(url));
+        put("__type", new JSONString("File"));
     }
 
     public String getName() {
