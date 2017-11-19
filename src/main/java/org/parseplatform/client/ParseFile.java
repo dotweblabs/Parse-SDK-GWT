@@ -10,8 +10,24 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import java.util.Iterator;
 
 public class ParseFile extends JSONObject {
+
     public static final String IMAGE_JPEG = "image/jpeg";
     public static final String IMAGE_PNG = "image/png";
+
+    public ParseFile(String name, String url) {
+        put("name", new JSONString(name));
+        put("url", new JSONString(url));
+    }
+
+    public String getName() {
+        String name = get("name") != null && get("name").isString() != null ? get("name").isString().stringValue() : null;
+        return name;
+    }
+
+    public String getUrl() {
+        String url = get("url") != null && get("url").isString() != null ? get("url").isString().stringValue() : null;
+        return url;
+    }
 
     public static void upload(String base64file, String fileName, String mimeType, final ParseAsyncCallback<ParseResponse> callback) {
 //            String data = "{__ContentType : \"" + mimeType + "\", base64 : " + base64file + "}";
