@@ -75,8 +75,20 @@ public class TestGwtMarshaller extends GWTTestCase {
         simpleBean.setTestBoolean(true);
         simpleBean.setTestCharacter('b');
 
+        simpleBean.setFile(new ParseFile("sample.txt", "http://localhost:8080/sample.txt"));
+
         //simple bean to parse objects using accessors and mutators
         ParseObject parseObject = marshaller.marshall(simpleBean);
+
+        assertNotNull(parseObject.getJSONObject("file"));
+
+        JSONObject parseFileObject = parseObject.getJSONObject("file");
+        ParseFile parseFile = new ParseFile(parseFileObject);
+        assertNotNull(parseFile);
+        assertEquals("sample.txt", parseFile.getName());
+        assertEquals("http://localhost:8080/sample.txt", parseFile.getUrl());
+
+
         Window.alert(">>>>>>>>" + parseObject.toString());
         //get non null values from model
         //populate expectation list
