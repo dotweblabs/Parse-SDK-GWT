@@ -47,8 +47,8 @@ public class ParseGeoPoint extends JSONObject {
     }
     public ParseGeoPoint(JSONObject jsonObject) {
         if(jsonObject != null) {
-            put("longitude", (jsonObject.get("longitude") != null && jsonObject.get("longitude").isString() != null)  ? jsonObject.get("longitude").isString() : null);
-            put("latitude", (jsonObject.get("latitude") != null && jsonObject.get("latitude").isString() != null) ? jsonObject.get("latitude").isString() : null);
+            put("longitude", (jsonObject.get("longitude") != null)  ? jsonObject.get("longitude") : null);
+            put("latitude", (jsonObject.get("latitude") != null ) ? jsonObject.get("latitude") : null);
             put("__type", new JSONString("GeoPoint"));
         }
     }

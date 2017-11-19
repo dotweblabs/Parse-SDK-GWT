@@ -22,7 +22,7 @@ import com.google.gwt.user.client.Window;
 import org.parseplatform.client.beans.ChildBean;
 import org.parseplatform.client.beans.ParentBean;
 import org.parseplatform.client.beans.SimpleBean;
-import org.parseplatform.types.Array;
+import org.parseplatform.types.*;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -72,12 +72,11 @@ public class TestGwtMarshaller extends GWTTestCase {
         simpleBean.setTestCharacter('b');
 
         simpleBean.setFile(new ParseFile("sample.txt", "http://localhost:8080/sample.txt"));
-        simpleBean.setGeoPoint(new ParseGeoPoint(100.10,200.10));
-        simpleBean.setPointer(new ParsePointer("TestObject","test-object-id"));
+        simpleBean.setGeoPoint(new ParseGeoPoint(100.10, 200.10));
+        simpleBean.setPointer(new ParsePointer("TestObject", "test-object-id"));
         simpleBean.setRelation(new ParseRelation("TestObject"));
         //simple bean to parse objects using accessors and mutators
         ParseObject parseObject = marshaller.marshall(simpleBean);
-
 
 
         //Test ParsePointer
@@ -148,14 +147,21 @@ public class TestGwtMarshaller extends GWTTestCase {
         assertEquals("http://localhost:8080/sample.txt", parseFile.getUrl());
 
         //Test ParseGeoPoint
+        Window.alert("test " + parseObject.getJSONObject("geoPoint"));
+
         assertNotNull(parseObject.getJSONObject("geoPoint"));
+
         JSONObject geoPointObj = parseObject.getJSONObject("geoPoint");
+        ParseGeoPoint parseGeoPoint = new ParseGeoPoint(geoPointObj);
+        Window.alert("test " + geoPointObj);
 
         assertNotNull(geoPointObj);
 
         Window.alert(geoPointObj.toString());
 
-        ParseGeoPoint parseGeoPoint = new ParseGeoPoint(geoPointObj);
+
+
+        Window.alert(parseGeoPoint.toString());
         assertNotNull(parseGeoPoint);
         assertEquals(100.10, parseGeoPoint.getLongitude());
         assertEquals(200.10, parseGeoPoint.getLatitude());
@@ -168,15 +174,14 @@ public class TestGwtMarshaller extends GWTTestCase {
         GwtReflect.magicClass(ChildBean.class);
 
 
-
         Window.alert("SETTING VALUES");
         ParentBean parentBean = new ParentBean();
 
         parentBean.setAge(99);
         parentBean.array = new Array();
-        parentBean.array.putString(0,"a");
-        parentBean.array.putString(1,"b");
-        parentBean.array.putString(2,"c");
+        parentBean.array.putString(0, "a");
+        parentBean.array.putString(1, "b");
+        parentBean.array.putString(2, "c");
 
         Window.alert(parentBean.array.toString());
         ChildBean first = new ChildBean();
@@ -216,23 +221,61 @@ public class TestGwtMarshaller extends GWTTestCase {
         Window.alert("SETTING PARSEOBJECT");
         ParseRelation relation = new ParseRelation(new ParseObject("TestObject"));
         first.setRelation(relation);
-
+        relation = new ParseRelation(new ParseObject("Parent"));
+        parentBean.setRelation(relation);
         //ParseObject parseObjectRef = new ParseObject("ReferenceObject");
         //parseObjectRef.setObjectId("0");
-       // first.setPointer(new ParsePointer(parseObjectRef));
+        // first.setPointer(new ParsePointer(parseObjectRef));
         first.setPointer(new ParsePointer("ReferenceObject", "0"));
         ParseRole role = new ParseRole("parserole");
         first.setRole(role);
         first.setPointer(new ParsePointer());
+
+
+
         ChildBean second = new ChildBean();
         ChildBean third = new ChildBean();
 
-        parentBean.setFavorite(first);
-        parentBean.children = new LinkedList<>();
+        ParseACL acl = new ParseACL();
+        acl.setPublicWriteAccess(true);
+        acl.setPublicReadAccess(true);
 
+        parentBean.acl = acl;
+
+        parentBean.setFavorite(first);
+
+        parentBean.children = new LinkedList<>();
         parentBean.children.add(first);
         parentBean.children.add(second);
         parentBean.children.add(third);
+
+        parentBean.setRole(role);
+
+        ParsePointer pointer = new ParsePointer("pointer", "1234567890");
+        ParseDate date = new ParseDate("2017-06-23T02:59:59.255Z");
+
+
+        parentBean.setPointer(pointer);
+        parentBean.date = date;
+
+        File parentFILE = new File();
+        parentFILE.name = "parent file";
+        parentFILE.url = "C:\\PARENTFILE.FILE";
+        parentBean.plainfile = parentFILE;
+
+        GeoPoint parentGEO = new GeoPoint();
+        parentGEO.latitude = 1.1;
+        parentGEO.longitude = 1.1;
+        parentBean.plaingeopoint = parentGEO;
+
+        Pointer parentPointer = new Pointer();
+        parentPointer.setClassName("pointer");
+        parentPointer.setObjectId("1234567890");
+        parentBean.plainpointer = parentPointer;
+
+        Relation parentRelation = new Relation();
+        parentRelation.setClassName("parent relation");
+        parentBean.plainrelation = parentRelation;
 
         //parentBean.setChildren(Arrays.asList(first,second,third));
 
@@ -280,6 +323,45 @@ public class TestGwtMarshaller extends GWTTestCase {
                 }
             }
         } while (i.hasNext());
+        JSONObject relJSON = parseObject.getJSONObject("relation");
+        //ParseObject relOBJECT = new ParseObject( relJSON);
+        JSONObject aclJSON = parseObject.getJSONObject("acl");
+        //ParseObject aclOBJECT = new ParseObject( aclJSON);
+        JSONObject pointerJSON = parseObject.getJSONObject("pointer");
+        //ParseObject pointerOBJECT = new ParseObject( aclJSON);
+
+
+        JSONValue dateVALUE =  parseObject.getJSONObject("date");
+        JSONObject dateOBJECT = dateVALUE.isObject();
+        ParseObject parseDate = new ParseObject(dateOBJECT);
+
+        JSONValue plainfileVALUE =  parseObject.getJSONObject("plainfile");
+        JSONObject plainfileOBJECT = plainfileVALUE.isObject();
+        ParseObject parseplainfile= new ParseObject(plainfileOBJECT);
+
+        JSONValue plainGEOVALUE=  parseObject.getJSONObject("plaingeopoint");
+        JSONObject plainGEOOBJECT = plainGEOVALUE.isObject();
+        ParseObject parseplaingeo= new ParseObject(plainGEOOBJECT);
+
+        JSONValue plainPOINTERVALUE=  parseObject.getJSONObject("plainpointer");
+        JSONObject plainPOINTEROBJECT = plainPOINTERVALUE.isObject();
+        ParseObject parseplainpointer= new ParseObject(plainPOINTEROBJECT);
+
+        JSONValue plainRELVALUE=  parseObject.getJSONObject("plainrelation");
+        JSONObject plainRELOBJECT = plainRELVALUE.isObject();
+        ParseObject parseplainrelation= new ParseObject(plainRELOBJECT);
+
+        JSONArray childrenARRAY = parseObject.getJSONArray("children");
+        JSONObject child = childrenARRAY.get(0).isObject();
+        ParseObject childname = new ParseObject(child);
+
+        assertEquals(relJSON, parseObject.get("relation"));
+        assertEquals(aclJSON, parseObject.get("acl"));
+        assertEquals("2017-06-23T02:59:59.255Z", parseDate.getString("iso"));
+        assertEquals("parent file", parseplainfile.getString("name"));
+        assertEquals(1.1, Double.parseDouble(parseplaingeo.get("latitude").toString()));
+        assertEquals("parent relation", parseplainrelation.getString("className"));
+        assertEquals("First", childname.getString("name"));
     }
 
     public static void log(String s) {

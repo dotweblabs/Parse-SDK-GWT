@@ -5,7 +5,7 @@ import org.parseplatform.client.*;
 import org.parseplatform.client.annotations.Column;
 import org.parseplatform.client.annotations.ComponentType;
 import org.parseplatform.client.annotations.RuntimeRetention;
-import org.parseplatform.types.Array;
+import org.parseplatform.types.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -40,6 +40,17 @@ public class ParentBean {
     public ParseDate date;
     @Column
     public Array array;
+    @Column
+    public ParsePointer pointer;
+    @Column
+    public File plainfile;
+    @Column
+    public Pointer plainpointer;
+    @Column
+    public Relation plainrelation;
+
+    @Column
+    public GeoPoint plaingeopoint;
 
     public String getName() {
         return name;
@@ -79,5 +90,29 @@ public class ParentBean {
 
     public void setChildBeans(ChildBean[] childBeans) {
         this.childBeans = childBeans;
+    }
+
+    public ParseRelation getRelation() {
+        return relation;
+    }
+
+    public void setRelation(ParseRelation relation) {
+        this.relation = relation;
+    }
+
+    public ParseRole getRole() {
+        return role;
+    }
+
+    public void setRole(ParseRole role) {
+        this.role = role;
+    }
+
+    public ParsePointer getPointer() {
+        return pointer;
+    }
+
+    public void setPointer(ParsePointer pointer) {
+        this.pointer = pointer;
     }
 }
