@@ -36,11 +36,13 @@ public class ParseGeoPoint extends JSONObject {
         put("__type", new JSONString("GeoPoint"));
     }
     public Double getLongitude() {
-        Double longitude = get("longitude").isNumber().doubleValue();
+        Double longitude = (get("longitude") != null && get("longitude").isNumber() != null)
+                ? get("longitude").isNumber().doubleValue() : null;
         return longitude;
     }
     public Double getLatitude() {
-        Double latitude = get("latitude").isNumber().doubleValue();
+        Double latitude = (get("latitude") != null && get("latitude").isNumber() != null)
+                ? get("latitude").isNumber().doubleValue() : null;
         return latitude;
     }
     public ParseGeoPoint(JSONObject jsonObject) {
@@ -49,14 +51,5 @@ public class ParseGeoPoint extends JSONObject {
             put("latitude", (jsonObject.get("latitude") != null && jsonObject.get("latitude").isString() != null) ? jsonObject.get("latitude").isString() : null);
             put("__type", new JSONString("GeoPoint"));
         }
-    }
-    public static ParseGeoPoint clone(JSONObject reference) {
-        String longitude = reference.get("longitude").isString().stringValue();
-        String latitude = reference.get("latitude").isString().stringValue();
-        ParseGeoPoint geoPoint = new ParseGeoPoint();
-        geoPoint.put("__type", new JSONString("GeoPoint"));
-        geoPoint.put("longitude", new JSONString(longitude));
-        geoPoint.put("latitude", new JSONString(latitude));
-        return geoPoint;
     }
 }

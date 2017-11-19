@@ -237,31 +237,39 @@ public class GwtMarshaller implements Marshaller {
                             } else if (fieldType.getName() == Byte[].class.getName()) {
                                 parseholder.put(fieldName, new JSONNumber(Byte.parseByte(value.toString())));
                             } else if (fieldType.getName() == ParseACL.class.getName()) {
-                                if(value instanceof ParseACL) {
+                                if(value != null) {
                                     parseholder.put(fieldName, (ParseACL) value);
                                 }
                             } else if (fieldType.getName() == ParseDate.class.getName()) {
-                                if(value instanceof ParseDate) {
+                                if(value != null) {
                                     parseholder.put(fieldName, (ParseDate) value);
                                 }
                             } else if (fieldType.getName() == ParseFile.class.getName()) {
-                                if(value instanceof ParseFile) {
+                                if(value != null) {
                                     parseholder.put(fieldName, (ParseFile) value);
                                 }
                             } else if (fieldType.getName() == ParseGeoPoint.class.getName()) {
-                                if(value instanceof ParseGeoPoint) {
-                                    parseholder.put(fieldName, (ParseGeoPoint) value);
+                                if(value != null) {
+                                    Window.alert("ParseGeoPoint type");
+                                    ParseGeoPoint parseGeoPoint = null;
+                                    try {
+                                        parseGeoPoint = (ParseGeoPoint) value;
+                                    } catch (Exception e) {
+                                        Window.alert(e.getMessage());
+                                    }
+                                    Window.alert("ParseGeoPoint casting done");
+                                    parseholder.put(fieldName, parseGeoPoint);
                                 }
                             } else if (fieldType.getName() == ParsePointer.class.getName()) {
-                                if(value instanceof ParsePointer) {
+                                if(value != null) {
                                     parseholder.put(fieldName, (ParsePointer) value);
                                 }
                             } else if (fieldType.getName() == ParseRelation.class.getName()) {
-                                if(value instanceof ParseRelation) {
+                                if(value != null) {
                                     parseholder.put(fieldName, (ParseRelation) value);
                                 }
                             } else if (fieldType.getName() == ParseRole.class.getName()) {
-                                if(value instanceof ParseRole) {
+                                if(value != null) {
                                     parseholder.put(fieldName, (ParseRole) value);
                                 }
                             } else {

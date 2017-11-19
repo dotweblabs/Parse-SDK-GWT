@@ -72,20 +72,27 @@ public class TestGwtMarshaller extends GWTTestCase {
         simpleBean.setTestCharacter('b');
 
         simpleBean.setFile(new ParseFile("sample.txt", "http://localhost:8080/sample.txt"));
-
+        simpleBean.setGeoPoint(new ParseGeoPoint(100.10,200.10));
+        simpleBean.setPointer(new ParsePointer("TestObject","test-object-id"));
+        simpleBean.setRelation(new ParseRelation("TestObject"));
         //simple bean to parse objects using accessors and mutators
         ParseObject parseObject = marshaller.marshall(simpleBean);
 
-        assertNotNull(parseObject.getJSONObject("file"));
-
-        JSONObject parseFileObject = parseObject.getJSONObject("file");
-        ParseFile parseFile = new ParseFile(parseFileObject);
-        assertNotNull(parseFile);
-        assertEquals("sample.txt", parseFile.getName());
-        assertEquals("http://localhost:8080/sample.txt", parseFile.getUrl());
 
 
-        Window.alert(">>>>>>>>" + parseObject.toString());
+        //Test ParsePointer
+//        assertNotNull(parseObject.getJSONObject("pointer"));
+//        JSONObject parsePointerObject = parseObject.getJSONObject("pointer");
+//        ParsePointer parsePointer = new ParsePointer(parsePointerObject);
+        //Test ParseRelation
+//        assertNotNull(parseObject.getJSONObject("relation"));
+//        JSONObject parseRelationObject = parseObject.getJSONObject("relation");
+//        ParseRelation parseRelation = new ParseRelation((ParseObject) parseRelationObject);
+//        assertNotNull(parseRelation);
+//        assertEquals("TextObject", parseRelation.getClassName() );
+
+
+        Window.alert(">>>>>>>> TEST SIMPLE BEAN" + parseObject.toString());
         //get non null values from model
         //populate expectation list
         //assert test expectation to mutant
@@ -132,6 +139,26 @@ public class TestGwtMarshaller extends GWTTestCase {
                 }
             }
         } while (i.hasNext());
+        assertNotNull(parseObject.getJSONObject("file"));
+
+        JSONObject parseFileObject = parseObject.getJSONObject("file");
+        ParseFile parseFile = new ParseFile(parseFileObject);
+        assertNotNull(parseFile);
+        assertEquals("sample.txt", parseFile.getName());
+        assertEquals("http://localhost:8080/sample.txt", parseFile.getUrl());
+
+        //Test ParseGeoPoint
+        assertNotNull(parseObject.getJSONObject("geoPoint"));
+        JSONObject geoPointObj = parseObject.getJSONObject("geoPoint");
+
+        assertNotNull(geoPointObj);
+
+        Window.alert(geoPointObj.toString());
+
+        ParseGeoPoint parseGeoPoint = new ParseGeoPoint(geoPointObj);
+        assertNotNull(parseGeoPoint);
+        assertEquals(100.10, parseGeoPoint.getLongitude());
+        assertEquals(200.10, parseGeoPoint.getLatitude());
     }
 
     public void testParentChildMarshaller() {
@@ -184,18 +211,16 @@ public class TestGwtMarshaller extends GWTTestCase {
         first.setACL(new ParseACL());
         first.setBirthdate(new ParseDate("2017-06-23T02:59:59.255Z"));
         //first.setFile(new ParseFile()); // TODO next
-        JSONObject geoPointRef = new JSONObject();
-        geoPointRef.put("longitude", new JSONNumber(100.10));
-        geoPointRef.put("latitude", new JSONNumber(200.10));
-        //first.setGeoPoint(ParseGeoPoint.clone(geoPointRef));
+        first.setGeoPoint(new ParseGeoPoint(100.10, 200.10));
 
         Window.alert("SETTING PARSEOBJECT");
         ParseRelation relation = new ParseRelation(new ParseObject("TestObject"));
         first.setRelation(relation);
 
-        ParseObject parseObjectRef = new ParseObject("ReferenceObject");
-        parseObjectRef.setObjectId("0");
-        first.setPointer(new ParsePointer(parseObjectRef));
+        //ParseObject parseObjectRef = new ParseObject("ReferenceObject");
+        //parseObjectRef.setObjectId("0");
+       // first.setPointer(new ParsePointer(parseObjectRef));
+        first.setPointer(new ParsePointer("ReferenceObject", "0"));
         ParseRole role = new ParseRole("parserole");
         first.setRole(role);
         first.setPointer(new ParsePointer());
@@ -216,7 +241,7 @@ public class TestGwtMarshaller extends GWTTestCase {
         GwtMarshaller marshaller = GWT.create(GwtMarshaller.class);
 
         ParseObject parseObject = marshaller.marshall(parentBean);
-        Window.alert(">>>>>>>>" + parseObject.toString());
+        Window.alert(">>>>>>>> TESTPARENTCHILDMARSHALL" + parseObject.toString());
 
         Window.alert("BEGIN TEST-----------------MARSHALL2");
 

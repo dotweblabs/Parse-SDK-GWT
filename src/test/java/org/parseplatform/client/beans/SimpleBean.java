@@ -3,6 +3,8 @@ package org.parseplatform.client.beans;
 import com.google.gwt.reflect.client.strategy.ReflectionStrategy;
 import org.parseplatform.client.ParseFile;
 import org.parseplatform.client.ParseGeoPoint;
+import org.parseplatform.client.ParsePointer;
+import org.parseplatform.client.ParseRelation;
 import org.parseplatform.client.annotations.Column;
 import org.parseplatform.client.annotations.RuntimeRetention;
 
@@ -78,6 +80,12 @@ public class SimpleBean {
 
     @Column
     public ParseGeoPoint geoPoint;
+
+    @Column
+    public ParsePointer pointer;
+
+    @Column
+    public ParseRelation relation;
 
     public String getObjectId() {
         return objectId;
@@ -253,5 +261,21 @@ public class SimpleBean {
 
     public void setGeoPoint(ParseGeoPoint geoPoint) {
         this.geoPoint = geoPoint;
+    }
+
+    public ParsePointer getPointer() {
+        return pointer;
+    }
+
+    public void setPointer(ParsePointer pointer) {
+        this.pointer = pointer;
+    }
+
+    public ParseRelation getRelation() {
+        return relation;
+    }
+
+    public void setRelation(ParseRelation relation) {
+        this.relation = relation;
     }
 }
