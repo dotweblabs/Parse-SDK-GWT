@@ -31,9 +31,9 @@ import com.google.gwt.json.client.JSONString;
 public class ParseGeoPoint extends JSONObject {
     public ParseGeoPoint() {}
     public ParseGeoPoint(Double longitude, Double latitude) {
-        put("__type", new JSONString("GeoPoint"));
         put("longitude", new JSONNumber(longitude));
         put("latitude", new JSONNumber(latitude));
+        put("__type", new JSONString("GeoPoint"));
     }
     public Double getLongitude() {
         Double longitude = get("longitude").isNumber().doubleValue();
@@ -42,6 +42,13 @@ public class ParseGeoPoint extends JSONObject {
     public Double getLatitude() {
         Double latitude = get("latitude").isNumber().doubleValue();
         return latitude;
+    }
+    public ParseGeoPoint(JSONObject jsonObject) {
+        if(jsonObject != null) {
+            put("longitude", (jsonObject.get("longitude") != null && jsonObject.get("longitude").isString() != null)  ? jsonObject.get("longitude").isString() : null);
+            put("latitude", (jsonObject.get("latitude") != null && jsonObject.get("latitude").isString() != null) ? jsonObject.get("latitude").isString() : null);
+            put("__type", new JSONString("GeoPoint"));
+        }
     }
     public static ParseGeoPoint clone(JSONObject reference) {
         String longitude = reference.get("longitude").isString().stringValue();

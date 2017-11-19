@@ -2,6 +2,7 @@ package org.parseplatform.client.beans;
 
 import com.google.gwt.reflect.client.strategy.ReflectionStrategy;
 import org.parseplatform.client.ParseFile;
+import org.parseplatform.client.ParseGeoPoint;
 import org.parseplatform.client.annotations.Column;
 import org.parseplatform.client.annotations.RuntimeRetention;
 
@@ -74,6 +75,9 @@ public class SimpleBean {
 
     @Column
     public ParseFile file;
+
+    @Column
+    public ParseGeoPoint geoPoint;
 
     public String getObjectId() {
         return objectId;
@@ -241,5 +245,13 @@ public class SimpleBean {
 
     public void setFile(ParseFile file) {
         this.file = file;
+    }
+
+    public ParseGeoPoint getGeoPoint() {
+        return geoPoint;
+    }
+
+    public void setGeoPoint(ParseGeoPoint geoPoint) {
+        this.geoPoint = geoPoint;
     }
 }

@@ -29,7 +29,7 @@ public class ParentBean {
     @Column
     public ParseRole role;
     @Column
-    public ParseGeoPoint point;
+    public ParseGeoPoint geoPoint;
     @Column
     public ParseFile file;
     @Column

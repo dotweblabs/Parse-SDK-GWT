@@ -148,10 +148,13 @@ public class TestGwtUnmarshaller extends GWTTestCase {
         firstChildObject.put("role", role);
         ParseRelation relation = new ParseRelation(new ParseObject("TestObject"));
         firstChildObject.put("relation", relation);
-        firstChildObject.put("geoPoint", new ParseGeoPoint(100.10, 200.10));
+//        firstChildObject.put("geoPoint", new ParseGeoPoint(100.10, 200.10));
 
         ParseFile file = new ParseFile("sample.txt", "http://localhost/sample.txt");
         firstChildObject.put("file", file);
+
+        ParseGeoPoint geoPoint = new ParseGeoPoint(100.1,200.1);
+        firstChildObject.put("geoPoint", geoPoint);
 
         ParseObject parseObjectRef = new ParseObject("ReferenceObject");
         parseObjectRef.setObjectId("0");
@@ -189,6 +192,7 @@ public class TestGwtUnmarshaller extends GWTTestCase {
         firstChildObject.put("shorts", shorts);
 
         firstChildObject.put("file", new ParseFile("sample.txt", "http://localhost:8080/sample.txt"));
+        firstChildObject.put("geoPoint", new ParseGeoPoint(100.1,200.1));
 
         secondChildObject.putString("name", "Second Child");
         secondChildObject.putNumber("age", 20);
@@ -254,8 +258,10 @@ public class TestGwtUnmarshaller extends GWTTestCase {
         assertNotNull(favorite.getFile());
         assertEquals("sample.txt", favorite.getFile().getName());
         assertEquals("http://localhost:8080/sample.txt", favorite.getFile().getUrl());
-
-
+        //Test ParseGeoPoint
+        assertNotNull(favorite.getGeoPoint());
+        assertEquals(100.1,favorite.getGeoPoint().getLongitude());
+        assertEquals(200.1,favorite.getGeoPoint().getLatitude());
     }
 
     public static void log(String s) {

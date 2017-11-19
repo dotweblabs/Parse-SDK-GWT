@@ -243,12 +243,13 @@ public class GwtUnmarshaller implements Unmarshaller {
             }
         } else if(clazz.getName() == ParseGeoPoint.class.getName()) {
             if(value != null && value.isObject() != null) {
-                JSONObject fileObject = value.isObject();
-                if(fileObject.get("__type").isString() != null && fileObject.get("__type").isString().stringValue().equals("GeoPoint")) {
-                    String longitude = fileObject.get("longitude").isString() != null && fileObject.get("longitude").isString().stringValue() != null
-                            ? fileObject.get("longitude").isString().stringValue() : null;
-                    String latitude = fileObject.get("latitude").isString() != null && fileObject.get("latitude").isString().stringValue() != null
-                            ? fileObject.get("latitude").isString().stringValue() : null;
+                Window.alert("ParseGeoPoint value = " + value.toString());
+                JSONObject geoPointObject = value.isObject();
+                Window.alert(geoPointObject.toString());
+//                JSONObject fileObject = value.isObject();
+                if(geoPointObject.get("__type").isString() != null && geoPointObject.get("__type").isString().stringValue().equals("GeoPoint")) {
+                    Double longitude = (geoPointObject.get("longitude") != null && geoPointObject.get("longitude").isNumber() != null) ? geoPointObject.get("longitude").isNumber().doubleValue(): null;
+                    Double latitude = (geoPointObject.get("latitude") != null && geoPointObject.get("latitude").isNumber() != null) ? geoPointObject.get("latitude").isNumber().doubleValue(): null;
                     return new ParseGeoPoint(Double.valueOf(longitude), Double.valueOf(latitude));
                 }
             }
@@ -290,10 +291,8 @@ public class GwtUnmarshaller implements Unmarshaller {
             if(value != null && value.isObject() != null) {
                 JSONObject geoPointObject = value.isObject();
                 if(geoPointObject.get("__type").isString() != null && geoPointObject.get("__type").isString().stringValue().equals("GeoPoint")) {
-                    String latitude = geoPointObject.get("latitude").isString() != null && geoPointObject.get("latitude").isString().stringValue() != null
-                            ? geoPointObject.get("latitude").isString().stringValue() : null;
-                    String longitude = geoPointObject.get("longitude").isString() != null && geoPointObject.get("longitude").isString().stringValue() != null
-                            ? geoPointObject.get("longitude").isString().stringValue() : null;
+                    Double longitude = (geoPointObject.get("longitude") != null && geoPointObject.get("longitude").isNumber() != null) ? geoPointObject.get("longitude").isNumber().doubleValue(): null;
+                    Double latitude = (geoPointObject.get("latitude") != null && geoPointObject.get("latitude").isNumber() != null) ? geoPointObject.get("latitude").isNumber().doubleValue(): null;
                     GeoPoint geoPoint = new GeoPoint();
                     geoPoint.setLatitude(Double.valueOf(latitude));
                     geoPoint.setLongitude(Double.valueOf(longitude));
