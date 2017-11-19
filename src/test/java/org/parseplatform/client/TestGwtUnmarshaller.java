@@ -44,7 +44,7 @@ public class TestGwtUnmarshaller extends GWTTestCase {
         return "org.parseplatform.Parse";
     }
 
-    /*
+
     public void testUnmarshaller() {
         GwtReflect.magicClass(SimpleBean.class);
 
@@ -127,8 +127,12 @@ public class TestGwtUnmarshaller extends GWTTestCase {
 
 
         } while (i.hasNext());
+
+        assertNotNull(simpleBean);
+        assertEquals("test-object-id", simpleBean.getObjectId());
+
     }
-*/
+
     public void testParentChildUnmarshaller() {
 
         ParseObject firstChildObject = new ParseObject();
@@ -151,7 +155,7 @@ public class TestGwtUnmarshaller extends GWTTestCase {
 
         ParseObject parseObjectRef = new ParseObject("ReferenceObject");
         parseObjectRef.setObjectId("0");
-        firstChildObject.put("pointer", new ParsePointer(parseObjectRef));
+        firstChildObject.put("pointer", new ParsePointer("TestObject", "test-object-id"));
 
         JSONArray shows = new JSONArray();
         shows.set(0, new JSONString("Movie 1"));
@@ -240,6 +244,9 @@ public class TestGwtUnmarshaller extends GWTTestCase {
         assertEquals("Movie 1", favorite.getShows().get(0));
         assertEquals("Movie 2", favorite.getShows().get(1));
         assertEquals("Movie 3", favorite.getShows().get(2));
+
+        assertNotNull(favorite.getPointer());
+        assertEquals("test-object-id", favorite.getPointer().getObjectId());
 
     }
 

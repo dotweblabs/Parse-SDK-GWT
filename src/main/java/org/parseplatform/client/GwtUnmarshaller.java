@@ -128,6 +128,8 @@ public class GwtUnmarshaller implements Unmarshaller {
                             GwtReflect.fieldSet(declaringClass, fieldName, instance, isAssignable(value, ParseRelation.class));
                         } else if(fieldType.getName() == ParseDate.class.getName()) {
                             GwtReflect.fieldSet(declaringClass, fieldName, instance, isAssignable(value, ParseDate.class));
+                        } else if(fieldType.getName() == ParsePointer.class.getName()) {
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, isAssignable(value, ParsePointer.class));
                         } else  {
                             JSONObject jsonObject = parseObject.getJSONObject(k);
                             ParseObject pojoObject = new ParseObject(jsonObject);
