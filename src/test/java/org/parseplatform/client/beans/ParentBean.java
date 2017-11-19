@@ -21,9 +21,11 @@ public class ParentBean {
     public ChildBean[] childBeans;
     @Column
     public ChildBean favorite;
+
     @Column
     @ComponentType(type = ChildBean.class)
     public LinkedList<ChildBean> children;
+
     @Column
     public ParseACL acl;
     @Column
