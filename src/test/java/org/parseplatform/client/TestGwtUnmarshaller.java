@@ -269,6 +269,9 @@ public class TestGwtUnmarshaller extends GWTTestCase {
         assertNotNull(favorite.getPointer());
         assertEquals("TestObject",favorite.getPointer().getClassname());
         assertEquals("test-object-id",favorite.getPointer().getObjectId());
+        //Test ParseRelation
+        assertNotNull(favorite.getRelation());
+        assertEquals("TestObject",favorite.getRelation().getClassName());
     }
 
     public static void log(String s) {

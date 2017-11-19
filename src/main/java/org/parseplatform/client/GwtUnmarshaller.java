@@ -268,7 +268,9 @@ public class GwtUnmarshaller implements Unmarshaller {
             }
         } else if(clazz.getName() == ParseRelation.class.getName()) {
             if(value != null && value.isObject() != null) {
+                Window.alert("ParseRelation value = " + value.toString());
                 JSONObject relationObject = value.isObject();
+                Window.alert(relationObject.toString());
                 if(relationObject.get("__type").isString() != null && relationObject.get("__type").isString().stringValue().equals("Relation")) {
                     String className = relationObject.get("className").isString() != null && relationObject.get("className").isString().stringValue() != null
                             ? relationObject.get("className").isString().stringValue() : null;
