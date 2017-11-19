@@ -5,6 +5,7 @@ import org.parseplatform.client.*;
 import org.parseplatform.client.annotations.Column;
 import org.parseplatform.client.annotations.ComponentType;
 import org.parseplatform.client.annotations.RuntimeRetention;
+import org.parseplatform.types.GeoPoint;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -53,6 +54,9 @@ public class ChildBean {
     public ParseGeoPoint geoPoint;
     @Column
     public ParseFile file;
+    @Column
+    public GeoPoint geo;
+
 
     public String getName() {
         return name;
@@ -180,5 +184,13 @@ public class ChildBean {
 
     public void setShorts(LinkedList<Short> shorts) {
         this.shorts = shorts;
+    }
+
+    public GeoPoint getGeo() {
+        return geo;
+    }
+
+    public void setGeo(GeoPoint geo) {
+        this.geo = geo;
     }
 }

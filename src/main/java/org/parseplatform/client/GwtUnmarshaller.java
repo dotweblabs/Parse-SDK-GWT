@@ -255,7 +255,9 @@ public class GwtUnmarshaller implements Unmarshaller {
             }
         } else if(clazz.getName() == ParsePointer.class.getName()) {
             if(value != null && value.isObject() != null) {
+                Window.alert("ParsePointer value = " + value.toString());
                 JSONObject pointerObject = value.isObject();
+                Window.alert(pointerObject.toString());
                 if(pointerObject.get("__type").isString() != null && pointerObject.get("__type").isString().stringValue().equals("Pointer")) {
                     String className = pointerObject.get("className").isString() != null && pointerObject.get("className").isString().stringValue() != null
                             ? pointerObject.get("className").isString().stringValue() : null;

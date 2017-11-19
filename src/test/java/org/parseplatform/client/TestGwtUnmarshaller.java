@@ -156,6 +156,9 @@ public class TestGwtUnmarshaller extends GWTTestCase {
         ParseGeoPoint geoPoint = new ParseGeoPoint(100.1,200.1);
         firstChildObject.put("geoPoint", geoPoint);
 
+//        ParsePointer pointer = new ParseGeoPoint(TestObject"",200.1);
+//        firstChildObject.put("geoPoint", geoPoint);
+
         ParseObject parseObjectRef = new ParseObject("ReferenceObject");
         parseObjectRef.setObjectId("0");
         firstChildObject.put("pointer", new ParsePointer("TestObject", "test-object-id"));
@@ -262,6 +265,10 @@ public class TestGwtUnmarshaller extends GWTTestCase {
         assertNotNull(favorite.getGeoPoint());
         assertEquals(100.1,favorite.getGeoPoint().getLongitude());
         assertEquals(200.1,favorite.getGeoPoint().getLatitude());
+        //Test ParsePointer
+        assertNotNull(favorite.getPointer());
+        assertEquals("TestObject",favorite.getPointer().getClassname());
+        assertEquals("test-object-id",favorite.getPointer().getObjectId());
     }
 
     public static void log(String s) {
