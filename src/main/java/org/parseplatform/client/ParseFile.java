@@ -20,6 +20,14 @@ public class ParseFile extends JSONObject {
         put("__type", new JSONString("File"));
     }
 
+    public ParseFile(JSONObject jsonObject) {
+        if(jsonObject != null) {
+            put("name", (jsonObject.get("name") != null && jsonObject.get("name").isString() != null)  ? jsonObject.get("name").isString() : null);
+            put("url", (jsonObject.get("url") != null && jsonObject.get("url").isString() != null) ? jsonObject.get("url").isString() : null);
+            put("__type", new JSONString("File"));
+        }
+    }
+
     public String getName() {
         String name = get("name") != null && get("name").isString() != null ? get("name").isString().stringValue() : null;
         return name;

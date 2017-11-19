@@ -1,6 +1,7 @@
 package org.parseplatform.client.beans;
 
 import com.google.gwt.reflect.client.strategy.ReflectionStrategy;
+import org.parseplatform.client.ParseFile;
 import org.parseplatform.client.annotations.Column;
 import org.parseplatform.client.annotations.RuntimeRetention;
 
@@ -70,6 +71,9 @@ public class SimpleBean {
 
     @Column
     public Byte[] testBytes;
+
+    @Column
+    public ParseFile file;
 
     public String getObjectId() {
         return objectId;
@@ -229,5 +233,13 @@ public class SimpleBean {
 
     public void setTestBytes(Byte[] testBytes) {
         this.testBytes = testBytes;
+    }
+
+    public ParseFile getFile() {
+        return file;
+    }
+
+    public void setFile(ParseFile file) {
+        this.file = file;
     }
 }
