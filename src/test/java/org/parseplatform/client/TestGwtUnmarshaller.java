@@ -188,6 +188,8 @@ public class TestGwtUnmarshaller extends GWTTestCase {
         firstChildObject.put("floats", floats);
         firstChildObject.put("shorts", shorts);
 
+        firstChildObject.put("file", new ParseFile("sample.txt", "http://localhost:8080/sample.txt"));
+
         secondChildObject.putString("name", "Second Child");
         secondChildObject.putNumber("age", 20);
 
@@ -247,6 +249,12 @@ public class TestGwtUnmarshaller extends GWTTestCase {
 
         assertNotNull(favorite.getPointer());
         assertEquals("test-object-id", favorite.getPointer().getObjectId());
+
+        // Test ParseFile
+        assertNotNull(favorite.getFile());
+        assertEquals("sample.txt", favorite.getFile().getName());
+        assertEquals("http://localhost:8080/sample.txt", favorite.getFile().getUrl());
+
 
     }
 
