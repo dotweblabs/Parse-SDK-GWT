@@ -102,7 +102,11 @@ public class GwtUnmarshaller implements Unmarshaller {
                                 Class<?> componentClass = componentType.type();
                                 for(int j=0;j<jsonArray.size();j++) {
                                     JSONValue jsonValue = jsonArray.get(j);
-                                    objectList.add(isAssignable(jsonValue, componentClass));
+                                    Object compnentValue = isAssignable(jsonValue, componentClass);
+                                    if(compnentValue == null) {
+                                        Window.alert("WARNNING: Component Value is NULL");
+                                    }
+                                    objectList.add(compnentValue);
                                 }
                                 GwtReflect.fieldSet(declaringClass, fieldName, instance, objectList);
                             } else {
@@ -164,7 +168,7 @@ public class GwtUnmarshaller implements Unmarshaller {
         return param.getClass();
     }
 
-    static Object isAssignable(JSONValue value, Class<?> clazz) {
+    public Object isAssignable(JSONValue value, Class<?> clazz) {
         if(clazz.getName() == String.class.getName()) {
             if(value != null && value.isString() != null) {
                 return value.isString().stringValue();
@@ -283,6 +287,9 @@ public class GwtUnmarshaller implements Unmarshaller {
                     return new ParseRelation(className);
                 }
             }
+        } else if(clazz.getName() == ParseRole.class.getName()) {
+            // TODO
+            return new ParseRole();
         } else if(clazz.getName() == File.class.getName()) {
             if(value != null && value.isObject() != null) {
                 JSONObject fileObject = value.isObject();
@@ -334,6 +341,25 @@ public class GwtUnmarshaller implements Unmarshaller {
                     return relation;
                 }
             }
+        } else {
+            Object newInstance = null;
+            if(value.isObject() != null) {
+                JSONObject jsonObject = value.isObject();
+                ParseObject parseObject = new ParseObject(jsonObject);
+                Window.alert("JSONObject component value found " + parseObject.toString());
+                try {
+                    newInstance = clazz.newInstance();
+                    if(newInstance != null && parseObject != null) {
+                        newInstance = unmarshall(clazz, newInstance, parseObject);
+                    }
+                } catch (Exception e) {
+                    Window.alert("ERROR: Cannot create new instance of " + clazz.getName() + " " + e.getMessage());
+                }
+            }
+            if(newInstance == null) {
+                Window.alert("WARNING: Cannot create new instance of " + clazz.getName());
+            }
+            return newInstance;
         }
         return null;
     }

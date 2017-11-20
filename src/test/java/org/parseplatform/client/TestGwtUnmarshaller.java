@@ -218,8 +218,8 @@ public class TestGwtUnmarshaller extends GWTTestCase {
 
         JSONArray children = new JSONArray();
         children.set(0, firstChildObject);
-        children.set(1, secondChildObject);
-        children.set(3, thirdChildObject);
+        //children.set(1, secondChildObject);
+        //children.set(3, thirdChildObject);
 
         parentObject.put("children", children);
 
@@ -239,6 +239,8 @@ public class TestGwtUnmarshaller extends GWTTestCase {
 
         assertNotNull(parentBean.getFavorite());
         assertNotNull(parentBean.getChildren());
+        assertNotNull(parentBean.getChildren().get(0));
+        assertEquals("First Child", parentBean.getChildren().get(0).getName());
 
         ChildBean favorite = parentBean.getFavorite();
         assertNotNull(favorite.getDob());
