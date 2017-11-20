@@ -16,6 +16,7 @@ package org.parseplatform.client;
 
 import com.google.gwt.json.client.*;
 import com.google.gwt.reflect.shared.GwtReflect;
+import elemental.client.Browser;
 import org.parseplatform.client.annotations.Column;
 import org.parseplatform.types.*;
 import org.parseplatform.util.DateUtil;
@@ -36,13 +37,12 @@ public class GwtMarshaller implements Marshaller {
     @Override
     public ParseObject marshall(java.lang.Object instance) {
         ParseObject parseholder = new ParseObject();
-        //check if object in parameter is null
+
         if (instance == null) {
             throw new RuntimeException("Object cannot be null");
         }
         Class<?> declaringClass = instance.getClass();
 
-        Window.alert("----------------------------LISTING FIELDS----------------------------");
         Field[] fields = GwtReflect.getPublicFields(instance.getClass());
 
         for (int c = 0; c < fields.length; c++){
@@ -53,15 +53,10 @@ public class GwtMarshaller implements Marshaller {
                 value = fields[c].get(instance);
             }
             catch (Exception e) {
-                Window.alert("ERROR FROM VALUE");
-            }
-            try{
-                Window.alert("FIELD FOUND " + fields[c].getName() + "  :  " + fieldTYPE.getName() + " : " + value.toString());
-            } catch (Exception e) {
-                Window.alert("FIELD FOUND " + fields[c].getName() + "  :  " + fieldTYPE.getName() + " : " + "UNDEFINED");
+                Browser.getWindow().getConsole().log(e.getMessage());
             }
         }
-        Window.alert("----------------------------FIELD PROCESSING----------------------------");
+
         for (int c = 0; c < fields.length; c++) {
             try {
                 //mutable class match to gettype class value
@@ -83,12 +78,6 @@ public class GwtMarshaller implements Marshaller {
                         value = fields[c].get(instance);
 
                         if (value != null ) {
-                            try {
-                                Window.alert("FIELD MATCH " + fields[c].getName() + "  :  " + value.toString() + " : " + fieldTYPE.getName());
-                            } catch (Exception ex) {
-                                Window.alert("FIELD MATCH " + fields[c].getName() + "  :  " + "UNDEFINED" +" : " + fieldTYPE.getName());
-                            }
-
                             if (fieldType.getName() == String.class.getName()) {
                                 String stringValue = value.toString();
                                 parseholder.put(fieldName, new JSONString(stringValue));
@@ -133,55 +122,38 @@ public class GwtMarshaller implements Marshaller {
                             } else if (fieldType.getName() == Map.class.getName()) { // Object
                                 throw new RuntimeException("Map is not supported use com.parse.gwt.client.types.Object instead");
                             } else if (fieldType.getName() == List.class.getName()) {
-                                Window.alert("List type found " + fieldName);
                                 List testList = (List) value;
                                 JSONArray testARRAY = new JSONArray();
                                 for (int p = 0; p < testList.size();p++) {
                                     Object testObject = testList.get(p);
-                                    Window.alert("from extraction type: " + testObject.getClass());
                                     GwtReflect.magicClass(Object.class);
                                     ParseObject spiral = new ParseObject();
                                     Field[] subfields = GwtReflect.getPublicFields(testObject.getClass());
-                                    for (int q = 0; q <subfields.length; q++)
-                                    {
+                                    for (int q = 0; q <subfields.length; q++) {
                                         Class<?> subfieldtype= subfields[q].getType();
                                         Object subfieldvalue = subfields[q].get(testObject);
-                                        Window.alert("field contents " + subfields[q].getName() + subfields[q].get(testObject));
                                     }
-                                    Window.alert("-----------------------------------REMARSHALL-----------------------------------");
                                     spiral = marshall(testObject);
-                                    Window.alert("SPIRAL " + spiral.toString());
                                     testARRAY.set(p,spiral);
-                                    Window.alert("TEST ARRAY " + p + " " + testARRAY.toString());
                                 }
                                 parseholder.put(fieldName,testARRAY);
                             } else if (fieldType.getName() == LinkedList.class.getName()) {
-                                Window.alert("List type found " + fieldName);
-
                                 List testList = (List) value;
-
                                 JSONArray testARRAY = new JSONArray();
                                 for (int p = 0; p < testList.size();p++) {
                                     Object testObject = testList.get(p);
-                                    Window.alert("from extraction type:  " + testObject.getClass());
                                     ParseObject spiral = new ParseObject();
                                     Field[] subfields = GwtReflect.getPublicFields(testObject.getClass());
-                                    for (int q = 0; q <subfields.length; q++)
-                                    {
+                                    for (int q = 0; q <subfields.length; q++) {
                                         Class<?> subfieldtype= subfields[q].getType();
                                         Object subfieldvalue = subfields[q].get(testObject);
-                                        Window.alert("field contents " + subfields[q].getName() + "" + subfields[q].get(testObject));
                                     }
-                                    Window.alert("-----------------------------------REMARSHALL------------------------------------");
                                     spiral = marshall(testObject);
-                                    Window.alert("SPIRAL " + spiral.toString());
                                     testARRAY.set(p,spiral);
-                                    Window.alert("TEST ARRAY " + p + " " + testARRAY.toString());
                                 }
                                 parseholder.put(fieldName,testARRAY);
                             }
                             else if (fieldType.getName() == File.class.getName()) {
-                                Window.alert("File type found");
                                 JSONObject jsonFile = new JSONObject();
                                 File file = (File) value;
                                 jsonFile.put("__type", new JSONString("File"));
@@ -189,12 +161,10 @@ public class GwtMarshaller implements Marshaller {
                                 jsonFile.put("name", new JSONString(file.name));
                                 parseholder.put(fieldName, jsonFile);
                             } else if (fieldType.getName() == GeoPoint.class.getName()) {
-                                Window.alert("GeoPoint type found");
                                 GeoPoint geoPoint = (GeoPoint) value;
                                 ParseGeoPoint parseGeoPoint = new ParseGeoPoint(geoPoint.longitude, geoPoint.latitude);
                                 parseholder.put(fieldName, parseGeoPoint);
                             } else if (fieldType.getName() == Pointer.class.getName()) {
-                                Window.alert("Pointer type found");
                                 Pointer pointer = (Pointer) value;
                                 JSONObject jsonPointer = new JSONObject();
                                 jsonPointer.put("__type", new JSONString("Pointer"));
@@ -202,19 +172,15 @@ public class GwtMarshaller implements Marshaller {
                                 jsonPointer.put("objectId", new JSONString(pointer.objectId));
                                 parseholder.put(fieldName, jsonPointer);
                             } else if (fieldType.getName() == Relation.class.getName()) {
-                                Window.alert("Relation type found");
                                 Relation relation = (Relation) value;
                                 JSONObject jsonRelation = new JSONObject();
                                 jsonRelation.put("__type", new JSONString("Relation"));
                                 jsonRelation.put("className", new JSONString(relation.className));
                                 parseholder.put(fieldName, jsonRelation);
                             } else if (fieldType.getName() == Array.class.getName()) { //array to JSON object
-
-                                Window.alert("Array type found " + value.toString());
                                 Array arrayValue = (Array) value;
                                 parseholder.put(fieldName, (JSONArray) value);
                             }  else if (fieldType.getName() == byte.class.getName()) {
-                                Window.alert("byte type found " + value.toString());
                                 parseholder.put(fieldName, new JSONNumber(Integer.parseInt(value.toString())));
                             } else if (fieldType.getName() == short.class.getName()) {
                                 parseholder.put(fieldName, new JSONNumber((short) value));
@@ -250,14 +216,12 @@ public class GwtMarshaller implements Marshaller {
                                 }
                             } else if (fieldType.getName() == ParseGeoPoint.class.getName()) {
                                 if(value != null) {
-                                    Window.alert("ParseGeoPoint type");
                                     ParseGeoPoint parseGeoPoint = null;
                                     try {
                                         parseGeoPoint = (ParseGeoPoint) value;
                                     } catch (Exception e) {
-                                        Window.alert(e.getMessage());
+                                        Browser.getWindow().getConsole().log(e.getMessage());
                                     }
-                                    Window.alert("ParseGeoPoint casting done");
                                     parseholder.put(fieldName, parseGeoPoint);
                                 }
                             } else if (fieldType.getName() == ParsePointer.class.getName()) {
@@ -277,14 +241,13 @@ public class GwtMarshaller implements Marshaller {
                                 throw new RuntimeException("Unsupported type for field");
                             }
                         } else {
-                            //Window.alert("VALUE IS NULL");
                             parseholder.put(fieldName, JSONNull.getInstance());
                         }
                     }
                 }
                 //object value to field object value
             } catch (Exception e) {
-                Window.alert("Error marshalling field " + fields[c].getName() + ":" + fields[c].getType().getName() + e.toString());
+                Browser.getWindow().getConsole().log("Error marshalling field " + fields[c].getName() + ":" + fields[c].getType().getName() + e.toString());
             }
         }
         return parseholder;

@@ -109,16 +109,13 @@ public class GwtUnmarshaller implements Unmarshaller {
                                     try {
                                         JSONValue jsonValue = jsonArray.get(j);
                                         JSONObject jsonobject = jsonValue.isObject();
-
                                         Object compnentValue = isAssignable(jsonValue, componentClass);
                                         if (compnentValue == null) {
-                                            Window.alert("WARNNING: Component Value is NULL");
+                                            Browser.getWindow().getConsole().log("WARNNING: Component Value is NULL");
                                         }
                                         objectList.add(compnentValue);
-
-
                                     } catch (Exception ex) {
-
+                                        Browser.getWindow().getConsole().log(ex.getMessage());
                                     }
                                 }
                                 GwtReflect.fieldSet(declaringClass, fieldName, instance, objectList);
@@ -222,7 +219,6 @@ public class GwtUnmarshaller implements Unmarshaller {
                 return doubleValue.shortValue();
             }
         } else if (clazz.getName() == byte.class.getName() || clazz.getName() == Byte.class.getName()) {
-            Window.alert("byte test 2");
             byte converter = Byte.parseByte(value.toString());
             return converter;
         } else if (clazz.getName() == Character.class.getName()
@@ -240,16 +236,12 @@ public class GwtUnmarshaller implements Unmarshaller {
                 }
             }
         } else if (clazz.getName() == ParseACL.class.getName()) {
-            Window.alert("ParseGeoPoint value = " + value.toString());
             JSONObject ACL = value.isObject();
-            Window.alert(ACL.toString());
             if (value != null && value.isObject() != null) {
                 return new ParseACL(value.isObject());
             }
         } else if (clazz.getName() == ParseDate.class.getName()) {
-            Window.alert("ParseDate value = " + value.toString());
             JSONObject birthDate = value.isObject();
-            Window.alert(birthDate.toString());
             if (value != null && value.isObject() != null) {
                 String iso = value.isObject().get("iso") != null && value.isObject().get("iso").isString() != null
                         ? value.isObject().get("iso").isString().stringValue() : null;
@@ -257,9 +249,7 @@ public class GwtUnmarshaller implements Unmarshaller {
             }
         } else if (clazz.getName() == ParseFile.class.getName()) {
             if (value != null && value.isObject() != null) {
-                Window.alert("ParseFile value = " + value.toString());
                 JSONObject fileObject = value.isObject();
-                Window.alert(fileObject.toString());
                 if (fileObject.get("__type") != null && fileObject.get("__type").isString() != null && fileObject.get("__type").isString().stringValue().equals("File")) {
                     String url = fileObject.get("url").isString() != null && fileObject.get("url").isString().stringValue() != null
                             ? fileObject.get("url").isString().stringValue() : null;
@@ -270,10 +260,7 @@ public class GwtUnmarshaller implements Unmarshaller {
             }
         } else if (clazz.getName() == ParseGeoPoint.class.getName()) {
             if (value != null && value.isObject() != null) {
-                Window.alert("ParseGeoPoint value = " + value.toString());
                 JSONObject geoPointObject = value.isObject();
-                Window.alert(geoPointObject.toString());
-//                JSONObject fileObject = value.isObject();
                 if (geoPointObject.get("__type").isString() != null && geoPointObject.get("__type").isString().stringValue().equals("GeoPoint")) {
                     Double longitude = (geoPointObject.get("longitude") != null && geoPointObject.get("longitude").isNumber() != null) ? geoPointObject.get("longitude").isNumber().doubleValue() : null;
                     Double latitude = (geoPointObject.get("latitude") != null && geoPointObject.get("latitude").isNumber() != null) ? geoPointObject.get("latitude").isNumber().doubleValue() : null;
@@ -282,9 +269,7 @@ public class GwtUnmarshaller implements Unmarshaller {
             }
         } else if (clazz.getName() == ParsePointer.class.getName()) {
             if (value != null && value.isObject() != null) {
-                Window.alert("ParsePointer value = " + value.toString());
                 JSONObject pointerObject = value.isObject();
-                Window.alert(pointerObject.toString());
                 if (pointerObject.get("__type").isString() != null && pointerObject.get("__type").isString().stringValue().equals("Pointer")) {
                     String className = pointerObject.get("className").isString() != null && pointerObject.get("className").isString().stringValue() != null
                             ? pointerObject.get("className").isString().stringValue() : null;
@@ -295,9 +280,7 @@ public class GwtUnmarshaller implements Unmarshaller {
             }
         } else if (clazz.getName() == ParseRelation.class.getName()) {
             if (value != null && value.isObject() != null) {
-                Window.alert("ParseRelation value = " + value.toString());
                 JSONObject relationObject = value.isObject();
-                Window.alert(relationObject.toString());
                 if (relationObject.get("__type").isString() != null && relationObject.get("__type").isString().stringValue().equals("Relation")) {
                     String className = relationObject.get("className").isString() != null && relationObject.get("className").isString().stringValue() != null
                             ? relationObject.get("className").isString().stringValue() : null;
@@ -308,7 +291,6 @@ public class GwtUnmarshaller implements Unmarshaller {
             // TODO
             return new ParseRole();
         } else if (clazz.getName() == File.class.getName()) {
-            Window.alert("FILE " + value);
             if (value != null && value.isObject() != null) {
                 JSONObject fileObject = value.isObject();
                 if (fileObject.get("__type").isString() != null && fileObject.get("__type").isString().stringValue().equals("File")) {
@@ -323,7 +305,6 @@ public class GwtUnmarshaller implements Unmarshaller {
                 }
             }
         } else if (clazz.getName() == GeoPoint.class.getName()) {
-            Window.alert("GEOPOINT " + value);
             if (value != null && value.isObject() != null) {
                 JSONObject geoPointObject = value.isObject();
                 if (geoPointObject.get("__type").isString() != null && geoPointObject.get("__type").isString().stringValue().equals("GeoPoint")) {
@@ -336,7 +317,6 @@ public class GwtUnmarshaller implements Unmarshaller {
                 }
             }
         } else if (clazz.getName() == Pointer.class.getName()) {
-            Window.alert("POINTER " + value);
             if (value != null && value.isObject() != null) {
                 JSONObject pointerObject = value.isObject();
                 if (pointerObject.get("__type").isString() != null && pointerObject.get("__type").isString().stringValue().equals("Pointer")) {
@@ -351,7 +331,6 @@ public class GwtUnmarshaller implements Unmarshaller {
                 }
             }
         } else if (clazz.getName() == Relation.class.getName()) {
-            Window.alert("RELATION " + value);
             if (value != null && value.isObject() != null) {
                 JSONObject relationObject = value.isObject();
                 if (relationObject.get("__type").isString() != null && relationObject.get("__type").isString().stringValue().equals("Relation")) {
@@ -367,18 +346,17 @@ public class GwtUnmarshaller implements Unmarshaller {
             if (value.isObject() != null) {
                 JSONObject jsonObject = value.isObject();
                 ParseObject parseObject = new ParseObject(jsonObject);
-                //Window.alert("JSONObject component value found " + parseObject.toString());
                 try {
                     newInstance = clazz.newInstance();
                     if (newInstance != null && parseObject != null) {
                         newInstance = unmarshall(clazz, newInstance, parseObject);
                     }
                 } catch (Exception e) {
-                    Window.alert("ERROR: Cannot create new instance of " + clazz.getName() + " " + e.getMessage());
+                    Browser.getWindow().getConsole().log("ERROR: Cannot create new instance of " + clazz.getName() + " " + e.getMessage());
                 }
             }
             if (newInstance == null) {
-                Window.alert("WARNING: Cannot create new instance of " + clazz.getName());
+               Browser.getWindow().getConsole().log("WARNING: Cannot create new instance of " + clazz.getName());
             }
             return newInstance;
         }
