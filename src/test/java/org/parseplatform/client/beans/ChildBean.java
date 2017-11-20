@@ -5,7 +5,10 @@ import org.parseplatform.client.*;
 import org.parseplatform.client.annotations.Column;
 import org.parseplatform.client.annotations.ComponentType;
 import org.parseplatform.client.annotations.RuntimeRetention;
+import org.parseplatform.types.File;
 import org.parseplatform.types.GeoPoint;
+import org.parseplatform.types.Pointer;
+import org.parseplatform.types.Relation;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -58,6 +61,14 @@ public class ChildBean {
     @Column
     public GeoPoint geo;
 
+    @Column
+    public File plainfile;
+    @Column
+    public Pointer plainpointer;
+    @Column
+    public Relation plainrelation;
+    @Column
+    public GeoPoint plaingeopoint;
 
     public String getName() {
         return name;

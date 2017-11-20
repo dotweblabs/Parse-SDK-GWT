@@ -117,7 +117,7 @@ public class TestGwtUnmarshaller extends GWTTestCase {
                         } else {
                             message = "FAIL: " + k + " " + expectableparse + " <-> " + " " + fields[c].getName() + " " + fields[c].get(simpleBean);
                         }
-                        //assertEquals(expectablefield, expectableparse); //find workaround for string bug
+                        assertEquals(expectablefield, expectableparse); //find workaround for string bug
                     } catch (Exception e) {
                         //Window.alert(e.toString());
                     }
@@ -146,16 +146,14 @@ public class TestGwtUnmarshaller extends GWTTestCase {
 //        firstChildObject.put("ACL", new ParseACL());
         ParseRole role = new ParseRole("parserole");
         firstChildObject.put("role", role);
-        ParseRelation relation = new ParseRelation(new ParseObject("TestObject"));
-        firstChildObject.put("relation", relation);
+
 //        firstChildObject.put("geoPoint", new ParseGeoPoint(100.10, 200.10));
 
         ParseFile file = new ParseFile("sample.txt", "http://localhost/sample.txt");
         firstChildObject.put("file", file);
 
 
-
-        ParseGeoPoint geoPoint = new ParseGeoPoint(100.1,200.1);
+        ParseGeoPoint geoPoint = new ParseGeoPoint(100.1, 200.1);
         firstChildObject.put("geoPoint", geoPoint);
 
 //        ParsePointer pointer = new ParseGeoPoint(TestObject"",200.1);
@@ -163,7 +161,7 @@ public class TestGwtUnmarshaller extends GWTTestCase {
 
         ParseObject parseObjectRef = new ParseObject("ReferenceObject");
         parseObjectRef.setObjectId("0");
-        firstChildObject.put("pointer", new ParsePointer("TestObject", "test-object-id"));
+
 
         JSONArray shows = new JSONArray();
         shows.set(0, new JSONString("Movie 1"));
@@ -196,10 +194,21 @@ public class TestGwtUnmarshaller extends GWTTestCase {
         firstChildObject.put("floats", floats);
         firstChildObject.put("shorts", shorts);
 
-        firstChildObject.put("file", new ParseFile("sample.txt", "http://localhost:8080/sample.txt"));
-        firstChildObject.put("geoPoint", new ParseGeoPoint(100.1,200.1));
+        ParseFile parsefile = new ParseFile("sample.txt", "http://localhost:8080/sample.txt");
+        firstChildObject.put("file", parsefile);
+        firstChildObject.put("plainfile", parsefile);
 
+        ParseGeoPoint geopoint = new ParseGeoPoint(100.1, 200.1);
+        firstChildObject.put("geoPoint", geopoint);
+        firstChildObject.put("plaingeopoint", geopoint);
 
+        ParsePointer pointer = new ParsePointer("TestObject", "test-object-id");
+        firstChildObject.put("pointer", pointer);
+        firstChildObject.put("plainpointer", pointer);
+
+        ParseRelation relation = new ParseRelation(new ParseObject("TestObject"));
+        firstChildObject.put("relation", relation);
+        firstChildObject.put("plainrelation", relation);
 
         ParseACL ACL = new ParseACL();
         ACL.setPublicReadAccess(true);
@@ -218,29 +227,83 @@ public class TestGwtUnmarshaller extends GWTTestCase {
 
         JSONArray children = new JSONArray();
         children.set(0, firstChildObject);
-        //children.set(1, secondChildObject);
-        //children.set(3, thirdChildObject);
+        children.set(1, secondChildObject);
+        children.set(3, thirdChildObject);
 
         parentObject.put("children", children);
 
-        //Window.alert(">>>>>>>>  " + parentObject.toString());
+
+        ParseObject toGEO = new ParseObject();
+        ParseObject toFILE = new ParseObject();
+        ParseObject toPOINTER = new ParseObject();
+        ParseObject toRELATION = new ParseObject();
+
+
+        toGEO.putString("__type", "GeoPoint");
+        toGEO.putNumber("latitude", 1.1);
+        toGEO.putNumber("longitude", 1.1);
+
+        toFILE.putString("__type", "File");
+        toPOINTER.putString("__type", "Pointer");
+        toPOINTER.putString("className", "Pointer");
+        toPOINTER.putString("objectId", "Pointer123");
+        toRELATION.putString("__type", "Relation");
+
+
+        toFILE.putString("name", "File");
+        toFILE.putString("url", "File");
+        toPOINTER.putString("className", "Pointer");
+        toPOINTER.putString("objectID", "POINTER123");
+        toRELATION.putString("className", "RELATION");
+        secondChildObject.put("plaingeopoint", toGEO);
+        secondChildObject.put("plainfile", toFILE);
+        secondChildObject.put("plainpointer", toPOINTER);
+        secondChildObject.put("plainrelation", toRELATION);
 
         GwtReflect.magicClass(ChildBean.class);
         GwtReflect.magicClass(ParentBean.class);
 
+        Window.alert("BEGIN TEST-----------------UNMARSHALL");
         ParentBean parentBean = parentObject.unmarshall(ParentBean.class);
+        Class<?> archetype = parentBean.getClass();
+        Set<?> s = parentObject.keySet();
 
-        Window.alert("Parent Name   " + parentBean.getName());
-        Window.alert("Parent Age    " + parentBean.getAge());
+        Field[] fields = GwtReflect.getPublicFields(archetype);
+        for (int c = 0; c < fields.length; c++) {
+            String message = null;
+            try {
+                message = "FIELD " + " " + fields[c].getName() + " " + fields[c].get(parentBean);
+            } catch (Exception e) {
+            }
+            Window.alert(message);
+        }
+        for (int p = 0; p < parentBean.children.size(); p++){
+            Window.alert("--------------------------------------------------------------");
+            archetype= parentBean.children.get(p).getClass();
+            fields = GwtReflect.getPublicFields(archetype);
+            for (int c = 0; c < fields.length; c++) {
+                String message = null;
+                try {
+                    message = "CHILD FIELD " + p + " " + fields[c].getName() + " " + fields[c].get(parentBean.children.get(p));
+                } catch (Exception e) {
+                }
+                Window.alert(message);
+            }
+        }
+
+        //Window.alert("Parent Name   " + parentBean.getName());
+        //Window.alert("Parent Age    " + parentBean.getAge());
+        Window.alert("<<<<<<<<" + parentObject.toString());
+        Window.alert("children " + parentBean.children.size());
 
         assertNotNull(parentBean);
+        assertNotNull(parentBean.children);
         assertEquals("The Parent", parentBean.getName());
         assertEquals(80, parentBean.getAge().intValue());
 
         assertNotNull(parentBean.getFavorite());
         assertNotNull(parentBean.getChildren());
-        assertNotNull(parentBean.getChildren().get(0));
-        assertEquals("First Child", parentBean.getChildren().get(0).getName());
+        assertNotNull(parentBean.children.get(0));
 
         ChildBean favorite = parentBean.getFavorite();
         assertNotNull(favorite.getDob());
@@ -273,21 +336,26 @@ public class TestGwtUnmarshaller extends GWTTestCase {
         assertEquals("http://localhost:8080/sample.txt", favorite.getFile().getUrl());
         //Test ParseGeoPoint
         assertNotNull(favorite.getGeoPoint());
-        assertEquals(100.1,favorite.getGeoPoint().getLongitude());
-        assertEquals(200.1,favorite.getGeoPoint().getLatitude());
+        assertEquals(100.1, favorite.getGeoPoint().getLongitude());
+        assertEquals(200.1, favorite.getGeoPoint().getLatitude());
         //Test ParsePointer
         assertNotNull(favorite.getPointer());
-        assertEquals("TestObject",favorite.getPointer().getClassname());
-        assertEquals("test-object-id",favorite.getPointer().getObjectId());
+        assertEquals("TestObject", favorite.getPointer().getClassname());
+        assertEquals("test-object-id", favorite.getPointer().getObjectId());
         //Test ParseRelation
         assertNotNull(favorite.getRelation());
-        assertEquals("TestObject",favorite.getRelation().getClassName());
+        assertEquals("TestObject", favorite.getRelation().getClassName());
         //Test ParseACL
         assertNotNull(favorite.getACL());
-        assertEquals(true,favorite.getACL() != null);
+        assertEquals(true, favorite.getACL() != null);
         //Test ParseDate
         assertNotNull(favorite.getBirthdate());
-        assertEquals("2017-06-23T02:59:59.255Z",favorite.getBirthdate().getIsoDate());
+        assertEquals("2017-06-23T02:59:59.255Z", favorite.getBirthdate().getIsoDate());
+
+        assertEquals("RELATION",parentBean.children.get(1).plainrelation.className);
+        assertEquals("Pointer",parentBean.children.get(1).plainpointer.className);
+        assertEquals("File",parentBean.children.get(1).plainfile.name);
+        assertEquals(1.1,parentBean.children.get(1).plaingeopoint.latitude);
 
     }
 
