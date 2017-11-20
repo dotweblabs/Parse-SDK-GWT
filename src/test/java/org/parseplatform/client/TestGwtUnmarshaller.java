@@ -47,9 +47,7 @@ public class TestGwtUnmarshaller extends GWTTestCase {
 
     public void testUnmarshaller() {
         GwtReflect.magicClass(SimpleBean.class);
-
         GwtUnmarshaller unmarshaller = GWT.create(GwtUnmarshaller.class);
-
         ParseObject parseObject = new ParseObject();
         parseObject.putString("objectId", "test-object-id");
         parseObject.putString("nullstr", null);
@@ -61,12 +59,11 @@ public class TestGwtUnmarshaller extends GWTTestCase {
         parseObject.putBoolean("testboolean", true);
         parseObject.putNumber("testfloat", 5.0);
         parseObject.putString("testchar", "a");
-
         parseObject.putNumber("testInteger", 6);
         parseObject.putNumber("testDouble", 7);
         parseObject.putNumber("testLong", 8L);
         parseObject.putNumber("testShort", 9);
-        parseObject.put("testByte", null);
+        parseObject.put("testByte", new JSONNumber(1));
         parseObject.putBoolean("testBoolean", false);
         parseObject.putNumber("testFloat", 10);
         parseObject.putString("testCharacter", "a");
@@ -84,14 +81,11 @@ public class TestGwtUnmarshaller extends GWTTestCase {
         Window.alert("<<<<<<<<" + parseObject.toString());
         SimpleBean simpleBean = new SimpleBean();
         Class<?> archetype = simpleBean.getClass();
-        //get non null values from model
 
         simpleBean = unmarshaller.unmarshall(SimpleBean.class, simpleBean, parseObject);
-        //get field names, get method names
-        //iterate field contents
 
         Set<?> s = parseObject.keySet();
-        //iterate and persist keys from model
+
         Window.alert("BEGIN TEST-----------------UNMARSHALL");
         Iterator<?> i = s.iterator();
         do {
@@ -113,20 +107,54 @@ public class TestGwtUnmarshaller extends GWTTestCase {
                         }
                         Object expectablefield = fields[c].get(simpleBean).toString();
                         if (expectablefield == expectableparse) {
-                            message = "PASS: " + k + " " + expectableparse + " <-> " + " " + fields[c].getName() + " " + fields[c].get(simpleBean);
+                           // message = "PASS: " + k + " " + expectableparse + " <-> " + " " + fields[c].getName() + " " + fields[c].get(simpleBean);
                         } else {
-                            message = "FAIL: " + k + " " + expectableparse + " <-> " + " " + fields[c].getName() + " " + fields[c].get(simpleBean);
+                           // message = "FAIL: " + k + " " + expectableparse + " <-> " + " " + fields[c].getName() + " " + fields[c].get(simpleBean);
                         }
                         assertEquals(expectablefield, expectableparse); //find workaround for string bug
                     } catch (Exception e) {
                         //Window.alert(e.toString());
                     }
-                    Window.alert(message);
+                    //Window.alert(message);
                 }
             }
 
 
         } while (i.hasNext());
+
+        assertNotNull(simpleBean.testByte);
+        assertNotNull(simpleBean.testint);
+        assertNotNull(simpleBean.testdouble);
+        assertNotNull(simpleBean.testlong);
+        assertNotNull(simpleBean.testshort);
+        assertNotNull(simpleBean.testboolean);
+        assertNotNull(simpleBean.testfloat);
+        assertNotNull(simpleBean.testchar);
+        assertNotNull(simpleBean.testInteger);
+        assertNotNull(simpleBean.testDouble);
+        assertNotNull(simpleBean.testLong);
+        assertNotNull(simpleBean.testShort);
+        assertNotNull(simpleBean.testBoolean);
+        assertNotNull(simpleBean.testFloat);
+        assertNotNull(simpleBean.testCharacter);
+
+        assertEquals(1, simpleBean.testByte.byteValue());
+        assertEquals((int)1,simpleBean.testint);
+        assertEquals((double)2,simpleBean.testdouble);
+        assertEquals((long)3L,simpleBean.testlong);
+        assertEquals((short)4,simpleBean.testshort);
+        assertEquals((boolean)true,simpleBean.testboolean);
+        assertEquals((float)5.0,simpleBean.testfloat);
+        assertEquals((char)'a', simpleBean.testchar);
+        assertEquals(6,simpleBean.testInteger.intValue());
+        assertEquals((double)7,simpleBean.testDouble);
+        assertEquals((long)8L,simpleBean.testLong.longValue());
+        assertEquals((short)9,simpleBean.testShort.shortValue());
+        assertEquals(false, simpleBean.testBoolean.booleanValue());
+        assertEquals((float)10,simpleBean.testFloat.floatValue());
+        assertEquals('a',simpleBean.testCharacter.charValue());
+
+
 
         assertNotNull(simpleBean);
         assertEquals("test-object-id", simpleBean.getObjectId());

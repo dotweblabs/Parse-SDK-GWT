@@ -74,8 +74,11 @@ public class GwtUnmarshaller implements Unmarshaller {
                         } else if (fieldType.getName() == Short.class.getName() || fieldType.getName() == short.class.getName()) {
                             Short shortValue = parseObject.getDouble(k).shortValue();
                             GwtReflect.fieldSet(declaringClass, fieldName, instance, shortValue);
-                        } else if (fieldType.getName() == byte.class.getName()) {
-                            // TODO
+                        } else if (fieldType.getName() == byte.class.getName() || fieldType.getName() == Byte.class.getName()) {
+
+                            byte converter = Byte.parseByte(value.toString());
+
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
                         } else if (fieldType.getName() == char.class.getName() || fieldType.getName() == Character.class.getName()) {
                             char converter = parseObject.getString(k).charAt(0);
                             GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
@@ -218,6 +221,10 @@ public class GwtUnmarshaller implements Unmarshaller {
                 Double doubleValue = value.isNumber().doubleValue();
                 return doubleValue.shortValue();
             }
+        } else if (clazz.getName() == byte.class.getName() || clazz.getName() == Byte.class.getName()) {
+            Window.alert("byte test 2");
+            byte converter = Byte.parseByte(value.toString());
+            return converter;
         } else if (clazz.getName() == Character.class.getName()
                 || clazz.getName() == char.class.getName()) {
             // TODO
