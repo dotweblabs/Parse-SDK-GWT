@@ -20,14 +20,14 @@ import com.dotweblabs.shape.client.Shape;
 import com.google.common.base.Joiner;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.json.client.*;
-import com.google.gwt.reflect.shared.GwtReflect;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import elemental.client.Browser;
-//import org.parseplatform.client.util.JSON;
 
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+
+//import org.parseplatform.client.util.JSON;
 
 /**
  *
@@ -190,7 +190,7 @@ public class ParseObject extends JSONObject {
             if(type != null && type.equals("Pointer")){
                 String className = jso.get("className").isString() != null ? jso.get("className").isString().stringValue() : null;
                 String objectId = jso.get("objectId").isString() != null ? jso.get("objectId").isString().stringValue() : null;
-                ParsePointer parsePointer = ParsePointer.parse(className, objectId);
+                ParsePointer parsePointer = new ParsePointer(className, objectId);
                 return parsePointer;
             }
         }
@@ -299,7 +299,7 @@ public class ParseObject extends JSONObject {
                 if(className != null) {
                     query = new ParseQuery(new ParseObject(className));
                     JSONObject relatedTo = new JSONObject();
-                    ParsePointer pointer = ParsePointer.parse(this.getClassName(), this.getObjectId());
+                    ParsePointer pointer = new ParsePointer(this.getClassName(), this.getObjectId());
                     relatedTo.put("object", pointer);
                     relatedTo.put("key", new JSONString(key));
                     Where where = new Where("$relatedTo", relatedTo);
@@ -436,7 +436,7 @@ public class ParseObject extends JSONObject {
                     }
                     @Override
                     public void onSuccess(String s) {
-                        callback.onSuccess(ParseObject.parse(className, s));
+                        callback.onSuccess(new ParseObject(className, s));
                     }
                 });
     }
@@ -463,7 +463,7 @@ public class ParseObject extends JSONObject {
                     }
                     @Override
                     public void onSuccess(String s) {
-                        callback.onSuccess(ParseObject.parse(className, s));
+                        callback.onSuccess(new ParseObject(className, s));
                     }
                 });
     }
@@ -546,7 +546,7 @@ public class ParseObject extends JSONObject {
         ParseObject reference = this;
         ParseQuery query = new ParseQuery(referencee);
         JSONObject jsonObject = new JSONObject();
-        ParsePointer pointer = ParsePointer.parse(reference.getClassName(), reference.getObjectId());
+        ParsePointer pointer = new ParsePointer(reference.getClassName(), reference.getObjectId());
         jsonObject.put("object", pointer);
         jsonObject.put("key", new JSONString(referenceKey));
         Where where = new Where("$relatedTo", jsonObject);
@@ -580,7 +580,7 @@ public class ParseObject extends JSONObject {
         JSONValue jsonValueRegex = new JSONString(regex);
         ParseQuery query = new ParseQuery(referencee);
         JSONObject jsonObject = new JSONObject();
-        ParsePointer pointer = ParsePointer.parse(reference.getClassName(), reference.getObjectId());
+        ParsePointer pointer = new ParsePointer(reference.getClassName(), reference.getObjectId());
         jsonObject.put("object", pointer);
         jsonObject.put("key", new JSONString(referenceKey));
         Where where = new Where("$relatedTo", jsonObject).where(filterField).regex(jsonValueRegex);
@@ -602,7 +602,7 @@ public class ParseObject extends JSONObject {
         ParseObject reference = this;
         ParseQuery query = new ParseQuery(referencee);
         JSONObject jsonObject = new JSONObject();
-        ParsePointer pointer = ParsePointer.parse(reference.getClassName(), reference.getObjectId());
+        ParsePointer pointer = new ParsePointer(reference.getClassName(), reference.getObjectId());
         jsonObject.put("object", pointer);
         jsonObject.put("key", new JSONString(referenceKey));
         Where where = new Where("$relatedTo", jsonObject);
