@@ -9,6 +9,7 @@ public class ParseCloud {
         Shape.post(Parse.SERVER_URL + "functions/" + function)
                 .header("X-Parse-Application-Id", Parse.X_Parse_Application_Id)
                 .header("X-Parse-REST-API-Key", Parse.X_Parse_REST_API_Key)
+                .header("X-Parse-Session-Token", Parse.X_Parse_Session_Token)
                 .header("X-Parse-Master-Key", Parse.X_Parse_Master_Key)
                 .body(object.toString())
                 .asJson(new AsyncCallback<String>() {
@@ -28,6 +29,7 @@ public class ParseCloud {
         Shape.post(Parse.SERVER_URL + "functions/" + function)
                 .header("X-Parse-Application-Id", Parse.X_Parse_Application_Id)
                 .header("X-Parse-REST-API-Key", Parse.X_Parse_REST_API_Key)
+                .header("X-Parse-Session-Token", Parse.X_Parse_Session_Token)
                 .header("X-Parse-Master-Key", Parse.X_Parse_Master_Key)
                 .body(new JSONObject().toString())
                 .asJson(new AsyncCallback<String>() {
