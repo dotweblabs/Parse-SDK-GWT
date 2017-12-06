@@ -237,8 +237,16 @@ public class GwtMarshaller implements Marshaller {
                                     parseholder.put(fieldName, (ParseRole) value);
                                 }
                             } else {
-                                log("Unsupported type for field");
-                                throw new RuntimeException("Unsupported type for field");
+                                Object testObject = value;
+                                ParseObject spiral = new ParseObject();
+                                Field[] subfields = GwtReflect.getPublicFields(testObject.getClass());
+                                for (int q = 0; q <subfields.length; q++) {
+                                    Class<?> subfieldtype= subfields[q].getType();
+                                    Object subfieldvalue = subfields[q].get(testObject);
+                                }
+                                spiral = marshall(testObject);
+                                parseholder.put(fieldName,spiral);
+                                log("Unlisted type of field");
                             }
                         } else {
                             parseholder.put(fieldName, JSONNull.getInstance());
