@@ -204,37 +204,73 @@ public class GwtMarshaller implements Marshaller {
                                 parseholder.put(fieldName, new JSONNumber(Byte.parseByte(value.toString())));
                             } else if (fieldType.getName() == ParseACL.class.getName()) {
                                 if(value != null) {
-                                    parseholder.put(fieldName, (ParseACL) value);
-                                }
-                            } else if (fieldType.getName() == ParseDate.class.getName()) {
-                                if(value != null) {
-                                    parseholder.put(fieldName, (ParseDate) value);
-                                }
-                            } else if (fieldType.getName() == ParseFile.class.getName()) {
-                                if(value != null) {
-                                    parseholder.put(fieldName, (ParseFile) value);
-                                }
-                            } else if (fieldType.getName() == ParseGeoPoint.class.getName()) {
-                                if(value != null) {
-                                    ParseGeoPoint parseGeoPoint = null;
+                                    ParseACL parseconvert = null;
                                     try {
-                                        parseGeoPoint = (ParseGeoPoint) value;
+                                        parseconvert = (ParseACL) value;
                                     } catch (Exception e) {
                                         Browser.getWindow().getConsole().log(e.getMessage());
                                     }
-                                    parseholder.put(fieldName, parseGeoPoint);
+                                    parseholder.put(fieldName, parseconvert);
+                                }
+                            } else if (fieldType.getName() == ParseDate.class.getName()) {
+                                if(value != null) {
+                                    ParseDate parseconvert = null;
+                                    try {
+                                        parseconvert = (ParseDate) value;
+                                    } catch (Exception e) {
+                                        Browser.getWindow().getConsole().log(e.getMessage());
+                                    }
+                                    parseholder.put(fieldName, parseconvert);
+                                }
+                            } else if (fieldType.getName() == ParseFile.class.getName()) {
+                                if(value != null) {
+                                    ParseFile parseconvert = null;
+                                    try {
+                                        parseconvert = (ParseFile) value;
+                                    } catch (Exception e) {
+                                        Browser.getWindow().getConsole().log(e.getMessage());
+                                    }
+                                    parseholder.put(fieldName, parseconvert);
+                                }
+                            } else if (fieldType.getName() == ParseGeoPoint.class.getName()) {
+                                if(value != null) {
+                                    ParseGeoPoint parseconvert = null;
+                                    try {
+                                        parseconvert = (ParseGeoPoint) value;
+                                    } catch (Exception e) {
+                                        Browser.getWindow().getConsole().log(e.getMessage());
+                                    }
+                                    parseholder.put(fieldName, parseconvert);
                                 }
                             } else if (fieldType.getName() == ParsePointer.class.getName()) {
                                 if(value != null) {
-                                    parseholder.put(fieldName, (ParsePointer) value);
+                                    ParsePointer parseconvert = null;
+                                    try {
+                                        parseconvert = (ParsePointer) value;
+                                    } catch (Exception e) {
+                                        Browser.getWindow().getConsole().log(e.getMessage());
+                                    }
+                                    parseholder.put(fieldName, parseconvert);
                                 }
                             } else if (fieldType.getName() == ParseRelation.class.getName()) {
                                 if(value != null) {
-                                    parseholder.put(fieldName, (ParseRelation) value);
+                                    ParseRelation parseconvert = null;
+                                    try {
+                                        parseconvert = (ParseRelation) value;
+                                    } catch (Exception e) {
+                                        Browser.getWindow().getConsole().log(e.getMessage());
+                                    }
+                                    parseholder.put(fieldName, parseconvert);
                                 }
                             } else if (fieldType.getName() == ParseRole.class.getName()) {
                                 if(value != null) {
-                                    parseholder.put(fieldName, (ParseRole) value);
+                                    ParseRole parseconvert = null;
+                                    try {
+                                        parseconvert = (ParseRole) value;
+                                    } catch (Exception e) {
+                                        Browser.getWindow().getConsole().log(e.getMessage());
+                                    }
+                                    parseholder.put(fieldName, parseconvert);
                                 }
                             } else {
                                 Object testObject = value;
