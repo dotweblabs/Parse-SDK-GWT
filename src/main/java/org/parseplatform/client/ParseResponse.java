@@ -20,7 +20,7 @@ import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
-import org.parseplatform.client.js.base.JSON;
+//import org.parseplatform.client.util.JSON;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -34,10 +34,32 @@ import java.util.List;
  * @version 0-SNAPSHOT
  */
 public class ParseResponse extends JSONObject {
+
+    public ParseResponse() {}
+    public ParseResponse(String json) {
+        if(json != null && !json.isEmpty()) {
+            JSONValue value = JSONParser.parseStrict(json);
+            if(value != null) {
+                if(value.isObject() != null) {
+                    JSONObject jsonObject = value.isObject();
+                    if(jsonObject != null) {
+                        Iterator<String> it = jsonObject.keySet().iterator();
+                        while(it.hasNext()) {
+                            String key = it.next();
+                            JSONValue jsonValue = jsonObject.get(key);
+                            put(key, jsonValue);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    @Deprecated
     public static ParseResponse parse(String json) {
         JSONObject jsonObject = (JSONObject) JSONParser.parseStrict(json);
         return ParseResponse.clone(jsonObject);
     }
+    @Deprecated
     public static ParseResponse clone(JSONObject jsonObject) {
         ParseResponse response = new ParseResponse();
         Iterator<String> it = jsonObject.keySet().iterator();
@@ -51,9 +73,7 @@ public class ParseResponse extends JSONObject {
         }
         return response;
     }
-    public ParseObject asParseObject(String className) {
-        return ParseObject.clone(className, this);
-    }
+
     public Boolean isEmpty() {
         if(getResults() != null) {
             return getResults().size() == 0 ? true : false;
@@ -91,7 +111,7 @@ public class ParseResponse extends JSONObject {
         JSONArray results = getResults();
         for(int i=0;i<results.size();i++) {
             if(results.get(i).isObject() != null) {
-                ParseObject parseObject = ParseObject.clone(results.get(i).isObject());
+                ParseObject parseObject = new ParseObject(results.get(i).isObject());
                 return parseObject;
             }
         }
@@ -102,7 +122,7 @@ public class ParseResponse extends JSONObject {
         JSONArray results = getResults();
         for(int i=0;i<results.size();i++) {
             if(results.get(i).isObject() != null) {
-                ParseObject parseObject = ParseObject.clone(results.get(i).isObject());
+                ParseObject parseObject = new ParseObject(results.get(i).isObject());
                 resultList.add(parseObject);
             }
         }
@@ -132,9 +152,13 @@ public class ParseResponse extends JSONObject {
      * @param <T> Target object type
      * @return Target object
      */
-    public <T> T as(Class<T> clazz) {
-        T as = JSON.parse(this.toString());
-        return as;
+//    public <T> T as(Class<T> clazz) {
+//        T as = JSON.parse(this.toString());
+//        return as;
+//    }
+
+    public ParseObject asParseObject(String className) {
+        return new ParseObject(className, this);
     }
 
     /**

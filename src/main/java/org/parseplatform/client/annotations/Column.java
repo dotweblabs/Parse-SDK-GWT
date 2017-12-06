@@ -14,11 +14,15 @@
  * limitations under the License.
  *
  */
-package org.parseplatform.client.js.base;
+package org.parseplatform.client.annotations;
 
-import jsinterop.annotations.JsFunction;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@JsFunction
-public interface JsForEachCallbackFn {
-    void onKey(String key);
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Column {
+
 }

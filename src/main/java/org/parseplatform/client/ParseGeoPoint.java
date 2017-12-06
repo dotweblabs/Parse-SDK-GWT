@@ -31,25 +31,25 @@ import com.google.gwt.json.client.JSONString;
 public class ParseGeoPoint extends JSONObject {
     public ParseGeoPoint() {}
     public ParseGeoPoint(Double longitude, Double latitude) {
-        put("__type", new JSONString("GeoPoint"));
         put("longitude", new JSONNumber(longitude));
         put("latitude", new JSONNumber(latitude));
+        put("__type", new JSONString("GeoPoint"));
     }
     public Double getLongitude() {
-        Double longitude = get("longitude").isNumber().doubleValue();
+        Double longitude = (get("longitude") != null && get("longitude").isNumber() != null)
+                ? get("longitude").isNumber().doubleValue() : null;
         return longitude;
     }
     public Double getLatitude() {
-        Double latitude = get("latitude").isNumber().doubleValue();
+        Double latitude = (get("latitude") != null && get("latitude").isNumber() != null)
+                ? get("latitude").isNumber().doubleValue() : null;
         return latitude;
     }
-    public static ParseGeoPoint clone(JSONObject reference) {
-        String longitude = reference.get("longitude").isString().stringValue();
-        String latitude = reference.get("latitude").isString().stringValue();
-        ParseGeoPoint geoPoint = new ParseGeoPoint();
-        geoPoint.put("__type", new JSONString("GeoPoint"));
-        geoPoint.put("longitude", new JSONString(longitude));
-        geoPoint.put("latitude", new JSONString(latitude));
-        return geoPoint;
+    public ParseGeoPoint(JSONObject jsonObject) {
+        if(jsonObject != null) {
+            put("longitude", (jsonObject.get("longitude") != null)  ? jsonObject.get("longitude") : null);
+            put("latitude", (jsonObject.get("latitude") != null ) ? jsonObject.get("latitude") : null);
+            put("__type", new JSONString("GeoPoint"));
+        }
     }
 }

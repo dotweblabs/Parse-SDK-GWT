@@ -14,23 +14,14 @@
  * limitations under the License.
  *
  */
-package org.parseplatform.client.js.parse;
+package org.parseplatform.client.annotations;
 
-import jsinterop.annotations.JsOverlay;
-import jsinterop.annotations.JsPackage;
-import jsinterop.annotations.JsProperty;
-import jsinterop.annotations.JsType;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@JsType(isNative = true, namespace = JsPackage.GLOBAL, name = "Object")
-public class ParsePointer {
-    @JsProperty(name = "__type")
-    public String type;
-    public String className;
-    public String objectId;
-    @JsOverlay
-    public static ParsePointer create() { // Should be native?
-        ParsePointer parsePointer = new ParsePointer();
-        parsePointer.type = "Pointer";
-        return parsePointer;
-    }
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ObjectId {
 }

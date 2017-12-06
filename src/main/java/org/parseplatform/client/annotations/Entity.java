@@ -14,13 +14,18 @@
  * limitations under the License.
  *
  */
-package org.parseplatform.client.js.parse;
+package org.parseplatform.client.annotations;
 
-import jsinterop.annotations.JsPackage;
-import jsinterop.annotations.JsType;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@JsType(isNative = true, namespace = JsPackage.GLOBAL, name = "Object")
-public class AccessControl {
-    public boolean read;
-    public boolean write;
+/**
+ * Note: Entity to be stored must have empty constructor
+ */
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Entity {
+    public String name() default "";
 }

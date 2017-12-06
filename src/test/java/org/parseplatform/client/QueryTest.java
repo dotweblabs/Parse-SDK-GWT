@@ -26,7 +26,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
  *
- * Unit tests of {@link Parse.Query}
+ * Unit tests of {@link ParseQuery}
  *
  * @author Kerby Martino
  * @since 0-SNAPSHOT
@@ -43,19 +43,18 @@ public class QueryTest extends GWTTestCase {
     }
 
     public void testQuery() {
-
         Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
-        Parse.SERVER_URL = PARSE_API_ROOT;
-        ParseObject testObject = Parse.Objects.extend("TestObject");
-        Parse.Query query = Parse.Query.extend(testObject);
+        ParseObject testObject = new ParseObject("TestObject");
+        ParseQuery query = new ParseQuery(testObject);
 
         Where where = new Where("marko", new JSONString("marko"));
 
-        query.where(where).find(new AsyncCallback<ParseResponse>() {
+        query.where(where).find(new ParseAsyncCallback<ParseResponse>() {
             @Override
-            public void onFailure(Throwable throwable) {
-                log("Query error: " + throwable.getMessage());
-                fail();
+            public void onFailure(ParseError error) {
+                error.log();
+                fail(error.getError());
+                finishTest();
             }
 
             @Override
@@ -66,20 +65,20 @@ public class QueryTest extends GWTTestCase {
                 } else {
                     log(parseResponse.get("error").isString().stringValue());
                 }
+                finishTest();
 
             }
         });
         log(query.toString());
-        delayTestFinish(5000);
+        delayTestFinish(10000);
     }
 
     public void testQueryPointer() {
         delayTestFinish(10000);
-        Parse.SERVER_URL = PARSE_API_ROOT;
         Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
         createParseObject();
-        ParseObject talentObject = Parse.Objects.extend("TestObject");
-        Parse.Query query = Parse.Query.extend(talentObject);
+        ParseObject talentObject = new ParseObject("TestObject");
+        ParseQuery query = new ParseQuery(talentObject);
 
         ParseObject pointer = new ParseObject();
         pointer.putString("__type", "Pointer");
@@ -88,11 +87,11 @@ public class QueryTest extends GWTTestCase {
 
         Where where = new Where("userId", pointer);
 
-        query.where(where).find(new AsyncCallback<ParseResponse>() {
+        query.where(where).find(new ParseAsyncCallback<ParseResponse>() {
             @Override
-            public void onFailure(Throwable throwable) {
-                HttpRequestException ex = (HttpRequestException) throwable;
-                fail();
+            public void onFailure(ParseError error) {
+                error.log();
+                fail(error.getError());
                 finishTest();
             }
             @Override
@@ -111,7 +110,6 @@ public class QueryTest extends GWTTestCase {
     }
 
     public void createParseObject() {
-
         ParseObject testObject = new ParseObject("TestObject");
         testObject.put("foo", new JSONString("bar"));
 
@@ -122,12 +120,11 @@ public class QueryTest extends GWTTestCase {
 
         testObject.put("userId", pointer);
 
-        Parse.Objects.create(testObject, new AsyncCallback<ParseResponse>() {
+        testObject.create(new ParseAsyncCallback<ParseResponse>() {
             @Override
-            public void onFailure(Throwable throwable) {
-                HttpRequestException ex = (HttpRequestException) throwable;
-                log("POST Error: " + ex.getCode());
-                fail("POST Error: " + ex.getCode());
+            public void onFailure(ParseError error) {
+                error.log();
+                fail(error.getError());
             }
             @Override
             public void onSuccess(ParseResponse parseResponse) {
@@ -136,7 +133,6 @@ public class QueryTest extends GWTTestCase {
                 assertNotNull(parseResponse.getCreatedAt());
             }
         });
-
     }
 
     public Where complexWhere() {
@@ -158,20 +154,19 @@ public class QueryTest extends GWTTestCase {
     }
 
     public void testQuery1() {
-        Parse.SERVER_URL = TestKeys.TEST_API_ROOT;
         Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
         Where where = new Where("isPublished", JSONBoolean.getInstance(true));
-        ParseObject test = Parse.Objects.extend("Story");
-        Parse.Query query = Parse.Query.extend(test);
+        ParseObject test = new ParseObject("Story");
+        ParseQuery query = new ParseQuery(test);
         query.where(where);
         query.skip(0);
         query.limit(10);
         query.order(new Order().descending("createdAt"));
         //log("Query: " + query.toString());
-        query.find(new AsyncCallback<ParseResponse>() {
+        query.find(new ParseAsyncCallback<ParseResponse>() {
             @Override
-            public void onFailure(Throwable throwable) {
-                log("Query Error: " + throwable.getMessage());
+            public void onFailure(ParseError error) {
+                error.log();
                 finishTest();
             }
             @Override

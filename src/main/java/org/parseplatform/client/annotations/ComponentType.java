@@ -14,13 +14,15 @@
  * limitations under the License.
  *
  */
-package org.parseplatform.client.js.base;
+package org.parseplatform.client.annotations;
 
-import jsinterop.annotations.JsPackage;
-import jsinterop.annotations.JsType;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@JsType(isNative = true, namespace = JsPackage.GLOBAL)
-public class JSON {
-    public static native String stringify(Object o);
-    public static native <O> O parse(String json);
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ComponentType {
+    public Class<?> type() default Object.class;
 }
