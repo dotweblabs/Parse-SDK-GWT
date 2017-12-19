@@ -157,7 +157,7 @@ public class GwtUnmarshaller implements Unmarshaller {
                             GwtReflect.fieldSet(declaringClass, fieldName, instance, pojo);
                         }
                     } else {
-                        GwtReflect.fieldSet(declaringClass,  fields[c].getName(), instance, null);
+                        //GwtReflect.fieldSet(declaringClass,  fields[c].getName(), instance, null);
                     }
                 } catch (Exception e) {
                     //log(e.getMessage());
