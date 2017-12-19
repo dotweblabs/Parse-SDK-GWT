@@ -156,6 +156,8 @@ public class GwtUnmarshaller implements Unmarshaller {
                             assert pojo != null;
                             GwtReflect.fieldSet(declaringClass, fieldName, instance, pojo);
                         }
+                    } else {
+                        GwtReflect.fieldSet(declaringClass,  fields[c].getName(), instance, null);
                     }
                 } catch (Exception e) {
                     //log(e.getMessage());
