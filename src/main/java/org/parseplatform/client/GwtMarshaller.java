@@ -43,16 +43,21 @@ public class GwtMarshaller implements Marshaller {
         }
         Class<?> declaringClass = instance.getClass();
 
-        Field[] fields = GwtReflect.getPublicFields(instance.getClass());
+        Field[] fields = null;
 
-        for (int c = 0; c < fields.length; c++){
+        try {
+            fields = GwtReflect.getPublicFields(instance.getClass());
+        } catch (Exception e) {
+            return null;
+        }
+
+        for (int c = 0; c < fields.length; c++) {
             Class<?> fieldTYPE = fields[c].getType();
 
             java.lang.Object value = null;
             try {
                 value = fields[c].get(instance);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 Browser.getWindow().getConsole().log(e.getMessage());
             }
         }
@@ -77,7 +82,7 @@ public class GwtMarshaller implements Marshaller {
 
                         value = fields[c].get(instance);
 
-                        if (value != null ) {
+                        if (value != null) {
                             if (fieldType.getName() == String.class.getName()) {
                                 String stringValue = value.toString();
                                 parseholder.put(fieldName, new JSONString(stringValue));
@@ -124,36 +129,78 @@ public class GwtMarshaller implements Marshaller {
                             } else if (fieldType.getName() == List.class.getName()) {
                                 List testList = (List) value;
                                 JSONArray testARRAY = new JSONArray();
-                                for (int p = 0; p < testList.size();p++) {
+                                for (int p = 0; p < testList.size(); p++) {
                                     Object testObject = testList.get(p);
                                     GwtReflect.magicClass(Object.class);
                                     ParseObject spiral = new ParseObject();
                                     Field[] subfields = GwtReflect.getPublicFields(testObject.getClass());
-                                    for (int q = 0; q <subfields.length; q++) {
-                                        Class<?> subfieldtype= subfields[q].getType();
+                                    for (int q = 0; q < subfields.length; q++) {
+                                        Class<?> subfieldtype = subfields[q].getType();
                                         Object subfieldvalue = subfields[q].get(testObject);
                                     }
                                     spiral = marshall(testObject);
-                                    testARRAY.set(p,spiral);
+                                    testARRAY.set(p, spiral);
                                 }
-                                parseholder.put(fieldName,testARRAY);
+                                parseholder.put(fieldName, testARRAY);
                             } else if (fieldType.getName() == LinkedList.class.getName()) {
                                 List testList = (List) value;
                                 JSONArray testARRAY = new JSONArray();
-                                for (int p = 0; p < testList.size();p++) {
+                                for (int p = 0; p < testList.size(); p++) {
                                     Object testObject = testList.get(p);
                                     ParseObject spiral = new ParseObject();
-                                    Field[] subfields = GwtReflect.getPublicFields(testObject.getClass());
-                                    for (int q = 0; q <subfields.length; q++) {
-                                        Class<?> subfieldtype= subfields[q].getType();
-                                        Object subfieldvalue = subfields[q].get(testObject);
+
+                                    if (testObject.getClass().getName() == String.class.getName()) {
+                                        String stringValue = value.toString();
+                                        testARRAY.set(p,  new JSONString(stringValue));
+
+                                    } else if (testObject.getClass().getName() == Boolean.class.getName() ||testObject.getClass().getName() == boolean.class.getName()) {
+                                        Boolean booleanValue = (Boolean) value;
+                                        if (booleanValue != null) {
+                                            testARRAY.set(p,  JSONBoolean.getInstance(booleanValue));
+
+                                        } else {
+                                            testARRAY.set(p,  null);
+
+                                        }
+                                    } else if (testObject.getClass().getName() == Double.class.getName() || testObject.getClass().getName() == Integer.class.getName() ||testObject.getClass().getName() == Long.class.getName()) {
+                                        if (value instanceof Double) {
+                                            testARRAY.set(p,   new JSONNumber((Double) value));
+
+                                        } else if (value instanceof Integer) {
+                                            testARRAY.set(p,  new JSONNumber((Integer) value));
+
+                                        } else if (value instanceof Long) {
+                                            testARRAY.set(p,  new JSONNumber((Long) value));
+                                        }
+                                    } else if (fieldType.getName() == float.class.getName() || fieldType.getName() == int.class.getName() || fieldType.getName() == long.class.getName()) {
+                                        //Browser.getWindow().getConsole().log("float int long " + fieldName + value.getClass().getName());
+                                        if (value.getClass().getName() == float.class.getName()) {
+                                            // spiral.put(fieldName, new JSONNumber((float) value));
+                                        } else if (value.getClass().getTypeName() == int.class.getName()) {
+                                            //spiral.put(fieldName, new JSONNumber((Integer) value));
+                                        } else if (value.getClass().getTypeName() == long.class.getName()) {
+                                            //spiral.put(fieldName, new JSONNumber((Long) value));
+                                        } else if (value.getClass().getTypeName() == Integer.class.getName()) {
+                                            //spiral.put(fieldName, new JSONNumber((Integer) value));
+                                        } else if (fieldType.getName() == int.class.getName()) {
+                                            //spiral.put(fieldName, new JSONNumber((int) value));
+                                        } else if (value.getClass().getName() == Double.class.getName()) {
+                                            //spiral.put(fieldName, new JSONNumber((Double) value));
+                                        } else if (value.getClass().getName() == Long.class.getName()) {
+                                            //spiral.put(fieldName, new JSONNumber(Long.parseLong(value.toString())));
+                                        }
+                                    } else {
+                                        spiral = marshall(testObject);
+                                        testARRAY.set(p, spiral);
+
                                     }
-                                    spiral = marshall(testObject);
-                                    testARRAY.set(p,spiral);
+
+
+
+
                                 }
-                                parseholder.put(fieldName,testARRAY);
-                            }
-                            else if (fieldType.getName() == File.class.getName()) {
+                                parseholder.put(fieldName, testARRAY);
+                            } else if (fieldType.getName() == File.class.getName()) {
                                 JSONObject jsonFile = new JSONObject();
                                 File file = (File) value;
                                 jsonFile.put("__type", new JSONString("File"));
@@ -180,7 +227,7 @@ public class GwtMarshaller implements Marshaller {
                             } else if (fieldType.getName() == Array.class.getName()) { //array to JSON object
                                 Array arrayValue = (Array) value;
                                 parseholder.put(fieldName, (JSONArray) value);
-                            }  else if (fieldType.getName() == byte.class.getName()) {
+                            } else if (fieldType.getName() == byte.class.getName()) {
                                 parseholder.put(fieldName, new JSONNumber(Integer.parseInt(value.toString())));
                             } else if (fieldType.getName() == short.class.getName()) {
                                 parseholder.put(fieldName, new JSONNumber((short) value));
@@ -203,7 +250,7 @@ public class GwtMarshaller implements Marshaller {
                             } else if (fieldType.getName() == Byte[].class.getName()) {
                                 parseholder.put(fieldName, new JSONNumber(Byte.parseByte(value.toString())));
                             } else if (fieldType.getName() == ParseACL.class.getName()) {
-                                if(value != null) {
+                                if (value != null) {
                                     ParseACL parseconvert = null;
                                     try {
                                         parseconvert = (ParseACL) value;
@@ -213,7 +260,7 @@ public class GwtMarshaller implements Marshaller {
                                     parseholder.put(fieldName, parseconvert);
                                 }
                             } else if (fieldType.getName() == ParseDate.class.getName()) {
-                                if(value != null) {
+                                if (value != null) {
                                     ParseDate parseconvert = null;
                                     try {
                                         parseconvert = (ParseDate) value;
@@ -223,7 +270,7 @@ public class GwtMarshaller implements Marshaller {
                                     parseholder.put(fieldName, parseconvert);
                                 }
                             } else if (fieldType.getName() == ParseFile.class.getName()) {
-                                if(value != null) {
+                                if (value != null) {
                                     ParseFile parseconvert = null;
                                     try {
                                         parseconvert = (ParseFile) value;
@@ -233,7 +280,7 @@ public class GwtMarshaller implements Marshaller {
                                     parseholder.put(fieldName, parseconvert);
                                 }
                             } else if (fieldType.getName() == ParseGeoPoint.class.getName()) {
-                                if(value != null) {
+                                if (value != null) {
                                     ParseGeoPoint parseconvert = null;
                                     try {
                                         parseconvert = (ParseGeoPoint) value;
@@ -243,7 +290,7 @@ public class GwtMarshaller implements Marshaller {
                                     parseholder.put(fieldName, parseconvert);
                                 }
                             } else if (fieldType.getName() == ParsePointer.class.getName()) {
-                                if(value != null) {
+                                if (value != null) {
                                     ParsePointer parseconvert = null;
                                     try {
                                         parseconvert = (ParsePointer) value;
@@ -253,7 +300,7 @@ public class GwtMarshaller implements Marshaller {
                                     parseholder.put(fieldName, parseconvert);
                                 }
                             } else if (fieldType.getName() == ParseRelation.class.getName()) {
-                                if(value != null) {
+                                if (value != null) {
                                     ParseRelation parseconvert = null;
                                     try {
                                         parseconvert = (ParseRelation) value;
@@ -263,7 +310,7 @@ public class GwtMarshaller implements Marshaller {
                                     parseholder.put(fieldName, parseconvert);
                                 }
                             } else if (fieldType.getName() == ParseRole.class.getName()) {
-                                if(value != null) {
+                                if (value != null) {
                                     ParseRole parseconvert = null;
                                     try {
                                         parseconvert = (ParseRole) value;
@@ -276,12 +323,12 @@ public class GwtMarshaller implements Marshaller {
                                 Object testObject = value;
                                 ParseObject spiral = new ParseObject();
                                 Field[] subfields = GwtReflect.getPublicFields(testObject.getClass());
-                                for (int q = 0; q <subfields.length; q++) {
-                                    Class<?> subfieldtype= subfields[q].getType();
+                                for (int q = 0; q < subfields.length; q++) {
+                                    Class<?> subfieldtype = subfields[q].getType();
                                     Object subfieldvalue = subfields[q].get(testObject);
                                 }
                                 spiral = marshall(testObject);
-                                parseholder.put(fieldName,spiral);
+                                parseholder.put(fieldName, spiral);
                                 log("Unlisted type of field");
                             }
                         } else {
@@ -298,5 +345,8 @@ public class GwtMarshaller implements Marshaller {
     }
 
     private static void marshallValue(String fieldName, Class<?> fieldType, java.lang.Object value, ParseObject parseholder) {
+    }
+
+    private static void returnPrimitive() {
     }
 }
