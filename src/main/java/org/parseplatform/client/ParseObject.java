@@ -541,6 +541,44 @@ public class ParseObject extends JSONObject {
         }
     }
 
+    public void increment(String field, Long amount, final ParseAsyncCallback<Long> callback) {
+        try {
+            final ParseObject ref = this;
+            String objectId = ref.getObjectId();
+            final String className = ref.getClassName();
+            final String path = Parse.SERVER_URL + Parse.CLASSES_URI + className + "/" + objectId;
+            JSONObject payload = new JSONObject();
+            JSONObject op = new JSONObject();
+            op.put("__op", new JSONString("Increment"));
+            op.put("amount", new JSONNumber(amount));
+            payload.put(field, op);
+            Shape.put(path)
+                    .header("X-Parse-Application-Id", Parse.X_Parse_Application_Id)
+                    .header("X-Parse-REST-API-Key", Parse.X_Parse_REST_API_Key)
+                    .header("X-Parse-Master-Key", Parse.X_Parse_Master_Key)
+                    .header("X-Parse-Session-Token", Parse.X_Parse_Session_Token)
+                    .body(payload.toString())
+                    .asJson(new AsyncCallback<String>() {
+                        @Override
+                        public void onFailure(Throwable throwable) {
+                            callback.onFailure(new ParseError(throwable));
+                        }
+                        @Override
+                        public void onSuccess(String s) {
+                            try {
+                                ParseResponse parseResponse = new ParseResponse(s);
+                                Double value = parseResponse.get(field).isNumber().doubleValue();
+                                callback.onSuccess(value.longValue());
+                            } catch (Exception e) {
+                                callback.onFailure(new ParseError(e));
+                            }
+                        }
+                    });
+        } catch (Exception e) {
+            callback.onFailure(new ParseError(e));
+        }
+    }
+
     public void getRelation(String referenceKey, ParseObject referencee,
                             final ParseAsyncCallback<ParseResponse> callback) {
         ParseObject reference = this;
