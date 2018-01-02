@@ -327,9 +327,14 @@ public class GwtMarshaller implements Marshaller {
                                     Class<?> subfieldtype = subfields[q].getType();
                                     Object subfieldvalue = subfields[q].get(testObject);
                                 }
-                                spiral = marshall(testObject);
-                                parseholder.put(fieldName, spiral);
-                                log("Unlisted type of field");
+                                if(testObject != null) {
+                                    spiral = marshall(testObject);
+                                    parseholder.put(fieldName, spiral);
+                                    log("Unlisted type of field");
+                                } else {
+                                    parseholder.put(fieldName, JSONNull.getInstance());
+                                }
+
                             }
                         } else {
                             parseholder.put(fieldName, JSONNull.getInstance());
