@@ -319,6 +319,17 @@ public class GwtMarshaller implements Marshaller {
                                     }
                                     parseholder.put(fieldName, parseconvert);
                                 }
+                            } else if(fieldType.getName() == JSONObject.class.getName()) {
+                                if(value != null) {
+                                    JSONObject jsonObject = new JSONObject();
+                                    try {
+                                        jsonObject = (JSONObject) value;
+                                        parseholder.put(fieldName, jsonObject);
+                                    } catch (Exception e) {
+                                        Browser.getWindow().getConsole().log(e.getMessage());
+                                    }
+                                    parseholder.put(fieldName, jsonObject);
+                                }
                             } else {
                                 Object testObject = value;
                                 ParseObject spiral = new ParseObject();
