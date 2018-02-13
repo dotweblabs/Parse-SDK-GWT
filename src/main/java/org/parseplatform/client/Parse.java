@@ -726,6 +726,10 @@ public class Parse {
             }
             Shape.post(Parse.SERVER_URL + Parse.FILES_URI + fileName)
                     .header("Content-Type", "plain-text")
+                    .header("X-Parse-Application-Id", X_Parse_Application_Id)
+                    .header("X-Parse-REST-API-Key", X_Parse_REST_API_Key)
+                    .header("X-Parse-Master-Key", X_Parse_Master_Key)
+                    .header("X-Parse-Session-Token", X_Parse_Session_Token)
                     .body(data.toString())
                     .asJson(new AsyncCallback<String>() {
                         @Override

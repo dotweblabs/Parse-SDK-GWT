@@ -29,6 +29,10 @@ import com.google.gwt.json.client.JSONString;
  */
 public class ParsePointer extends JSONObject {
     public ParsePointer() {}
+    public ParsePointer(String className, String objectId) {
+        put("className", new JSONString(className));
+        put("objectId", new JSONString(objectId));
+    }
     public ParsePointer(ParseObject reference) {
         put("__type", new JSONString("Pointer"));
         put("className", new JSONString(reference.getClassName()));
