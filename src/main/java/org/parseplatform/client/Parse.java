@@ -39,6 +39,7 @@ public class Parse {
 
     public static String SERVER_URL = "http://localhost:1337/parse";
     public static String CLASSES_URI = "classes/";
+    public static String BATCH_URI = "batch";
     public static String FILES_URI = "files/";
 
     /*

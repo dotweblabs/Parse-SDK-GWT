@@ -403,19 +403,15 @@ public class ParseObject extends JSONObject {
                     }
                     @Override
                     public void onSuccess(String s) {
-                        try {
-                            JSONObject jsonObject = JSONParser.parseStrict(s).isObject();
-                            ParseResponse response = new ParseResponse();
-                            Iterator<String> it = jsonObject.keySet().iterator();
-                            while (it.hasNext()) {
-                                String key = it.next();
-                                JSONValue jsonValue = jsonObject.get(key);
-                                response.put(key, jsonValue);
-                            }
-                            callback.onSuccess(response);
-                        } catch (Exception e) {
-                            callback.onFailure(new ParseError(e));
+                        JSONObject jsonObject = JSONParser.parseStrict(s).isObject();
+                        ParseResponse response = new ParseResponse();
+                        Iterator<String> it = jsonObject.keySet().iterator();
+                        while (it.hasNext()) {
+                            String key = it.next();
+                            JSONValue jsonValue = jsonObject.get(key);
+                            response.put(key, jsonValue);
                         }
+                        callback.onSuccess(response);
                     }
                 });
     }
