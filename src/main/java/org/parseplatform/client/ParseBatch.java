@@ -16,7 +16,7 @@ public class ParseBatch extends JSONObject {
         this.objects = objects;
     }
 
-    public void create(final ParseAsyncCallback<ParseResponse> callback) {
+    public void create(final ParseAsyncCallback<JSONArray> callback) {
         List<ParseObject> parseObjectList = Arrays.asList(objects);
         JSONArray requests = new JSONArray();
         int i = 0;
@@ -44,15 +44,8 @@ public class ParseBatch extends JSONObject {
                     @Override
                     public void onSuccess(String s) {
                         try {
-                            JSONObject jsonObject = JSONParser.parseStrict(s).isObject();
-                            ParseResponse response = new ParseResponse();
-                            Iterator<String> it = jsonObject.keySet().iterator();
-                            while (it.hasNext()) {
-                                String key = it.next();
-                                JSONValue jsonValue = jsonObject.get(key);
-                                response.put(key, jsonValue);
-                            }
-                            callback.onSuccess(response);
+                            JSONArray jsonArray = JSONParser.parseStrict(s).isArray();
+                            callback.onSuccess(jsonArray);
                         } catch (Exception e) {
                             callback.onFailure(new ParseError(e));
                         }
