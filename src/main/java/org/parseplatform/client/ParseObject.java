@@ -342,33 +342,33 @@ public class ParseObject extends JSONObject {
 //        return parseObject;
 //    }
 
-    /**
-     * Unmarshall this {@ParseObject} into a target object.
-     *
-     * @param clazz Target object class
-     * @param <T> Target object type
-     * @return Target object
-     */
-    public <T> T unmarshall(Class<T> clazz) {
-        T as = null;
-        GwtUnmarshaller unmarshaller = GWT.create(GwtUnmarshaller.class);
-        try {
-            T instance = clazz.newInstance();
-            as = unmarshaller.unmarshall(clazz, instance, this);
-        } catch (Exception e) {
-            Browser.getWindow().getConsole().log(e.getMessage());
-        }
-        return as;
-    }
-
-    public static <T> ParseObject marshall(Class<T> clazz, Object instance) {
-        if(instance != null) {
-            GwtMarshaller marshaller = GWT.create(GwtMarshaller.class);
-            ParseObject parseObject = marshaller.marshall(instance);
-            return parseObject;
-        }
-        return null;
-    }
+//    /**
+//     * Unmarshall this {@ParseObject} into a target object.
+//     *
+//     * @param clazz Target object class
+//     * @param <T> Target object type
+//     * @return Target object
+//     */
+//    public <T> T unmarshall(Class<T> clazz) {
+//        T as = null;
+//        GwtUnmarshaller unmarshaller = GWT.create(GwtUnmarshaller.class);
+//        try {
+//            T instance = clazz.newInstance();
+//            as = unmarshaller.unmarshall(clazz, instance, this);
+//        } catch (Exception e) {
+//            Browser.getWindow().getConsole().log(e.getMessage());
+//        }
+//        return as;
+//    }
+//
+//    public static <T> ParseObject marshall(Class<T> clazz, Object instance) {
+//        if(instance != null) {
+//            GwtMarshaller marshaller = GWT.create(GwtMarshaller.class);
+//            ParseObject parseObject = marshaller.marshall(instance);
+//            return parseObject;
+//        }
+//        return null;
+//    }
 
 
 
