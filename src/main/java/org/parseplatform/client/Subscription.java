@@ -20,12 +20,12 @@ import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONString;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.sksamuel.gwt.websockets.Websocket;
 import com.sksamuel.gwt.websockets.WebsocketListener;
 
 /**
  *
+ * Subscription object
  *
  * @author Kerby Martino
  * @since 0-SNAPSHOT
@@ -45,7 +45,7 @@ public class Subscription {
         this.isConnected = false;
     }
 
-    public void on(String event, final AsyncCallback<ParseObject> callback){
+    public void on(String event, final ParseAsyncCallback<ParseObject> callback){
         //throw new RuntimeException("Websocket is not yet connected");
         final String subcribeOp = event;
         socket = new Websocket("ws://" + Parse.getUri());
@@ -62,7 +62,7 @@ public class Subscription {
                 if((message.get("op") != null) && (message.get("op").isString() != null)) {
                     String op = message.get("op").isString().stringValue();
                     if(op.equalsIgnoreCase("connected")) {
-                        isConnected = true;
+                        setIsConnected(true);
                         JSONObject connect = new JSONObject();
                         connect.put("op", new JSONString("subscribe"));
                         connect.put("requestId", new JSONNumber(1L));
@@ -74,13 +74,13 @@ public class Subscription {
                     } else if (op.equalsIgnoreCase("enter")||op.equalsIgnoreCase("create")||op.equalsIgnoreCase("leave")) {
                         if(subcribeOp.equals(op)) {
                             JSONObject jsonObject = message.get("object").isObject();
-                            ParseObject parseObject = ParseObject.clone(className, jsonObject);
+                            ParseObject parseObject = new ParseObject(className, jsonObject);
                             callback.onSuccess(parseObject);
                         }
                     } else if (op.equalsIgnoreCase("update")) {
                         if(subcribeOp.equals(op)) {
                             JSONObject jsonObject = message.get("object").isObject();
-                            ParseObject parseObject = ParseObject.clone(className, jsonObject);
+                            ParseObject parseObject = new ParseObject(className, jsonObject);
                             callback.onSuccess(parseObject);
                         }
                     }
@@ -91,14 +91,19 @@ public class Subscription {
 //                    Browser.getWindow().getConsole().log("onOpen");
                 JSONObject connect = new JSONObject();
                 connect.put("op", new JSONString("connect"));
-                connect.put("applicationId", new JSONString(Parse._appId));
-                connect.put("restAPIKey", new JSONString(Parse._restApiKey));
+                connect.put("applicationId", new JSONString(Parse.X_Parse_Application_Id));
+                connect.put("restAPIKey", new JSONString(Parse.X_Parse_REST_API_Key));
                 socket.send(connect.toString());
             }
         });
     }
     public void unsubscribe(){
         socket.close();
-        isConnected = false;
+        setIsConnected(false);
     }
+
+    private void setIsConnected(Boolean connected) {
+        isConnected = connected;
+    }
+
 }
