@@ -507,6 +507,10 @@ public class ParseObject extends JSONObject {
         }
     }
 
+    public ParseQuery query() {
+        return new ParseQuery(this);
+    }
+
     public void increment(String field, Long amount, final ParseAsyncCallback<Long> callback) {
         try {
             final ParseObject ref = this;

@@ -8,6 +8,7 @@ import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import elemental.client.Browser;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -36,6 +37,12 @@ public class ParseQuery extends JSONObject {
         put("className", new JSONString(className));
     }
 
+    public ParseQuery orderScore() {
+        put("order", new JSONString("$score"));
+        put("key", new JSONString("$score"));
+        return this;
+    }
+
     public ParseQuery order(Order order) {
         this.order = order;
         put("order", order);
@@ -51,6 +58,11 @@ public class ParseQuery extends JSONObject {
     public ParseQuery limit(int limit){
         this.limit = limit;
         put("limit", new JSONNumber(limit));
+        return this;
+    }
+
+    public ParseQuery count(int count) {
+        put("count", new JSONNumber(count));
         return this;
     }
 
@@ -95,8 +107,12 @@ public class ParseQuery extends JSONObject {
                 && !get("where").isObject().toString().equals("{}")) ? "where=" + URL.encode(get("where").isObject().toString()) : null;
         String limit = null;
         String skip = null;
+        String count = null;
         if(get("limit") != null) {
             limit = get("limit").isNumber() != null ? "limit=" + ((int)get("limit").isNumber().doubleValue()) : null;
+        }
+        if(get("count") != null) {
+            count = get("count").isNumber() != null ? "count=" + ((int)get("count").isNumber().doubleValue()) : null;
         }
         if(get("skip") != null) {
             skip = get("skip").isNumber() != null ? "skip=" + ((int)get("skip").isNumber().doubleValue()) : null;
@@ -115,29 +131,61 @@ public class ParseQuery extends JSONObject {
             if(order != null) {
                 if(limit != null) {
                     if(skip != null) {
-                        queryParams = "?" + where + "&" + order + "&" + limit + "&" + skip;
+                        if(count != null) {
+                            queryParams = "?" + where + "&" + order + "&" + limit + "&" + skip + "&count=" + count;
+                        } else {
+                            queryParams = "?" + where + "&" + order + "&" + limit + "&" + skip;
+                        }
                     } else {
-                        queryParams = "?" + where + "&" + order + "&" + limit;
+                        if(count != null) {
+                            queryParams = "?" + where + "&" + order + "&" + limit  + "&count=" + count;
+                        } else {
+                            queryParams = "?" + where + "&" + order + "&" + limit;
+                        }
                     }
                 } else {
                     if(skip != null) {
-                        queryParams = "?" + where + "&" + order + "&" + skip;
+                        if(count != null) {
+                            queryParams = "?" + where + "&" + order + "&" + skip + "&count=" + count;
+                        } else {
+                            queryParams = "?" + where + "&" + order + "&" + skip;
+                        }
                     } else {
-                        queryParams = "?" + where + "&" + order;
+                        if(count != null) {
+                            queryParams = "?" + where + "&" + order + "&count=" + count;
+                        } else {
+                            queryParams = "?" + where + "&" + order;
+                        }
                     }
                 }
             } else {
                 if(limit != null) {
                     if(skip != null) {
-                        queryParams = "?" + where + "&" + limit + "&" + skip;
+                        if(count != null) {
+                            queryParams = "?" + where + "&" + limit + "&" + skip  + "&count=" + count;
+                        } else {
+                            queryParams = "?" + where + "&" + limit + "&" + skip;
+                        }
                     } else {
-                        queryParams = "?" + where + "&" + limit;
+                        if(count != null) {
+                            queryParams = "?" + where + "&" + limit + "&count=" + count;
+                        } else {
+                            queryParams = "?" + where + "&" + limit;
+                        }
                     }
                 } else {
                     if(skip != null) {
-                        queryParams = "?" + where + "&" + skip;
+                        if(count != null) {
+                            queryParams = "?" + where + "&" + skip + "&count=" + count;
+                        } else {
+                            queryParams = "?" + where + "&" + skip;
+                        }
                     } else {
-                        queryParams = "?" + where;
+                        if(count != null) {
+                            queryParams = "?" + where + "&count=" + count;
+                        } else {
+                            queryParams = "?" + where;
+                        }
                     }
                 }
             }
@@ -194,8 +242,12 @@ public class ParseQuery extends JSONObject {
                     @Override
                     public void onSuccess(String s) {
                         if(s != null && !s.isEmpty()) {
-                            ParseResponse resp = new ParseResponse(s);
-                            callback.onSuccess(resp);
+                            try {
+                                ParseResponse resp = new ParseResponse(s);
+                                callback.onSuccess(resp);
+                            } catch (Exception e) {
+                                callback.onFailure(new ParseError(e));
+                            }
                         } else {
                             callback.onFailure(new ParseError(204, "No response"));
                         }

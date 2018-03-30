@@ -100,6 +100,13 @@ public class ParseResponse extends JSONObject {
         }
         return null;
     }
+    public Long getCount() {
+        if(get("count") != null && get("count").isNumber() != null) {
+            Double count = get("count").isNumber().doubleValue();
+            return count.longValue();
+        }
+        return null;
+    }
     public JSONValue getFirstResult() {
         JSONArray results = getResults();
         for(int i=0;i<results.size();i++) {

@@ -20,6 +20,7 @@ import com.google.gwt.json.client.JSONBoolean;
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.junit.client.GWTTestCase;
+import org.parseplatform.client.where.TextParameter;
 
 /**
  *
@@ -41,6 +42,13 @@ public class WhereTest extends GWTTestCase {
     public void testSimpleWhere() {
         Where where = new Where("playerName", new JSONString("Sean Plott"))
                 .where("cheatMode", JSONBoolean.getInstance(false));
+        log(where.toString());
+    }
+
+    public void testTextWhere() {
+        TextParameter parameter = new TextParameter();
+        parameter.setTerm("Sample query");
+        Where where = new Where("description").text(parameter);
         log(where.toString());
     }
 

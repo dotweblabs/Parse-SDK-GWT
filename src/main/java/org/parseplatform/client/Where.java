@@ -19,6 +19,7 @@ package org.parseplatform.client;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONValue;
+import org.parseplatform.client.where.TextParameter;
 
 /**
  *
@@ -204,6 +205,22 @@ public class Where extends JSONObject {
             if(jsonValue.isObject() != null){
                 jsonValue.isObject().put("$regex", value);
             }
+            put(key, operation);
+        } else {
+            put(key, operation);
+        }
+        return this;
+    }
+
+    public Where text(TextParameter param) {
+        JSONObject operation = new JSONObject();
+        operation.put("$text", param);
+        if(get(key) != null){
+            JSONValue jsonValue = get(key);
+            if(jsonValue.isObject() != null){
+                jsonValue.isObject().put("$text", param);
+            }
+            put(key, jsonValue);
         } else {
             put(key, operation);
         }
