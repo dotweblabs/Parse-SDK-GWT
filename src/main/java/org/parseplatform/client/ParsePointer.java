@@ -29,11 +29,19 @@ import com.google.gwt.json.client.JSONString;
  */
 public class ParsePointer extends JSONObject {
     public ParsePointer() {}
+
+    public ParsePointer(String className, String objectId) {
+        put("__type", new JSONString("Pointer"));
+        put("className", new JSONString(className));
+        put("objectId", new JSONString(objectId));
+    }
+
     public ParsePointer(ParseObject reference) {
         put("__type", new JSONString("Pointer"));
         put("className", new JSONString(reference.getClassName()));
         put("objectId", new JSONString(reference.getObjectId()));
     }
+
     public static ParsePointer parse(String className, String objectId) {
         ParsePointer pointer = new ParsePointer();
         pointer.put("__type", new JSONString("Pointer"));
@@ -41,6 +49,7 @@ public class ParsePointer extends JSONObject {
         pointer.put("objectId", new JSONString(objectId));
         return pointer;
     }
+
     public static ParsePointer clone(String className, JSONObject reference) {
         String objectId = reference.get("objectId").isString().stringValue();
         ParsePointer pointer = new ParsePointer();
@@ -49,6 +58,7 @@ public class ParsePointer extends JSONObject {
         pointer.put("objectId", new JSONString(objectId));
         return pointer;
     }
+
     public static ParsePointer clone(JSONObject reference) {
         String className = reference.get("className").isString().stringValue();
         String objectId = reference.get("objectId").isString().stringValue();
