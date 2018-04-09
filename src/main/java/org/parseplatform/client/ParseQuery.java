@@ -132,13 +132,13 @@ public class ParseQuery extends JSONObject {
                 if(limit != null) {
                     if(skip != null) {
                         if(count != null) {
-                            queryParams = "?" + where + "&" + order + "&" + limit + "&" + skip + "&count=" + count;
+                            queryParams = "?" + where + "&" + order + "&" + limit + "&" + skip + "&" + count;
                         } else {
                             queryParams = "?" + where + "&" + order + "&" + limit + "&" + skip;
                         }
                     } else {
                         if(count != null) {
-                            queryParams = "?" + where + "&" + order + "&" + limit  + "&count=" + count;
+                            queryParams = "?" + where + "&" + order + "&" + limit  + "&" + count;
                         } else {
                             queryParams = "?" + where + "&" + order + "&" + limit;
                         }
@@ -146,13 +146,13 @@ public class ParseQuery extends JSONObject {
                 } else {
                     if(skip != null) {
                         if(count != null) {
-                            queryParams = "?" + where + "&" + order + "&" + skip + "&count=" + count;
+                            queryParams = "?" + where + "&" + order + "&" + skip + "&" + count;
                         } else {
                             queryParams = "?" + where + "&" + order + "&" + skip;
                         }
                     } else {
                         if(count != null) {
-                            queryParams = "?" + where + "&" + order + "&count=" + count;
+                            queryParams = "?" + where + "&" + order + "&" + count;
                         } else {
                             queryParams = "?" + where + "&" + order;
                         }
@@ -162,13 +162,13 @@ public class ParseQuery extends JSONObject {
                 if(limit != null) {
                     if(skip != null) {
                         if(count != null) {
-                            queryParams = "?" + where + "&" + limit + "&" + skip  + "&count=" + count;
+                            queryParams = "?" + where + "&" + limit + "&" + skip  + "&" + count;
                         } else {
                             queryParams = "?" + where + "&" + limit + "&" + skip;
                         }
                     } else {
                         if(count != null) {
-                            queryParams = "?" + where + "&" + limit + "&count=" + count;
+                            queryParams = "?" + where + "&" + limit + "&" + count;
                         } else {
                             queryParams = "?" + where + "&" + limit;
                         }
@@ -176,13 +176,13 @@ public class ParseQuery extends JSONObject {
                 } else {
                     if(skip != null) {
                         if(count != null) {
-                            queryParams = "?" + where + "&" + skip + "&count=" + count;
+                            queryParams = "?" + where + "&" + skip + "&" + count;
                         } else {
                             queryParams = "?" + where + "&" + skip;
                         }
                     } else {
                         if(count != null) {
-                            queryParams = "?" + where + "&count=" + count;
+                            queryParams = "?" + where + "&" + count;
                         } else {
                             queryParams = "?" + where;
                         }
