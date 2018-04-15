@@ -21,6 +21,7 @@ public class ParseQuery extends JSONObject {
     private int skip;
 
     private List<String> includes;
+    private List<String> keys;
 
     public ParseQuery() {
     }
@@ -37,9 +38,17 @@ public class ParseQuery extends JSONObject {
         put("className", new JSONString(className));
     }
 
-    public ParseQuery orderScore() {
-        put("order", new JSONString("$score"));
-        put("key", new JSONString("$score"));
+    public ParseQuery key(String fieldName) {
+        if(keys == null) {
+            keys = new LinkedList<String>();
+        }
+        keys.add(fieldName);
+        return this;
+    }
+
+
+    public ParseQuery order(String key) {
+        put("order", new JSONString(key));
         return this;
     }
 
@@ -97,8 +106,12 @@ public class ParseQuery extends JSONObject {
 
     public void find(final ParseAsyncCallback<ParseResponse> callback) {
         String stringIncludes = null;
+        String stringKeys = null;
         if(includes != null) {
             stringIncludes = Joiner.on(",").join(includes);
+        }
+        if(keys != null && !keys.isEmpty()) {
+            stringKeys = Joiner.on(",").join(keys);
         }
         String className = getClassName();
         String order = "";
@@ -124,6 +137,9 @@ public class ParseQuery extends JSONObject {
             arrayString = arrayString.substring(1, arrayString.length() -1);
             arrayString = arrayString.replaceAll("\"", "");
             order = order + URL.encode(arrayString);
+        }
+        if(get("order") != null && get("order").isString() != null){
+            order = "order=" + get("order").isString().stringValue();
         }
         String queryParams = "";
         // where + order + limit + skip
@@ -229,6 +245,13 @@ public class ParseQuery extends JSONObject {
                 queryUrl = queryUrl + "&include=" + stringIncludes;
             }
         }
+        if(stringKeys != null && !stringKeys.isEmpty()) {
+            if(queryUrl.equals(Parse.SERVER_URL + Parse.CLASSES_URI + className)) {
+                queryUrl = queryUrl + "?keys=" + stringKeys;
+            } else {
+                queryUrl = queryUrl + "&keys=" + stringKeys;
+            }
+        }
         Shape.get(queryUrl)
                 .header("X-Parse-Application-Id", Parse.X_Parse_Application_Id)
                 .header("X-Parse-REST-API-Key", Parse.X_Parse_REST_API_Key)
@@ -259,4 +282,5 @@ public class ParseQuery extends JSONObject {
         Subscription subscription = new Subscription(getClassName(), where);
         return subscription;
     }
+
 }
