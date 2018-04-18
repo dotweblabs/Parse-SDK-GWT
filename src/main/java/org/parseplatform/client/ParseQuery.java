@@ -114,7 +114,7 @@ public class ParseQuery extends JSONObject {
             stringKeys = Joiner.on(",").join(keys);
         }
         String className = getClassName();
-        String order = "";
+        String order = null;
         String where = (get("where") != null && get("where").isObject() != null
                 && !get("where").isObject().toString().isEmpty()
                 && !get("where").isObject().toString().equals("{}")) ? "where=" + URL.encode(get("where").isObject().toString()) : null;
@@ -233,6 +233,13 @@ public class ParseQuery extends JSONObject {
                     } else {
                         queryParams = "";
                     }
+                }
+            }
+            if(count != null) {
+                if(queryParams.contains("?")) {
+                    queryParams = queryParams + "&count=1";
+                } else {
+                    queryParams = queryParams + "?count=1";
                 }
             }
         }
