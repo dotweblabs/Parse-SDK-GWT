@@ -27,7 +27,7 @@ package org.parseplatform.client;
  */
 public class TestKeys {
     public static final String TEST_API_ROOT = "http://localhost:1337/parse";
-    public static final String TEST_APP_ID = "APP_ID";
+    public static final String TEST_APP_ID = "APPLICATION_ID";
     public static final String TEST_JAVASCRIPT_KEY = "JAVASCRIPT_KEY";
     public static final String TEST_MASTER_KEY = "MASTER_KEY";
     public static final String TEST_REST_API_KEY = "REST_API_KEY";

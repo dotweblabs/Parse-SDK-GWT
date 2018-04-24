@@ -21,6 +21,7 @@ import com.google.gwt.json.client.JSONBoolean;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.junit.client.GWTTestCase;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import java.util.Date;
@@ -256,6 +257,25 @@ public class ParseTest extends GWTTestCase {
                 finishTest();
             }
         });
+    }
+
+    public void testAnonymousLogin() {
+        Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY);
+        ParseUser.anonymousLogin(new ParseAsyncCallback<ParseResponse>() {
+            @Override
+            public void onFailure(ParseError error) {
+                error.log();
+                fail();
+                finishTest();
+            }
+            @Override
+            public void onSuccess(ParseResponse parseResponse) {
+                assertNotNull(parseResponse);
+                Window.alert(parseResponse.toString());
+                finishTest();
+            }
+        });
+        delayTestFinish(6000);
     }
 
     public void testLogin() {

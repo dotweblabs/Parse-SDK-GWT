@@ -9,6 +9,7 @@ import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.storage.client.Storage;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import elemental.client.Browser;
+import org.parseplatform.client.util.UUID;
 
 import java.util.Iterator;
 
@@ -72,6 +73,7 @@ public class ParseUser extends ParseObject {
                     }
                 });
     }
+
     public void login(boolean remember, final ParseAsyncCallback<ParseResponse> callback) {
         String username = getString("username");
         String password = getString("password");
@@ -125,6 +127,49 @@ public class ParseUser extends ParseObject {
             }
         });
     }
+
+    public static void anonymousLogin(final ParseAsyncCallback<ParseResponse> callback) {
+        JSONObject payload = new JSONObject();
+        JSONObject authData = new JSONObject();
+        JSONObject id = new JSONObject();
+        id.put("id", new JSONString(UUID.uuid().replace("-","")));
+        authData.put("anonymous", id);
+        payload.put("authData", authData);
+        Shape.post(Parse.SERVER_URL + "/users")
+                .header(ParseConstants.FIELD_REST_APP_ID, Parse.X_Parse_Application_Id)
+                .header(ParseConstants.FIELD_REST_REST_API_KEY, Parse.X_Parse_REST_API_Key)
+                .header(ParseConstants.FIELD_REST_MASTER_KEY, Parse.X_Parse_Master_Key)
+                .header("X-Parse-Revocable-Session", "1")
+                .body(payload.toString())
+                .asJson(new AsyncCallback<String>() {
+                    @Override
+                    public void onFailure(Throwable throwable) {
+                        callback.onFailure(new ParseError(throwable));
+                    }
+                    @Override
+                    public void onSuccess(String s) {
+                        if(s != null && !s.isEmpty()) {
+                            ParseResponse response = new ParseResponse(s);
+                            if(response.isError()) {
+                                callback.onFailure(new ParseError(response.getErrorCode(), response.getErrorMessage()));
+                            } else {
+                                if(response.get("sessionToken") != null) {
+                                    //createdAt, objectId, sessionToken
+                                    sessionToken = response.get("sessionToken").isString().stringValue();
+                                    Parse.X_Parse_Session_Token = sessionToken;
+                                    Storage storage = Storage.getLocalStorageIfSupported();
+                                    if(storage != null) {
+                                        String key = "Parse/" + Parse.X_Parse_Application_Id + "/currentUser";
+                                        storage.setItem(key, response.toString());
+                                    }
+                                }
+                                callback.onSuccess(response);
+                            }
+                        }
+                    }
+                });
+    }
+
     public static void logout(final ParseAsyncCallback<ParseResponse> callback) {
         Shape.post(Parse.SERVER_URL + "logout")
                 .header(ParseConstants.FIELD_REST_APP_ID, Parse.X_Parse_Application_Id)
@@ -204,6 +249,7 @@ public class ParseUser extends ParseObject {
                     }
                 });
     }
+
     public void requestPasswordReset(final String email, final ParseAsyncCallback<ParseResponse> callback) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("email", new JSONString(email));
@@ -229,7 +275,9 @@ public class ParseUser extends ParseObject {
                     }
                 });
     }
+
     public void retrieveUser(String objectId ){}
+
     public static ParseUser retrieveCurrentUser() {
         Storage storage = Storage.getLocalStorageIfSupported();
         if(storage != null) {
@@ -245,6 +293,7 @@ public class ParseUser extends ParseObject {
         }
         return null;
     }
+
     public void updateUser(ParseObject ref, final ParseAsyncCallback<ParseResponse> callback) {
         String objectId = ref.getObjectId();
         final String className = ref.getClassName();
@@ -276,5 +325,7 @@ public class ParseUser extends ParseObject {
                     }
                 });
     }
+
     public static void deleteUser(String objectId) {}
+
 }
