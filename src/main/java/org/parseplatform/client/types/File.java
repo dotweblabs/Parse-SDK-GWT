@@ -1,7 +1,7 @@
-package org.parseplatform.client;
+package org.parseplatform.client.types;
 
 /*
-File:  ParseConstants.java
+File:  File.java
 Version: 0-SNAPSHOT
 Contact: hello@dotweblabs.com
 ----
@@ -24,17 +24,23 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVE
  * @since 0-SNAPSHOT
  * @version 0-SNAPSHOT
  */
-public class ParseConstants {
-    public static final String FIELD_REST_APP_ID = "X-Parse-Application-Id";
-    public static final String FIELD_REST_REST_API_KEY = "X-Parse-REST-API-Key";
-    public static final String FIELD_REST_MASTER_KEY = "X-Parse-Master-Key";
-    public static final String FIELD_REST_SESSION_TOKEN = "X-Parse-Session-Token";
-    public static final String FIELD_OBJECT_ID = "objectId";
-    public static final String FIELD_SESSION_TOKEN = "sessionToken";
-    public static final String FIELD_USERNAME = "username";
-    public static final String FIELD_PASSWORD = "password";
-    public static final String FIELD_EMAIL = "email";
-    public static final String CLASSNAME_USER = "_User";
-    public static final String CLASSNAME_ROLE = "_Role";
-    public static final String CLASSNAME_SESSION = "_Session";
+public class File {
+    public String name;
+    public String url;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 }

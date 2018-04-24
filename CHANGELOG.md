@@ -1,3 +1,6 @@
+## 0-SNAPSHOT - 04/24/18
+- Updated License header
+
 ## 0-SNAPSHOT - 11/14/17
 - Added JSONObject parametarized constructor for ParseACL
 
