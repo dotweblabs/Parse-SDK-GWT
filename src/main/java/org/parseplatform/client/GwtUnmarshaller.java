@@ -243,11 +243,12 @@ public class GwtUnmarshaller implements Unmarshaller {
                 return new ParseACL(value.isObject());
             }
         } else if (clazz.getName() == ParseDate.class.getName()) {
-            JSONObject birthDate = value.isObject();
             if (value != null && value.isObject() != null) {
                 String iso = value.isObject().get("iso") != null && value.isObject().get("iso").isString() != null
                         ? value.isObject().get("iso").isString().stringValue() : null;
                 return new ParseDate(iso);
+            } else if(value != null && value.isString() != null) {
+                return new ParseDate(value.isString().stringValue());
             }
         } else if (clazz.getName() == ParseFile.class.getName()) {
             if (value != null && value.isObject() != null) {
