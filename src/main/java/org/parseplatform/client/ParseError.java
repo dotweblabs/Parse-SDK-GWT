@@ -35,6 +35,8 @@ public class ParseError extends JSONObject {
 
     private String error;
 
+    private Throwable t;
+
     public ParseError(Integer code, String error) {
         this.code = code;
         this.error = error;
@@ -42,6 +44,7 @@ public class ParseError extends JSONObject {
 
     public ParseError(Throwable t) {
         String message = null;
+        this.t = t;
         if(t != null && t.getMessage() != null) {
             message = t.getMessage();
         }
@@ -66,6 +69,10 @@ public class ParseError extends JSONObject {
 
     public String getError() {
         return error;
+    }
+
+    public Throwable getThrowable() {
+        return t;
     }
 
     public void log() {
