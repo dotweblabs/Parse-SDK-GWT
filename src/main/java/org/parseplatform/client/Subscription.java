@@ -16,21 +16,36 @@
  */
 package org.parseplatform.client;
 
+/*
+File:  Subscription.java
+Version: 0-SNAPSHOT
+Contact: hello@dotweblabs.com
+----
+Copyright (c) 2018, Dotweblabs Web Technologies
+All rights reserved.
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+    * Neither the name of Dotweblabs Web Technologies nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONString;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.sksamuel.gwt.websockets.Websocket;
 import com.sksamuel.gwt.websockets.WebsocketListener;
 
 /**
- *
- *
  * @author Kerby Martino
  * @since 0-SNAPSHOT
  * @version 0-SNAPSHOT
- *
  */
 public class Subscription {
 
@@ -45,7 +60,7 @@ public class Subscription {
         this.isConnected = false;
     }
 
-    public void on(String event, final AsyncCallback<ParseObject> callback){
+    public void on(String event, final ParseAsyncCallback<ParseObject> callback){
         //throw new RuntimeException("Websocket is not yet connected");
         final String subcribeOp = event;
         socket = new Websocket("ws://" + Parse.getUri());
@@ -62,7 +77,7 @@ public class Subscription {
                 if((message.get("op") != null) && (message.get("op").isString() != null)) {
                     String op = message.get("op").isString().stringValue();
                     if(op.equalsIgnoreCase("connected")) {
-                        isConnected = true;
+                        setIsConnected(true);
                         JSONObject connect = new JSONObject();
                         connect.put("op", new JSONString("subscribe"));
                         connect.put("requestId", new JSONNumber(1L));
@@ -74,13 +89,13 @@ public class Subscription {
                     } else if (op.equalsIgnoreCase("enter")||op.equalsIgnoreCase("create")||op.equalsIgnoreCase("leave")) {
                         if(subcribeOp.equals(op)) {
                             JSONObject jsonObject = message.get("object").isObject();
-                            ParseObject parseObject = ParseObject.clone(className, jsonObject);
+                            ParseObject parseObject = new ParseObject(className, jsonObject);
                             callback.onSuccess(parseObject);
                         }
                     } else if (op.equalsIgnoreCase("update")) {
                         if(subcribeOp.equals(op)) {
                             JSONObject jsonObject = message.get("object").isObject();
-                            ParseObject parseObject = ParseObject.clone(className, jsonObject);
+                            ParseObject parseObject = new ParseObject(className, jsonObject);
                             callback.onSuccess(parseObject);
                         }
                     }
@@ -91,14 +106,19 @@ public class Subscription {
 //                    Browser.getWindow().getConsole().log("onOpen");
                 JSONObject connect = new JSONObject();
                 connect.put("op", new JSONString("connect"));
-                connect.put("applicationId", new JSONString(Parse._appId));
-                connect.put("restAPIKey", new JSONString(Parse._restApiKey));
+                connect.put("applicationId", new JSONString(Parse.X_Parse_Application_Id));
+                connect.put("restAPIKey", new JSONString(Parse.X_Parse_REST_API_Key));
                 socket.send(connect.toString());
             }
         });
     }
     public void unsubscribe(){
         socket.close();
-        isConnected = false;
+        setIsConnected(false);
     }
+
+    private void setIsConnected(Boolean connected) {
+        isConnected = connected;
+    }
+
 }

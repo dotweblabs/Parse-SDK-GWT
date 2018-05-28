@@ -1,32 +1,32 @@
-/**
- *
- * Copyright (c) 2017 Dotweblabs Web Technologies and others. All rights reserved.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * 	   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
 package org.parseplatform.client;
 
-import com.dotweblabs.shape.client.HttpRequestException;
+/*
+File:  QueryTest.java
+Version: 0-SNAPSHOT
+Contact: hello@dotweblabs.com
+----
+Copyright (c) 2018, Dotweblabs Web Technologies
+All rights reserved.
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+    * Neither the name of Dotweblabs Web Technologies nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONBoolean;
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.junit.client.GWTTestCase;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
- *
- * Unit tests of {@link Parse.Query}
+ * Unit tests of {@link ParseQuery}
  *
  * @author Kerby Martino
  * @since 0-SNAPSHOT
@@ -43,19 +43,18 @@ public class QueryTest extends GWTTestCase {
     }
 
     public void testQuery() {
-
         Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
-        Parse.SERVER_URL = PARSE_API_ROOT;
-        ParseObject testObject = Parse.Objects.extend("TestObject");
-        Parse.Query query = Parse.Query.extend(testObject);
+        ParseObject testObject = new ParseObject("TestObject");
+        ParseQuery query = new ParseQuery(testObject);
 
         Where where = new Where("marko", new JSONString("marko"));
 
-        query.where(where).find(new AsyncCallback<ParseResponse>() {
+        query.where(where).find(new ParseAsyncCallback<ParseResponse>() {
             @Override
-            public void onFailure(Throwable throwable) {
-                log("Query error: " + throwable.getMessage());
-                fail();
+            public void onFailure(ParseError error) {
+                error.log();
+                fail(error.getError());
+                finishTest();
             }
 
             @Override
@@ -66,20 +65,20 @@ public class QueryTest extends GWTTestCase {
                 } else {
                     log(parseResponse.get("error").isString().stringValue());
                 }
+                finishTest();
 
             }
         });
         log(query.toString());
-        delayTestFinish(5000);
+        delayTestFinish(10000);
     }
 
     public void testQueryPointer() {
         delayTestFinish(10000);
-        Parse.SERVER_URL = PARSE_API_ROOT;
         Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
         createParseObject();
-        ParseObject talentObject = Parse.Objects.extend("TestObject");
-        Parse.Query query = Parse.Query.extend(talentObject);
+        ParseObject talentObject = new ParseObject("TestObject");
+        ParseQuery query = new ParseQuery(talentObject);
 
         ParseObject pointer = new ParseObject();
         pointer.putString("__type", "Pointer");
@@ -88,11 +87,11 @@ public class QueryTest extends GWTTestCase {
 
         Where where = new Where("userId", pointer);
 
-        query.where(where).find(new AsyncCallback<ParseResponse>() {
+        query.where(where).find(new ParseAsyncCallback<ParseResponse>() {
             @Override
-            public void onFailure(Throwable throwable) {
-                HttpRequestException ex = (HttpRequestException) throwable;
-                fail();
+            public void onFailure(ParseError error) {
+                error.log();
+                fail(error.getError());
                 finishTest();
             }
             @Override
@@ -111,7 +110,6 @@ public class QueryTest extends GWTTestCase {
     }
 
     public void createParseObject() {
-
         ParseObject testObject = new ParseObject("TestObject");
         testObject.put("foo", new JSONString("bar"));
 
@@ -122,12 +120,11 @@ public class QueryTest extends GWTTestCase {
 
         testObject.put("userId", pointer);
 
-        Parse.Objects.create(testObject, new AsyncCallback<ParseResponse>() {
+        testObject.create(new ParseAsyncCallback<ParseResponse>() {
             @Override
-            public void onFailure(Throwable throwable) {
-                HttpRequestException ex = (HttpRequestException) throwable;
-                log("POST Error: " + ex.getCode());
-                fail("POST Error: " + ex.getCode());
+            public void onFailure(ParseError error) {
+                error.log();
+                fail(error.getError());
             }
             @Override
             public void onSuccess(ParseResponse parseResponse) {
@@ -136,7 +133,6 @@ public class QueryTest extends GWTTestCase {
                 assertNotNull(parseResponse.getCreatedAt());
             }
         });
-
     }
 
     public Where complexWhere() {
@@ -158,20 +154,19 @@ public class QueryTest extends GWTTestCase {
     }
 
     public void testQuery1() {
-        Parse.SERVER_URL = TestKeys.TEST_API_ROOT;
         Parse.initialize(TestKeys.TEST_APP_ID, TestKeys.TEST_REST_API_KEY, TestKeys.TEST_MASTER_KEY);
         Where where = new Where("isPublished", JSONBoolean.getInstance(true));
-        ParseObject test = Parse.Objects.extend("Story");
-        Parse.Query query = Parse.Query.extend(test);
+        ParseObject test = new ParseObject("Story");
+        ParseQuery query = new ParseQuery(test);
         query.where(where);
         query.skip(0);
         query.limit(10);
         query.order(new Order().descending("createdAt"));
         //log("Query: " + query.toString());
-        query.find(new AsyncCallback<ParseResponse>() {
+        query.find(new ParseAsyncCallback<ParseResponse>() {
             @Override
-            public void onFailure(Throwable throwable) {
-                log("Query Error: " + throwable.getMessage());
+            public void onFailure(ParseError error) {
+                error.log();
                 finishTest();
             }
             @Override

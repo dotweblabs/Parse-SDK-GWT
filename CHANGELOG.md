@@ -1,3 +1,28 @@
+## 0-SNAPSHOT - 04/24/18
+- Updated License header
+
+## 0-SNAPSHOT - 11/14/17
+- Added JSONObject parametarized constructor for ParseACL
+
+## 0-SNAPSHOT - 11/11/17
+- Initial working GwtReflection test 'GwtReflectTest'
+- Use XAPI (gwt-sandbox) to use reflection on GWT
+
+## 0-SNAPSHOT - 11/09/17
+- Fixed Parse config not being loaded to JSON object
+
+## 0-SNAPSHOT - 11/04/17
+- Fixed ParseResponse.asParseObject method
+- Added ParseContants 
+- Added ParseObject contructor metho11ds
+- Simplify ParseObject JSON string parsing
+- Added null checks
+
+## 0-SNAPSHOT - 11/03/17
+- Major library update
+- Fixed null limit and skip bug
+- Restructure methods and functions
+
 ## 0-SNAPSHOT - 11/14/17
 - Added empty constructor for ParseACL
 - Fixed getACL() method for ParseObject

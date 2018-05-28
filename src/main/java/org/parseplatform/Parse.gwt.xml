@@ -12,4 +12,6 @@
   <inherits name="com.google.common.collect.Collect"/>
   <!-- Specify the paths for translatable code -->
   <source path="client"/>
+  <source path="types"/>
+  <source path="util"/>
 </module>
