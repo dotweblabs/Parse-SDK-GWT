@@ -250,7 +250,7 @@ public class ParseUser extends ParseObject {
                 });
     }
 
-    public void requestPasswordReset(final ParseAsyncCallback<ParseResponse> callback) {
+    public static void requestPasswordReset(final ParseAsyncCallback<ParseResponse> callback) {
         Shape.post(Parse.SERVER_URL + "requestPasswordReset")
                 .header(ParseConstants.FIELD_REST_APP_ID, Parse.X_Parse_Application_Id)
                 .header(ParseConstants.FIELD_REST_REST_API_KEY, Parse.X_Parse_REST_API_Key)
@@ -273,7 +273,7 @@ public class ParseUser extends ParseObject {
                 });
     }
 
-    public void requestPasswordReset(final String email, final ParseAsyncCallback<ParseResponse> callback) {
+    public static void requestPasswordReset(final String email, final ParseAsyncCallback<ParseResponse> callback) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("email", new JSONString(email));
         Shape.post(Parse.SERVER_URL + "requestPasswordReset")
