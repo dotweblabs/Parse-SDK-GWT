@@ -1,4 +1,67 @@
+## 0-SNAPSHOT - 04/24/18
+- Updated License header
+
+## 0-SNAPSHOT - 11/14/17
+- Added JSONObject parametarized constructor for ParseACL
+
+## 0-SNAPSHOT - 11/11/17
+- Initial working GwtReflection test 'GwtReflectTest'
+- Use XAPI (gwt-sandbox) to use reflection on GWT
+
+## 0-SNAPSHOT - 11/09/17
+- Fixed Parse config not being loaded to JSON object
+
+## 0-SNAPSHOT - 11/04/17
+- Fixed ParseResponse.asParseObject method
+- Added ParseContants 
+- Added ParseObject contructor metho11ds
+- Simplify ParseObject JSON string parsing
+- Added null checks
+
+## 0-SNAPSHOT - 11/03/17
+- Major library update
+- Fixed null limit and skip bug
+- Restructure methods and functions
+
+## 0-SNAPSHOT - 11/14/17
+- Added empty constructor for ParseACL
+- Fixed getACL() method for ParseObject
+- Added JSONObject parameterized ParseACL constructor
+
+## 0-SNAPSHOT - 11/02/17
+- Added ParseDate
+
+## 0-SNAPSHOT - 10/26/17
+- Added helper methods
+- Added safe getters for ParseObject
+
+## 0-SNAPSHOT - 05/27/17
+- Login/Logout local storage bug fix
+
+## 0-SNAPSHOT - 04/30/17
+- Added email payload for request password reset function
+- Fixed Parse Upload function (working version)
+
+## 0-SNAPSHOT - 04/29/17
+- Added Parse Upload function (base64)
+
+## 0-SNAPSHOT - 04/28/17
+- Removed casting for Throwables
+- Update Object bug fix
+- Added "include" relation option for retrieve and query
+
+## 0-SNAPSHOT - 04/17/17
+- Updated POM, changed http to https
+
+## 0-SNAPSHOT - 04/16/17
+- Updated JUnit gwt.xml inherits
+- Updated algorithm to generate query parameters
+
 ## 0-SNAPSHOT - 04/14/17
+- Rename package
+- Update README
+- Removed unused classes
+- Added .gitignore file
 - Removed AutoBeans
 - Added JsInterop classes
 
@@ -7,6 +70,13 @@
 
 ## 0-SNAPSHOT - 04/12/17
 - Added AutoBeans serialization
+
+## 0-SNAPSHOT - 03/04/17
+- Fix missing ParseObject class name
+- Added GWT Marshaller and Unmarshaller for ParseObject
+
+## 0-SNAPSHOT - 02/24/17
+- Added GWT Object to Parse Object marshaller
 
 ## 0-SNAPSHOT - 02/08/17
 - Added ParseRole

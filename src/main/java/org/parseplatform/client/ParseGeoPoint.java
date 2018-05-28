@@ -1,0 +1,55 @@
+package org.parseplatform.client;
+
+/*
+File:  ParseGeoPoint.java
+Version: 0-SNAPSHOT
+Contact: hello@dotweblabs.com
+----
+Copyright (c) 2018, Dotweblabs Web Technologies
+All rights reserved.
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+    * Neither the name of Dotweblabs Web Technologies nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+
+import com.google.gwt.json.client.JSONNumber;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONString;
+
+/**
+ * @author Kerby Martino
+ * @since 0-SNAPSHOT
+ * @version 0-SNAPSHOT
+ */
+public class ParseGeoPoint extends JSONObject {
+    public ParseGeoPoint() {}
+    public ParseGeoPoint(Double longitude, Double latitude) {
+        put("longitude", new JSONNumber(longitude));
+        put("latitude", new JSONNumber(latitude));
+        put("__type", new JSONString("GeoPoint"));
+    }
+    public Double getLongitude() {
+        Double longitude = (get("longitude") != null && get("longitude").isNumber() != null)
+                ? get("longitude").isNumber().doubleValue() : null;
+        return longitude;
+    }
+    public Double getLatitude() {
+        Double latitude = (get("latitude") != null && get("latitude").isNumber() != null)
+                ? get("latitude").isNumber().doubleValue() : null;
+        return latitude;
+    }
+    public ParseGeoPoint(JSONObject jsonObject) {
+        if(jsonObject != null) {
+            put("longitude", (jsonObject.get("longitude") != null)  ? jsonObject.get("longitude") : null);
+            put("latitude", (jsonObject.get("latitude") != null ) ? jsonObject.get("latitude") : null);
+            put("__type", new JSONString("GeoPoint"));
+        }
+    }
+}

@@ -3,14 +3,14 @@
 
 	<groupId>org.parseplatform</groupId>
 	<artifactId>parse-gwt</artifactId>
-	<version>JSINTEROP-SNAPSHOT</version>
+	<version>0-SNAPSHOT</version>
 
 	<name>Parse Client for GWT</name>
 	<description>A simple Parse Client for GWT</description>
-	<url>https://www.github.com/dotweblabs/gwt-parse</url>
+	<url>https://www.github.com/dotweblabs/Parse-SDK-GWT</url>
 
 	<issueManagement>
-		<url>https://www.github.com/dotweblabs/gwt-parse/issues</url>
+		<url>https://www.github.com/dotweblabs/Parse-SDK-GWT/issues</url>
 		<system>GitHub Issues</system>
 	</issueManagement>
 
@@ -23,22 +23,24 @@
 	</licenses>
 
 	<scm>
-		<url>https://github.com/dotweblabs/gwt-parse</url>
-		<connection>scm:git:git://www.github.com/dotweblabs/gwt-parse.git</connection>
-		<developerConnection>scm:git:www.github.com/dotweblabs/gwt-parse.git</developerConnection>
+		<url>https://github.com/dotweblabs/Parse-SDK-GWT</url>
+		<connection>scm:git:git://www.github.com/dotweblabs/Parse-SDK-GWT.git</connection>
+		<developerConnection>scm:git:www.github.com/dotweblabs/Parse-SDK-GWT.git</developerConnection>
 	</scm>
 
 	<developers>
 		<developer>
 			<email>kerbymart@gmail.com</email>
 			<name>Kerby Martino</name>
-			<url>www.github.com/dotweblabs</url>
+			<url>www.github.com/kerbymart</url>
 			<id>kerbymart</id>
 		</developer>
 	</developers>
 
 	<properties>
 		<gwt.version>2.8.0-beta1</gwt.version>
+		<gwt-maven.version>2.8.0-rc3</gwt-maven.version>
+		<test.mode>htmlunit</test.mode>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -64,7 +66,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>gwt-maven-plugin</artifactId>
-				<version>${gwt.version}</version>
+				<version>${gwt-maven.version}</version>
 			</plugin>
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -103,11 +105,11 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-		<groupId>com.google.gwt</groupId>
-		<artifactId>gwt-dev</artifactId>
-		<version>${gwt.version}</version>
-		<scope>test</scope>
-	</dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-dev</artifactId>
+			<version>${gwt.version}</version>
+			<!--<scope>test</scope>-->
+		</dependency>
 		<dependency>
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-elemental</artifactId>
@@ -127,6 +129,11 @@
 			<groupId>com.sksamuel.gwt</groupId>
 			<artifactId>gwt-websockets</artifactId>
 			<version>1.0.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-elemental</artifactId>
+			<version>${gwt.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -168,7 +175,7 @@
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>gwt-maven-plugin</artifactId>
-						<version>2.7.0</version>
+						<version>${gwt-maven.version}</version>
 						<executions>
 							<execution>
 								<goals>
@@ -225,32 +232,20 @@
 				</plugins>
 			</build>
 			<repositories>
+				<!-- Snapshot repository -->
 				<repository>
-					<snapshots>
-						<enabled>false</enabled>
-					</snapshots>
-					<id>bintray-dotweblabs-maven</id>
-					<name>bintray</name>
-					<url>http://dl.bintray.com/dotweblabs/maven</url>
+					<id>oss-jfrog-artifactory-snapshots</id>
+					<name>oss-jfrog-artifactory-snapshots</name>
+					<url>https://oss.jfrog.org/artifactory/oss-snapshot-local</url>
 				</repository>
 			</repositories>
-			<pluginRepositories>
-				<pluginRepository>
-					<snapshots>
-						<enabled>false</enabled>
-					</snapshots>
-					<id>bintray-dotweblabs-maven</id>
-					<name>bintray-plugins</name>
-					<url>http://dl.bintray.com/dotweblabs/maven</url>
-				</pluginRepository>
-			</pluginRepositories>
 		</profile>
 	</profiles>
 	<distributionManagement>
 		<snapshotRepository>
 			<id>bintray-dotweblabs-parse</id>
 			<name>oss-jfrog-artifactory-snapshots</name>
-			<url>http://oss.jfrog.org/artifactory/oss-snapshot-local</url>
+			<url>https://oss.jfrog.org/artifactory/oss-snapshot-local</url>
 		</snapshotRepository>
 	</distributionManagement>
 </project>
