@@ -3,7 +3,7 @@
 
 	<groupId>org.parseplatform</groupId>
 	<artifactId>parse-gwt</artifactId>
-	<version>0-SNAPSHOT</version>
+	<version>JSINTEROP-SNAPSHOT</version>
 
 	<name>Parse Client for GWT</name>
 	<description>A simple Parse Client for GWT</description>

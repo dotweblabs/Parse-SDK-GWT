@@ -23,6 +23,8 @@ import com.dotweblabs.shape.client.Shape;
 import com.google.common.base.Joiner;
 import com.google.gwt.json.client.*;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import org.parseplatform.client.js.base.JSON;
+
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -97,34 +99,6 @@ public class ParseObject extends JSONObject {
         }
         return parseObject;
     }
-
-//    public static ParseObject clone(String className, JSONObject jsonObject) {
-//        ParseObject response = null;
-//        Iterator<String> it = jsonObject.keySet().iterator();
-//        while (it.hasNext()) {
-//            if (response == null) {
-//                response = new ParseObject(className);
-//            }
-//            String key = it.next();
-//            JSONValue value = jsonObject.get(key);
-//            response.put(key, value);
-//        }
-//        return response;
-//    }
-//
-//    public static ParseObject clone(JSONObject jsonObject) {
-//        ParseObject response = null;
-//        Iterator<String> it = jsonObject.keySet().iterator();
-//        while(it.hasNext()) {
-//            if(response == null) {
-//                response = new ParseObject();
-//            }
-//            String key = it.next();
-//            JSONValue value = jsonObject.get(key);
-//            response.put(key, value);
-//        }
-//        return response;
-//    }
 
     public void putNull(String key) {
         put(key, JSONNull.getInstance());
@@ -323,20 +297,6 @@ public class ParseObject extends JSONObject {
     public String getErrorMessage() {
         return get("error").isString() != null ? get("error").isString().stringValue() : null;
     }
-
-    /**
-     * Creates a new {@ParseObject} from a {@JsType} object
-     *
-     * @param className Parse className
-     * @param object Source object
-     * @param <T>
-     * @return a new new {@ParseObject}
-     */
-//    public static <T> ParseObject from(String className, T object) {
-//        String json = JSON.stringify(object);
-//        ParseObject parseObject = ParseObject.parse(className, json);
-//        return parseObject;
-//    }
 
     /**
      * Check if this object is an error.
@@ -659,8 +619,6 @@ public class ParseObject extends JSONObject {
                         }
                     }
                 });
-
-
     }
 
     public void createRelation(String key, ParsePointer[] targets,
@@ -696,6 +654,32 @@ public class ParseObject extends JSONObject {
                         callback.onSuccess(new ParseResponse(s));
                     }
                 });
+    }
+
+    /**
+     * Creates a new {@ParseObject} from a {@JsType} object
+     *
+     * @param className Parse className
+     * @param object Source object
+     * @param <T>
+     * @return a new new {@ParseObject}
+     */
+    public static <T> ParseObject from(String className, T object) {
+        String json = JSON.stringify(object);
+        ParseObject parseObject = ParseObject.parse(className, json);
+        return parseObject;
+    }
+
+    /**
+     * Marshall this {@ParseObject} into a target object.
+     *
+     * @param clazz Target object class
+     * @param <T> Target object type
+     * @return Target object
+     */
+    public <T> T as(Class<T> clazz) {
+        T as = JSON.parse(this.toString());
+        return as;
     }
 
 }
