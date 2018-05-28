@@ -725,7 +725,7 @@ public class Parse {
                 data.put("_SessionToken", new JSONString(X_Parse_Session_Token));
             }
             Shape.post(Parse.SERVER_URL + Parse.FILES_URI + fileName)
-                    .header("Content-Type", "plain-text")
+                    .header("Content-Type", "plain/text")
                     .header("X-Parse-Application-Id", X_Parse_Application_Id)
                     .header("X-Parse-REST-API-Key", X_Parse_REST_API_Key)
                     .header("X-Parse-Master-Key", X_Parse_Master_Key)
