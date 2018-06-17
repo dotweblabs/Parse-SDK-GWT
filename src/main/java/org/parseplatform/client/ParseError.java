@@ -49,7 +49,10 @@ public class ParseError extends JSONObject {
             message = t.getMessage();
         }
         if(message != null) {
-            JSONValue jsonError = JSONParser.parseStrict(message);
+            JSONValue jsonError = null;
+            try {
+                jsonError = JSONParser.parseStrict(message);
+            } catch (Exception e) {}
             if(jsonError != null && jsonError.isObject() != null) {
                 JSONObject error = jsonError.isObject();
                 Double d =  (error.get("code") != null && error.get("code").isNumber() != null)

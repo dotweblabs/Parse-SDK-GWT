@@ -27,6 +27,8 @@ import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import elemental.client.Browser;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -293,6 +295,10 @@ public class ParseQuery extends JSONObject {
                     }
                     @Override
                     public void onSuccess(String s) {
+                        if(Parse.DEBUG) {
+                            Browser.getWindow().getConsole().log("Query response:");
+                            Browser.getWindow().getConsole().log(s);
+                        }
                         if(s != null && !s.isEmpty()) {
                             try {
                                 ParseResponse resp = new ParseResponse(s);

@@ -37,6 +37,7 @@ public class Parse {
     }
 
     static final Logger logger = Logger.getLogger(Parse.class.getName());
+    public static Boolean DEBUG = false;
 
     public static String SERVER_URL = "http://localhost:1337/parse";
     public static String CLASSES_URI = "classes/";
@@ -97,6 +98,10 @@ public class Parse {
     }
 
     public static void initialize(String path, String appId, String restApiKey, String javascriptKey, String masterKey) {
+        initialize(path, appId, restApiKey, javascriptKey, masterKey, null);
+    }
+
+    public static void initialize(String path, String appId, String restApiKey, String javascriptKey, String masterKey, String sessionToken) {
         X_Parse_Application_Id = appId;
         X_Parse_REST_API_Key = restApiKey;
         if(masterKey != null) {
@@ -120,7 +125,9 @@ public class Parse {
             String key = "Parse/" + X_Parse_Application_Id + "/currentUser";
             if(storage.getItem(key) != null){
                 ParseObject user = ParseObject.parse("_User", storage.getItem(key));
-                String sessionToken = user.get("sessionToken").isString().stringValue();
+                if(sessionToken == null) {
+                    sessionToken = user.get("sessionToken").isString().stringValue();
+                }
                 X_Parse_Session_Token = sessionToken;
             }
         }
