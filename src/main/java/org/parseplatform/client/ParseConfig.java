@@ -32,7 +32,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public class ParseConfig {
     public static void get(final ParseAsyncCallback<Config> callback) {
-        Shape.get(Parse.SERVER_URL + "/config")
+        Shape.get(Parse.SERVER_URL + "config")
                 .header("X-Parse-Application-Id", Parse.X_Parse_Application_Id)
                 .header("X-Parse-REST-API-Key", Parse.X_Parse_REST_API_Key)
                 .header("X-Parse-Master-Key", Parse.X_Parse_Master_Key)
@@ -62,7 +62,7 @@ public class ParseConfig {
         params.put(parameter, value);
         JSONObject body = new JSONObject();
         body.put("params", params);
-        Shape.put(Parse.SERVER_URL + "/config")
+        Shape.put(Parse.SERVER_URL + "config")
                 .header("X-Parse-Application-Id", Parse.X_Parse_Application_Id)
                 .header("X-Parse-REST-API-Key", Parse.X_Parse_REST_API_Key)
                 .header("X-Parse-Master-Key", Parse.X_Parse_Master_Key)

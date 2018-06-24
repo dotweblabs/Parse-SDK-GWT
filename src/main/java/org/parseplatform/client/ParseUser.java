@@ -224,7 +224,7 @@ public class ParseUser extends ParseObject {
     }
 
     public static void become(String sessionToken, final ParseAsyncCallback<ParseObject> callback){
-        Shape.get(Parse.SERVER_URL + "/users/me")
+        Shape.get(Parse.SERVER_URL + "users/me")
                 .header(ParseConstants.FIELD_REST_APP_ID, Parse.X_Parse_Application_Id)
                 .header(ParseConstants.FIELD_REST_REST_API_KEY, Parse.X_Parse_REST_API_Key)
                 .header(ParseConstants.FIELD_REST_MASTER_KEY, Parse.X_Parse_Master_Key)
