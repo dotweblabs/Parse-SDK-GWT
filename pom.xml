@@ -3,7 +3,7 @@
 
 	<groupId>org.parseplatform</groupId>
 	<artifactId>parse-gwt</artifactId>
-	<version>XAPI-SNAPSHOT</version>
+	<version>XAPI-SNAPSHOT-Nov-2018</version>
 
 	<name>Parse Client for GWT</name>
 	<description>A simple Parse Client for GWT</description>
@@ -80,6 +80,14 @@
 					</additionalClasspathElements>
 					<useManifestOnlyJar>false</useManifestOnlyJar>
 					<forkMode>always</forkMode>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>8</source>
+					<target>8</target>
 				</configuration>
 			</plugin>
 			<!--<plugin>-->

@@ -104,7 +104,7 @@ public class GwtMarshaller implements Marshaller {
                             } else if (fieldType.getName() == float.class.getName() || fieldType.getName() == int.class.getName() || fieldType.getName() == long.class.getName()) {
                                 //Browser.getWindow().getConsole().log("float int long " + fieldName + value.getClass().getName());
                                 if (value.getClass().getName() == float.class.getName()) {
-                                    parseholder.put(fieldName, new JSONNumber((float) value));
+                                    parseholder.put(fieldName, new JSONNumber((Float) value));
                                 } else if (value.getClass().getTypeName() == int.class.getName()) {
                                     parseholder.put(fieldName, new JSONNumber((Integer) value));
                                 } else if (value.getClass().getTypeName() == long.class.getName()) {
@@ -112,7 +112,7 @@ public class GwtMarshaller implements Marshaller {
                                 } else if (value.getClass().getTypeName() == Integer.class.getName()) {
                                     parseholder.put(fieldName, new JSONNumber((Integer) value));
                                 } else if (fieldType.getName() == int.class.getName()) {
-                                    parseholder.put(fieldName, new JSONNumber((int) value));
+                                    parseholder.put(fieldName, new JSONNumber((Integer) value));
                                 } else if (value.getClass().getName() == Double.class.getName()) {
                                     parseholder.put(fieldName, new JSONNumber((Double) value));
                                 } else if (value.getClass().getName() == Long.class.getName()) {
@@ -150,7 +150,8 @@ public class GwtMarshaller implements Marshaller {
                                     ParseObject spiral = new ParseObject();
 
                                     if (testObject.getClass().getName() == String.class.getName()) {
-                                        String stringValue = value.toString();
+                                        List<String> values = (List<String>) value;
+                                        String stringValue = values.get(p);
                                         testARRAY.set(p,  new JSONString(stringValue));
 
                                     } else if (testObject.getClass().getName() == Boolean.class.getName() ||testObject.getClass().getName() == boolean.class.getName()) {
@@ -192,12 +193,7 @@ public class GwtMarshaller implements Marshaller {
                                     } else {
                                         spiral = marshall(testObject);
                                         testARRAY.set(p, spiral);
-
                                     }
-
-
-
-
                                 }
                                 parseholder.put(fieldName, testARRAY);
                             } else if (fieldType.getName() == File.class.getName()) {
@@ -230,7 +226,7 @@ public class GwtMarshaller implements Marshaller {
                             } else if (fieldType.getName() == byte.class.getName()) {
                                 parseholder.put(fieldName, new JSONNumber(Integer.parseInt(value.toString())));
                             } else if (fieldType.getName() == short.class.getName()) {
-                                parseholder.put(fieldName, new JSONNumber((short) value));
+                                parseholder.put(fieldName, new JSONNumber((Short) value));
                             } else if (fieldType.getName() == char.class.getName()) {
                                 //prevent JSON format errors
                                 //convert char to integer

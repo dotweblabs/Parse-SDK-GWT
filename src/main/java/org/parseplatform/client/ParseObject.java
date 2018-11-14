@@ -438,8 +438,8 @@ public class ParseObject extends JSONObject {
     }
     public static void retrieve(final ParseObject ref, final List<String> includes,
                                 final ParseAsyncCallback<ParseObject> callback) {
-        String objectId = ref.getObjectId();
-        String className = ref.getClassName();
+        final String objectId = ref.getObjectId();
+        final String className = ref.getClassName();
         String path = Parse.SERVER_URL + Parse.CLASSES_URI + className + "/" + objectId;
 
         String stringIncludes = Joiner.on(",").join(includes);
@@ -537,7 +537,7 @@ public class ParseObject extends JSONObject {
         }
     }
 
-    public void increment(String field, Long amount, final ParseAsyncCallback<Long> callback) {
+    public void increment(final String field, Long amount, final ParseAsyncCallback<Long> callback) {
         try {
             final ParseObject ref = this;
             String objectId = ref.getObjectId();

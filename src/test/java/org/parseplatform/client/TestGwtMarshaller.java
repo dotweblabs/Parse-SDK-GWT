@@ -244,7 +244,7 @@ public class TestGwtMarshaller extends GWTTestCase {
 
         parentBean.setFavorite(first);
 
-        parentBean.children = new LinkedList<>();
+        parentBean.children = new LinkedList<ChildBean>();
         parentBean.children.add(first);
         parentBean.children.add(second);
         parentBean.children.add(third);

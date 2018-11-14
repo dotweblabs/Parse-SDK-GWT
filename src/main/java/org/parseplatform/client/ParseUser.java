@@ -72,7 +72,7 @@ public class ParseUser extends ParseObject {
                     }
                 });
     }
-    public void login(boolean remember, final ParseAsyncCallback<ParseResponse> callback) {
+    public void login(final boolean remember, final ParseAsyncCallback<ParseResponse> callback) {
         String username = getString("username");
         String password = getString("password");
         String param = "username=" + username + "&" + "password=" + password;

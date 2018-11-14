@@ -102,7 +102,7 @@ public class GwtUnmarshaller implements Unmarshaller {
                         } else if (fieldType.getName() == LinkedList.class.getName()) {
                             ComponentType componentType = fields[c].getAnnotation(ComponentType.class);
                             if (value.isArray() != null) {
-                                List<Object> objectList = new LinkedList<>();
+                                List<Object> objectList = new LinkedList<Object>();
                                 JSONArray jsonArray = parseObject.getJSONArray(fieldName);
                                 Class<?> componentClass = componentType.type();
                                 for (int j = 0; j < jsonArray.size(); j++) {
