@@ -361,6 +361,7 @@ public class ParseObject extends JSONObject {
         if(instance != null) {
             GwtMarshaller marshaller = GWT.create(GwtMarshaller.class);
             ParseObject parseObject = marshaller.marshall(instance);
+            parseObject.setClassName(clazz.getSimpleName());
             return parseObject;
         }
         return null;
