@@ -290,26 +290,22 @@ public class ParseObject extends JSONObject {
 
     public ParseQuery relation(String key) {
         ParseQuery query = null;
-        try {
-            JSONObject jsonRelation = get(key) != null ? get(key).isObject() : null;
-            if(jsonRelation != null && jsonRelation.isObject() != null) {
-                JSONObject jsonObject = get(key).isObject();
-                ParseRelation relation = ParseRelation.clone(jsonObject);
-                String className = relation.getClassName();
-                if(className != null) {
-                    query = new ParseQuery(new ParseObject(className));
-                    JSONObject relatedTo = new JSONObject();
-                    ParsePointer pointer = new ParsePointer(this.getClassName(), this.getObjectId());
-                    relatedTo.put("object", pointer);
-                    relatedTo.put("key", new JSONString(key));
-                    Where where = new Where("$relatedTo", relatedTo);
-                    query.where(where);
-                }
-            } else {
-                throw new RuntimeException("ParseRelation is missing for " + key);
+        JSONObject jsonRelation = get(key) != null ? get(key).isObject() : null;
+        if(jsonRelation != null && jsonRelation.isObject() != null) {
+            JSONObject jsonObject = get(key).isObject();
+            ParseRelation relation = ParseRelation.clone(jsonObject);
+            String className = relation.getClassName();
+            if(className != null) {
+                query = new ParseQuery(new ParseObject(className));
+                JSONObject relatedTo = new JSONObject();
+                ParsePointer pointer = new ParsePointer(this.getClassName(), this.getObjectId());
+                relatedTo.put("object", pointer);
+                relatedTo.put("key", new JSONString(key));
+                Where where = new Where("$relatedTo", relatedTo);
+                query.where(where);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } else {
+            throw new RuntimeException("ParseRelation is missing for " + key);
         }
         return query;
     }
@@ -654,6 +650,41 @@ public class ParseObject extends JSONObject {
         });
     }
 
+    public void removeRelation(String key, ParsePointer target,
+                               final ParseAsyncCallback<ParseResponse> callback) {
+        ParseObject object = this;
+        String objectId = object.getObjectId();
+        final String className = object.getClassName();
+        final String path = Parse.SERVER_URL + Parse.CLASSES_URI + className + "/" + objectId;
+        JSONArray objects = new JSONArray();
+        objects.set(0, target);
+        JSONObject payload = new JSONObject();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("__op", new JSONString("RemoveRelation"));
+        jsonObject.put("objects", objects);
+        payload.put(key, jsonObject);
+        Shape.put(path)
+                .header("X-Parse-Application-Id", Parse.X_Parse_Application_Id)
+                .header("X-Parse-REST-API-Key", Parse.X_Parse_REST_API_Key)
+                .header("X-Parse-Master-Key", Parse.X_Parse_Master_Key)
+                .header("X-Parse-Session-Token", Parse.X_Parse_Session_Token)
+                .body(payload.toString())
+                .asJson(new AsyncCallback<String>() {
+                    @Override
+                    public void onFailure(Throwable throwable) {
+                        callback.onFailure(new ParseError(throwable));
+                    }
+                    @Override
+                    public void onSuccess(String s) {
+                        try{
+                            ParseResponse parseResponse = new ParseResponse(s);
+                            callback.onSuccess(parseResponse);
+                        } catch (Exception e) {
+                            callback.onFailure(new ParseError(e));
+                        }
+                    }
+                });
+    }
 
     public void createRelation(String key, ParsePointer target,
                                final ParseAsyncCallback<ParseResponse> callback) {
@@ -691,6 +722,41 @@ public class ParseObject extends JSONObject {
                 });
 
 
+    }
+
+    public void removeRelation(String key, ParsePointer[] targets,
+                               final ParseAsyncCallback<ParseResponse> callback) {
+        final ParseObject object = this;
+        String objectId = object.getObjectId();
+        final String className = object.getClassName();
+        final String path = Parse.SERVER_URL + Parse.CLASSES_URI + className + "/" + objectId;
+        JSONObject payload = new JSONObject();
+        JSONArray objects = new JSONArray();
+        int i = 0;
+        for(ParsePointer p : Arrays.asList(targets)) {
+            objects.set(i, p);
+            i++;
+        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("__op", new JSONString("RemoveRelation"));
+        jsonObject.put("objects", objects);
+        payload.put(key, jsonObject);
+        Shape.put(path)
+                .header("X-Parse-Application-Id", Parse.X_Parse_Application_Id)
+                .header("X-Parse-REST-API-Key", Parse.X_Parse_REST_API_Key)
+                .header("X-Parse-Master-Key", Parse.X_Parse_Master_Key)
+                .header("X-Parse-Session-Token", Parse.X_Parse_Session_Token)
+                .body(payload.toString())
+                .asJson(new AsyncCallback<String>() {
+                    @Override
+                    public void onFailure(Throwable throwable) {
+                        callback.onFailure(new ParseError(throwable));
+                    }
+                    @Override
+                    public void onSuccess(String s) {
+                        callback.onSuccess(new ParseResponse(s));
+                    }
+                });
     }
 
     public void createRelation(String key, ParsePointer[] targets,
