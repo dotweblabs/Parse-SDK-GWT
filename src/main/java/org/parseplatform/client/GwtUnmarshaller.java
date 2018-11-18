@@ -50,9 +50,6 @@ public class GwtUnmarshaller implements Unmarshaller {
                     if (parseObject.get(k) != null && k == fields[c].getName()) {
                         Class<?> fieldType = fields[c].getType();
                         String fieldName = fields[c].getName();
-                        //log("Field Type        " + fields[c].getType());
-                        //log("Field Type Name   " + fields[c].getType().getName());
-                        //log("Field Name        " + fieldName);
                         if (fieldType.getName() == String.class.getName()) {
                             String converter = parseObject.getString(k);
                             GwtReflect.fieldSet(declaringClass, fieldName, instance, converter);
@@ -145,16 +142,8 @@ public class GwtUnmarshaller implements Unmarshaller {
                         } else if (fieldType.getName() == ParsePointer.class.getName()) {
                             GwtReflect.fieldSet(declaringClass, fieldName, instance, isAssignable(value, ParsePointer.class));
                         } else {
-                            JSONObject jsonObject = parseObject.getJSONObject(k);
-                            ParseObject pojoObject = new ParseObject(jsonObject);
                             Class<?> pojoClass = fieldType;
-                            Object pojo = pojoClass.newInstance();
-                            pojo = unmarshall(pojoClass, pojo, pojoObject);
-                            //log("POJO type found   " + pojoClass.getName());
-                            //log("Parse Object      " + pojoObject.toString());
-                            //log("POJO Object       " + pojo.toString());
-                            assert pojo != null;
-                            GwtReflect.fieldSet(declaringClass, fieldName, instance, pojo);
+                            GwtReflect.fieldSet(declaringClass, fieldName, instance, isAssignable(value, fieldType));
                         }
                     } else {
                         //GwtReflect.fieldSet(declaringClass,  fields[c].getName(), instance, null);
@@ -260,6 +249,16 @@ public class GwtUnmarshaller implements Unmarshaller {
                             ? fileObject.get("name").isString().stringValue() : null;
                     return new ParseFile(name, url);
                 }
+            } else if(value != null && value.isString() != null) {
+                String name = "";
+                try{
+                    name = value.isString().stringValue().split("_")[1];
+                } catch (Exception e) {
+
+                }
+                String url = value.isString().stringValue();
+                ParseFile parseFile = new ParseFile(name, url);
+                return parseFile;
             }
         } else if (clazz.getName() == ParseGeoPoint.class.getName()) {
             if (value != null && value.isObject() != null) {
@@ -268,6 +267,18 @@ public class GwtUnmarshaller implements Unmarshaller {
                     Double longitude = (geoPointObject.get("longitude") != null && geoPointObject.get("longitude").isNumber() != null) ? geoPointObject.get("longitude").isNumber().doubleValue() : null;
                     Double latitude = (geoPointObject.get("latitude") != null && geoPointObject.get("latitude").isNumber() != null) ? geoPointObject.get("latitude").isNumber().doubleValue() : null;
                     return new ParseGeoPoint(Double.valueOf(longitude), Double.valueOf(latitude));
+                }
+            } else if(value != null && value.isArray() != null) {
+                Browser.getWindow().getConsole().log("Unmarshalling to ParseGeoPoint - " + value.isArray().toString());
+                JSONArray geoPointArray = value.isArray();
+                if(geoPointArray.get(0).isString() != null && geoPointArray.get(1).isString() != null) {
+                    ParseGeoPoint geoPoint
+                            = new ParseGeoPoint(Double.valueOf(geoPointArray.get(0).isString().stringValue()),(Double.valueOf(geoPointArray.get(1).isString().stringValue())));
+                    return geoPoint;
+                } else if(geoPointArray.get(0).isNumber() != null && geoPointArray.get(1).isNumber() != null) {
+                    ParseGeoPoint geoPoint
+                            = new ParseGeoPoint(Double.valueOf(geoPointArray.get(0).isNumber().doubleValue()), Double.valueOf(geoPointArray.get(1).isNumber().doubleValue()));
+                    return geoPoint;
                 }
             }
         } else if (clazz.getName() == ParsePointer.class.getName()) {
@@ -306,6 +317,16 @@ public class GwtUnmarshaller implements Unmarshaller {
                     file.setUrl(url);
                     return file;
                 }
+            } else if(value != null && value.isString() != null) {
+                String name = "";
+                try{
+                    name = value.isString().stringValue().split("_")[1];
+                } catch (Exception e) {
+
+                }
+                String url = value.isString().stringValue();
+                ParseFile parseFile = new ParseFile(name, url);
+                return parseFile;
             }
         } else if (clazz.getName() == GeoPoint.class.getName()) {
             if (value != null && value.isObject() != null) {
@@ -316,6 +337,20 @@ public class GwtUnmarshaller implements Unmarshaller {
                     GeoPoint geoPoint = new GeoPoint();
                     geoPoint.setLatitude(Double.valueOf(latitude));
                     geoPoint.setLongitude(Double.valueOf(longitude));
+                    return geoPoint;
+                }
+            } else if(value != null && value.isArray() != null) {
+                JSONArray geoPointArray = value.isArray();
+                Browser.getWindow().getConsole().log("Unmarshalling to GeoPoint - " + value.isArray().toString());
+                if(geoPointArray.get(0).isString() != null && geoPointArray.get(1).isString() != null) {
+                    GeoPoint geoPoint = new GeoPoint();
+                    geoPoint.setLatitude(Double.valueOf(geoPointArray.get(0).isString().stringValue()));
+                    geoPoint.setLongitude(Double.valueOf(geoPointArray.get(1).isString().stringValue()));
+                    return geoPoint;
+                } else if(geoPointArray.get(0).isNumber() != null && geoPointArray.get(1).isNumber() != null) {
+                    GeoPoint geoPoint = new GeoPoint();
+                    geoPoint.setLatitude(Double.valueOf(geoPointArray.get(0).isNumber().doubleValue()));
+                    geoPoint.setLongitude(Double.valueOf(geoPointArray.get(1).isNumber().doubleValue()));
                     return geoPoint;
                 }
             }
